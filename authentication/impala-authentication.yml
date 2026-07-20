@@ -1,0 +1,22 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/impala-hotels-openapi-original.json
+summary:
+  types:
+  - apiKey
+  - http
+  api_key_in:
+  - header
+schemes:
+- name: API_Key_Authentication
+  type: apiKey
+  in: header
+  parameter: x-api-key
+  sources:
+  - openapi/impala-hotels-openapi-original.json
+- name: paymentAuth
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  sources:
+  - openapi/impala-hotels-openapi-original.json
