@@ -1,0 +1,2531 @@
+openapi: 3.0.0
+info:
+  contact:
+    email: support@impala.travel
+    name: Impala Developer Support
+    url: https://docs.impala.travel/
+  description: 'Add room selling to your app with ease, or expand your existing hotel portfolio. Access all the marketing material you need to sell a room, from hotel amenities to images. Constantly updated, ever expanding and always correct. Impala allows you to start selling hotel rooms and earn a commission with every booking in hours.
+
+
+    Getting started is easy:
+
+
+    > **1. Sign-up within seconds**: Head to the [Impala website](https://impala.travel), enter your details and receive your sandbox API key immediately (no credit card needed).
+
+
+    > **2. Start building within minutes**: Build against a sandbox API with realistic test data. Use a [step-by-step walkthrough](https://impala.travel) to see what''s possible. Check for available hotels and their rates. Make and manage fake bookings without any risk. Add room booking to your existing website or app, or start an online travel agency from scratch. [![Run in Postman](https://run.pstmn.io/button.svg)](https://god.gw.postman.com/run-collection/11303451-9b241872-9961-424d-9ef4-9d949534567d?action=collection%2Ffork&collection-url=entityId%3D11303451-9b241872-9961-424d-9ef4-9d949534567d%26entityType%3Dcollection%26workspaceId%3D5ae55f12-332c-4e7d-8acc-3e75df3b2ee2)
+
+
+    > **3. Go live within hours**: Once your app or integration is ready for prime time, move to production within your Impala dashboard and start making real hotel bookings for your customers right away.
+
+
+    Want to see how it all works? Watch [a 5-minute walkthrough](https://www.youtube.com/watch?v=7B3evCL3nrY) of the two API requests you need to make a booking, and a demo of one of our customer''s apps.'
+  termsOfService: https://impala.travel/terms-and-conditions/
+  title: Impala Hotel Booking Bookings Rate Calendar API
+  version: '1.003'
+  x-apisguru-categories:
+  - ecommerce
+  x-logo:
+    url: https://api.apis.guru/v2/cache/logo/https_images.prismic.io_impala-v2_8d1fd8ad-ef74-46e6-99b8-a8dca8265c60_IM_LI_POST_LAUNCH.jpg
+  x-origin:
+  - format: openapi
+    url: https://docs.impala.travel/api/v1/projects/impala/booking-api/nodes/spec/openapi.seller.yaml?branch=v1.003
+    version: '3.0'
+  x-providerName: impala.travel
+  x-serviceName: hotels
+servers:
+- description: Hotel Booking API Sandbox
+  url: https://sandbox.impala.travel/v1
+- description: Hotel Booking API Production
+  url: https://api.impala.travel/v1
+security:
+- API_Key_Authentication: []
+tags:
+- description: Getting rates for future dates.
+  name: Rate Calendar
+paths:
+  /hotels/{hotelId}/rate-plans:
+    parameters:
+    - description: The uuid of hotel for which rate plans are being fetched.
+      example: 40c0b330-186a-40bf-ae36-2c61fb322db0
+      in: path
+      name: hotelId
+      required: true
+      schema:
+        format: uuid
+        type: string
+    - description: Returns rate plans changed after the supplied date.
+      example:
+        eq: '2022-11-04T15:56:37.000Z'
+        gt: '2022-11-04T15:56:37.000Z'
+        gte: '2022-11-04T15:56:37.000Z'
+        lt: '2022-11-04T15:56:37.000Z'
+        lte: '2022-11-04T15:56:37.000Z'
+      explode: true
+      in: query
+      name: updatedAt
+      schema:
+        type: object
+      style: deepObject
+    - description: Number of rate plans returned on a given page (pagination).
+      in: query
+      name: size
+      schema:
+        default: 25
+        example: 40
+        format: int32
+        maximum: 300
+        minimum: 1
+        type: number
+    - description: Offset from the first rate plan in the result (for pagination).
+      in: query
+      name: offset
+      schema:
+        default: 0
+        example: 25
+        format: int32
+        type: number
+    - description: Start date of the considered time window for the returned rate plan.
+      in: query
+      name: start
+      schema:
+        example: '2022-05-12'
+        type: string
+    - description: Start date of the considered time window for the returned rate plan.
+      in: query
+      name: end
+      schema:
+        example: '2022-05-12'
+        type: string
+    - description: The UUID of room for which rate plans are being fetched.
+      in: query
+      name: roomId
+      schema:
+        example: 6d3a255d-3b22-48a4-8076-3ae3d0ade3d7
+        format: uuid
+        type: string
+    get:
+      description: 'Returns a list of all rate plans available for you for a hotel.
+
+
+        Rate plans are products the hotel is offering. They typically consist of a combination of restrictiveness in case of cancellations or changes, the time they''re bookable, minimum or maximum length of stay restrictions (e.g. week-long bookings), included components like breakfast or dinner and/or the conditions under which the room can be sold (e.g. private rates that can only be offered and sold to a closed user group behind login).
+
+
+        Examples of rate plans:
+
+
+        * Non-refundable room rate that includes breakfast
+
+        * Room-only rate with free cancellation up to 14 days before arrival
+
+
+        For each such rate plan this endpoint returns the room types it''s available for, alongside prices for each date and occupancy that can be sold – or the information that the room isn''t available (closed) for a certain date.
+
+
+        For the vast majority of our customers, availability searches using the [List all hotels](https://docs.impala.travel/docs/booking-api/spec/openapi.seller.yaml/paths/~1hotels/get) endpoint are the best choice. It accepts the dates your guest is looking for and provides the rates to display.
+
+
+        This endpoint can help augment this for two additional use cases:
+
+
+        This endpoint allows you to query rate prices for all future dates in one go, making it a great choice to feed availability information and prices into your own system or displaying a rate calender to guide your guests to gain an overview of future availability and prices.'
+      operationId: listRatePlansForHotel
+      responses:
+        '200':
+          $ref: '#/components/responses/ratePlansOKResponse'
+        '400':
+          $ref: '#/components/responses/ratePlansBadRequestResponse'
+        '404':
+          $ref: '#/components/responses/notFoundResponse'
+      summary: List all rate plans (rate calendar) for a hotel (Beta endpoint)
+      tags:
+      - Rate Calendar
+  /hotels/{hotelId}/rate-plans/{ratePlanId}:
+    parameters:
+    - description: The uuid of hotel for which rate plans are being fetched.
+      example: 40c0b330-186a-40bf-ae36-2c61fb322db0
+      in: path
+      name: hotelId
+      required: true
+      schema:
+        format: uuid
+        type: string
+    - description: The id of requested rateplan
+      example: 112
+      in: path
+      name: ratePlanId
+      required: true
+      schema:
+        type: integer
+    - description: Returns rate plans changed after the supplied date.
+      example:
+        eq: '2022-11-04T15:56:37.000Z'
+        gt: '2022-11-04T15:56:37.000Z'
+        gte: '2022-11-04T15:56:37.000Z'
+        lt: '2022-11-04T15:56:37.000Z'
+        lte: '2022-11-04T15:56:37.000Z'
+      explode: true
+      in: query
+      name: updatedAt
+      schema:
+        type: object
+      style: deepObject
+    - description: Number of rate plans returned on a given page (pagination).
+      in: query
+      name: size
+      schema:
+        default: 25
+        example: 40
+        format: int32
+        maximum: 300
+        minimum: 1
+        type: number
+    - description: Offset from the first rate plan in the result (for pagination).
+      in: query
+      name: offset
+      schema:
+        default: 0
+        example: 25
+        format: int32
+        type: number
+    - description: Start date of the considered time window for the returned rate plan.
+      in: query
+      name: start
+      schema:
+        example: '2022-05-12'
+        type: string
+    - description: Start date of the considered time window for the returned rate plan.
+      in: query
+      name: end
+      schema:
+        example: '2022-05-12'
+        type: string
+    - description: The uuid of room for which rate plans are being fetched.
+      in: query
+      name: roomTypeId
+      schema:
+        example: 6d3a255d-3b22-48a4-8076-3ae3d0ade3d7
+        format: uuid
+        type: string
+    get:
+      description: 'Returns a single rate plan available for you for a hotel.
+
+
+        Rate plans are products the hotel is offering. They typically consist of a combination of restrictiveness in case of cancellations or changes, the time they''re bookable, minimum or maximum length of stay restrictions (e.g. week-long bookings), included components like breakfast or dinner and/or the conditions under which the room can be sold (e.g. private rates that can only be offered and sold to a closed user group behind login).
+
+
+        Examples of rate plans:
+
+
+        * Non-refundable room rate that includes breakfast
+
+        * Room-only rate with free cancellation up to 14 days before arrival
+
+
+        This endpoint returns a singular available rate plan.'
+      operationId: listRatePlanForHotelForRatePlanId
+      responses:
+        '200':
+          $ref: '#/components/responses/ratePlanOKResponse'
+        '400':
+          $ref: '#/components/responses/ratePlansBadRequestResponse'
+        '404':
+          $ref: '#/components/responses/notFoundResponse'
+      summary: List a rate plan (rate calendar) for a hotel (Beta endpoint).
+      tags:
+      - Rate Calendar
+      x-internal: false
+components:
+  schemas:
+    rateAdjustment:
+      properties:
+        adjustmentId:
+          description: Unique identifier of this rate adjustment.
+          format: uuid
+          type: string
+        amount:
+          description: The percentage discount between 0 and 100.
+          example: 5
+          maximum: 100
+          minimum: 0
+          type: number
+        conditions:
+          description: A list of conditions for the adjustment to apply.
+          items:
+            $ref: '#/components/schemas/adjustmentConditions'
+          minItems: 1
+          type: array
+          uniqueItems: true
+        type:
+          description: The adjustment type.
+          enum:
+          - PERCENTAGE
+          type: string
+      required:
+      - amount
+      - type
+      - conditions
+      title: Adjustment
+      type: object
+    adjustmentConditions:
+      $ref: '#/components/schemas/adjustmentConditionLengthOfStayRule'
+    money:
+      description: An amount of money in the specified currency (used in the context of prices, fees, refunds etc.)
+      properties:
+        amount:
+          description: Amount in the smallest unit of the currency. E.g. 234.56 € is expressed as 23456 (in Euro cents to avoid rounding errors in calculations).
+          example: 9500
+          type: integer
+        currency:
+          description: Details of the currency.
+          properties:
+            code:
+              description: Three-character currency code in ISO 4217 notation.
+              example: EUR
+              type: string
+          required:
+          - code
+          title: CurrencyDetails
+          type: object
+      required:
+      - amount
+      - currency
+      title: Money
+      type: object
+      x-examples:
+        Double-decimal currency (EUR):
+          amount: 9500
+          currency:
+            code: EUR
+        Zero-decimal currency (JPY):
+          amount: 37747
+          currency:
+            code: JPY
+    adjustmentConditionLengthOfStayRule:
+      properties:
+        rules:
+          properties:
+            bookableDateRange:
+              description: The date range the adjustment applies to, inclusive.
+              properties:
+                end:
+                  example: '2021-08-23'
+                  type: string
+                start:
+                  example: '2021-05-15'
+                  type: string
+              required:
+              - start
+              - end
+              type: object
+            nightsRange:
+              description: The number of nights the adjustment applies to, inclusive.
+              properties:
+                max:
+                  example: 5
+                  type: number
+                min:
+                  example: 3
+                  minimum: 1
+                  type: number
+              required:
+              - min
+              - max
+              type: object
+          required:
+          - bookableDateRange
+          - nightsRange
+          type: object
+        type:
+          description: The type of the condition. Currently we only support conditions based on length of stay.
+          enum:
+          - LENGTH_OF_STAY
+          type: string
+      required:
+      - type
+      - rules
+      title: 'Adjustment: Conditions'
+      type: object
+    ratesPerDate:
+      properties:
+        closed:
+          description: Determines whether the rate is available for a stay including this date.
+          type: boolean
+        closedToArrival:
+          description: Determines whether the rate is available if the arrival falls on this date.
+          type: boolean
+        closedToDeparture:
+          description: Determines whether the rate is available if the departure falls on this date.
+          type: boolean
+        date:
+          description: ''
+          format: YYYY-MM-DD
+          minLength: 1
+          type: string
+        rates:
+          description: Rate prices for each occupancy the room can accommodate.
+          items:
+            $ref: '#/components/schemas/ratePlanRate'
+          type: array
+          uniqueItems: true
+        staythrough:
+          description: The minimum number of nights (inclusive) that the guest has to book which include the date to be eligible for this rate.
+          properties:
+            min:
+              description: Expressed in minimum value.
+              type: number
+          required:
+          - min
+          type: object
+      required:
+      - date
+      - rates
+      - closed
+      title: 'Rate plans: Rates available for a date'
+      type: object
+      x-examples: {}
+    validationError:
+      allOf:
+      - $ref: '#/components/schemas/genericError'
+      - properties:
+          validations:
+            items:
+              $ref: '#/components/schemas/validationResult'
+            type: array
+        type: object
+      title: Validation error response
+      x-examples: {}
+    rateComponent:
+      description: Product or service offered as part of a rate in addition to accommodation in the room.
+      properties:
+        formatted:
+          description: Human-readable plain English version of the component included in the rate, ready to be shown to your guests.
+          example: breakfast
+          type: string
+        includedInRate:
+          type: boolean
+        type:
+          description: The type of product or service included in the price. We currently support rates including "BREAKFAST", "LUNCH", "DINNER" and "ALL_INCLUSIVE".
+          enum:
+          - BREAKFAST
+          - LUNCH
+          - DINNER
+          - WELCOME_BEVERAGE
+          - ALL_INCLUSIVE
+          example: BREAKFAST
+          type: string
+      required:
+      - formatted
+      - type
+      title: Rate component
+      type: object
+      x-examples: {}
+    ratePlanRoomType:
+      properties:
+        dates:
+          description: A list of future dates and their rate prices for this rate plan and room type.
+          items:
+            $ref: '#/components/schemas/ratesPerDate'
+          minItems: 1
+          type: array
+          uniqueItems: true
+        maxOccupancy:
+          description: Number of adults that the room can accommodate.
+          minimum: 1
+          type: number
+        name:
+          description: Formatted room type name.
+          example: Junior Suite
+          minLength: 1
+          type: string
+        roomTypeId:
+          description: Unique identifier of this room type.
+          format: uuid
+          minLength: 1
+          type: string
+      required:
+      - roomTypeId
+      - name
+      - maxOccupancy
+      - dates
+      title: RoomType
+      type: object
+    pagination:
+      description: Information that helps paginate through lists of resources.
+      properties:
+        count:
+          description: The number of items returned on this page.
+          example: 10
+          format: int32
+          type: number
+        next:
+          description: The absolute URL pointing to the next page. Will be null if there are no next pages.
+          example: /v1/sample?size=20&offset=120
+          nullable: true
+          type: string
+        prev:
+          description: The absolute URL pointing to the previous page. Will be null if there are no previous pages.
+          example: /v1/sample?size=20&offset=80
+          nullable: true
+          type: string
+        total:
+          description: The total number of items that exist for your query across all pages.
+          example: 1500
+          format: int32
+          type: number
+      required:
+      - count
+      - total
+      - next
+      - prev
+      title: Pagination information
+      type: object
+    ratePlanRate:
+      properties:
+        adults:
+          description: The number of adults in the room for which this price applies.
+          minimum: 1
+          type: number
+        retailRate:
+          $ref: '#/components/schemas/money'
+        roomsSellable:
+          description: Amount of room which can be sold for this occupancy level and room type at this rate price.
+          type: number
+      required:
+      - adults
+      - roomsSellable
+      - retailRate
+      title: 'Rate plans: rate price for date'
+      type: object
+    validationResult:
+      description: Describes the validation that failed.
+      properties:
+        code:
+          description: Error code intended for logging and debugging.
+          example: ANY_REQUIRED
+          type: string
+        field:
+          description: Name of the field that has failed to validate. Intended to aid developers in finding and fixing implementation mistakes.
+          example: start
+          type: string
+        message:
+          description: Error message in English intended to aid developers in finding and solving implementation mistakes. Do not display to your guests as it **might contain sensitive implementation information**.
+          example: '"start" is required'
+          type: string
+      required:
+      - message
+      - code
+      title: Validation result
+      type: object
+      x-examples: {}
+    conditions:
+      description: Conditions described by the rate plan.
+      properties:
+        cancellationDeadline:
+          format: days
+          nullable: true
+          type: number
+        cancellationPolicy:
+          description: Type of cancellation policy applicable to the rate
+          enum:
+          - FREE_CANCELLATION
+          - FREE_CANCELLATION_24
+          - FREE_CANCELLATION_48
+          - FREE_CANCELLATION_WEEK
+          - NON_REFUNDABLE
+          - null
+          nullable: true
+          type: string
+      required:
+      - cancellationPolicy
+      - cancellationDeadline
+      title: Conditions
+      type: object
+    ratePlan:
+      description: Rate plan encapsulates rates given a set of internal conditions like cancellation policy or meal plan.
+      properties:
+        adjustments:
+          description: A list of adjustments that could apply to this rate.
+          items:
+            $ref: '#/components/schemas/rateAdjustment'
+          type: array
+          uniqueItems: true
+        components:
+          items:
+            $ref: '#/components/schemas/rateComponent'
+          type: array
+        conditions:
+          $ref: '#/components/schemas/conditions'
+        description:
+          description: Human-readable summary describing this rate plan.
+          example: NON_REFUNDABLE,DINNER
+          minLength: 1
+          type: string
+        hotelId:
+          description: The unique identifier of the hotel this rate plan is available for.
+          format: uuid
+          minLength: 1
+          type: string
+        ratePlanId:
+          description: The integer identifier of this rate plan.
+          format: 6 digit
+          type: number
+        restrictions:
+          $ref: '#/components/schemas/ratePlanRestrictions'
+        roomTypes:
+          description: A list of room types this rate plan is bookable for.
+          items:
+            $ref: '#/components/schemas/ratePlanRoomType'
+          minItems: 1
+          type: array
+          uniqueItems: true
+      required:
+      - ratePlanId
+      - hotelId
+      - description
+      - conditions
+      - restrictions
+      - roomTypes
+      title: Rate plan info
+      type: object
+      x-examples: {}
+    ratePlanRestrictions:
+      description: Restrictions that apply to this rate plan.
+      properties:
+        lengthOfStay:
+          description: Determines the length of stay in nights for which this rate plan can be booked.
+          properties:
+            max:
+              description: The maximum number of nights (inclusive) a guest can stay to be eligible for this rate plan.
+              type: number
+            min:
+              description: The minimum number of nights (inclusive) a guest has to stay to be eligible for this rate plan.
+              type: number
+          required:
+          - min
+          type: object
+      required:
+      - lengthOfStay
+      title: Rate plan restrictions
+      type: object
+      x-examples: {}
+    genericError:
+      properties:
+        code:
+          description: Error code for you to use programatically, for error logging and debugging.
+          example: ERROR_CODE
+          type: string
+        message:
+          description: Error message intended to aid developers in debugging issues. We strongly advise against displaying this information publicly to your guests as it **might contain sensitive implementation details**.
+          example: Resource not found
+          type: string
+      required:
+      - message
+      title: Error response
+      type: object
+  examples:
+    RatePlansResponseExample:
+      value:
+        data:
+        - components:
+          - formatted: breakfast
+            includedInRate: true
+            type: BREAKFAST
+          - formatted: lunch
+            includedInRate: false
+            type: LUNCH
+          - formatted: dinner
+            includedInRate: false
+            type: DINNER
+          - formatted: allInclusive
+            includedInRate: false
+            type: ALL_INCLUSIVE
+          conditions:
+            cancellationDeadline: null
+            cancellationPolicy: NON_REFUNDABLE
+          description: BREAKFAST,NON_REFUNDABLE
+          hotelId: 55b6ae0d-2de3-4ec4-b8b5-042a7003cd87
+          ratePlanId: 6
+          restrictions:
+            lengthOfStay:
+              min: 1
+          roomTypes:
+          - dates:
+            - closed: false
+              date: '2021-05-21'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-05-22'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-05-23'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-05-24'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-05-25'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-05-26'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-05-27'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-05-28'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-05-29'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-05-30'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-05-31'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-06-01'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-06-02'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-06-03'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-06-04'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-06-05'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-06-06'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-06-07'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-06-08'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-06-09'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-06-10'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-06-11'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-06-12'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-06-13'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-06-14'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-06-15'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-06-16'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-06-17'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-06-18'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-06-19'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-06-20'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-06-21'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-06-22'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-06-23'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-06-24'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-06-25'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-06-26'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-06-27'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-06-28'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-06-29'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-06-30'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-07-01'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-07-02'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-07-03'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-07-04'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-07-05'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-07-06'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-07-07'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-07-08'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-07-09'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-07-10'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-07-11'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-07-12'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-07-13'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-07-14'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-07-15'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-07-16'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-07-17'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-07-18'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-07-19'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-07-20'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-07-21'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-07-22'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-07-23'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-07-24'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-07-25'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-07-26'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-07-27'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-07-28'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-07-29'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-07-30'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-07-31'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-08-01'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-08-02'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-08-03'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-08-04'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-08-05'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-08-06'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-08-07'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-08-08'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-08-09'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-08-10'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-08-11'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-08-12'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-08-13'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-08-14'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-08-15'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-08-16'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-08-17'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-08-18'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-08-19'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-08-20'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-08-21'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-08-22'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-08-23'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-08-24'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-08-25'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-08-26'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-08-27'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-08-28'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-08-29'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-08-30'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-08-31'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-09-01'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-09-02'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-09-03'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-09-04'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-09-05'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-09-06'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-09-07'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-09-08'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-09-09'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-09-10'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-09-11'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-09-12'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-09-13'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-09-14'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-09-15'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-09-16'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-09-17'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-09-18'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-09-19'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-09-20'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-09-21'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-09-22'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-09-23'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-09-24'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-09-25'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-09-26'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-09-27'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-09-28'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-09-29'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-09-30'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-10-01'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-10-02'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-10-03'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-10-04'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-10-05'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-10-06'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-10-07'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-10-08'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-10-09'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-10-10'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-10-11'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-10-12'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-10-13'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-10-14'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-10-15'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-10-16'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-10-17'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-10-18'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-10-19'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-10-20'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-10-21'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-10-22'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-10-23'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-10-24'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-10-25'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-10-26'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-10-27'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-10-28'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-10-29'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-10-30'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-10-31'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-11-01'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-11-02'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-11-03'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-11-04'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-11-05'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-11-06'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-11-07'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-11-08'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-11-09'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-11-10'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-11-11'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-11-12'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-11-13'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-11-14'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-11-15'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-11-16'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-11-17'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-11-18'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-11-19'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-11-20'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-11-21'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-11-22'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-11-23'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-11-24'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-11-25'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-11-26'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-11-27'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-11-28'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-11-29'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-11-30'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-12-01'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-12-02'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-12-03'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-12-04'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-12-05'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            - closed: false
+              date: '2021-12-06'
+              rates:
+              - adults: 1
+                retailRate:
+                  amount: 70000
+                  currency:
+                    code: EUR
+                roomsSellable: 100
+            maxOccupancy: 2
+            name: Double Room
+            roomTypeId: b301f494-d11d-4f9e-9425-c3883f082078
+        pagination:
+          count: 1
+          next: https://api.impala.travel/v1/085c034a-955c-42b7-81a9-a5ec445b18c6/rate-plans?size=1&offset=1
+          prev: null
+          total: 2
+    hotelNotFoundResponseExample:
+      summary: Not found
+      value:
+        code: NOT_FOUND
+        message: Cannot find property with id 6f86fd08-5378-4ac4-a6e0-ae099d5ce512
+  responses:
+    ratePlanOKResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ratePlan'
+      description: ''
+    notFoundResponse:
+      content:
+        application/json:
+          examples:
+            Not Found:
+              $ref: '#/components/examples/hotelNotFoundResponseExample'
+          schema:
+            $ref: '#/components/schemas/genericError'
+      description: Not Found
+    ratePlansOKResponse:
+      content:
+        application/json:
+          examples:
+            List all rate plans:
+              $ref: '#/components/examples/RatePlansResponseExample'
+          schema:
+            description: ''
+            properties:
+              data:
+                items:
+                  $ref: '#/components/schemas/ratePlan'
+                type: array
+                uniqueItems: true
+              pagination:
+                $ref: '#/components/schemas/pagination'
+            required:
+            - data
+            - pagination
+            type: object
+      description: ''
+    ratePlansBadRequestResponse:
+      content:
+        application/json:
+          examples:
+            Validation error:
+              summary: Bad request
+              value:
+                code: VALIDATION_ERROR
+                message: '"start" must be in YYYY-MM-DD format. "foo" is not allowed. "lorem" missing required peer "ipsum"'
+                validations:
+                - code: DATE_FORMAT
+                  message: '"start" must be in YYYY-MM-DD format'
+                  property: start
+                - code: OBJECT_WITH
+                  message: '"lorem" missing required peer "ipsum"'
+                  property: lorem
+          schema:
+            $ref: '#/components/schemas/validationError'
+      description: Your request wasn't formatted correctly and therefore couldn't be processed. This most frequently happens when query parameters or request body values are missing, incorrectly formatted or added where they don't exist (e.g. due to typos). We're including a list of `validations` to point out where things are going wrong and should be fixed.
+  securitySchemes:
+    API_Key_Authentication:
+      in: header
+      name: x-api-key
+      type: apiKey
+    paymentAuth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http

@@ -1,0 +1,3131 @@
+openapi: 3.0.0
+info:
+  contact:
+    email: support@impala.travel
+    name: Impala Developer Support
+    url: https://docs.impala.travel/
+  description: 'Add room selling to your app with ease, or expand your existing hotel portfolio. Access all the marketing material you need to sell a room, from hotel amenities to images. Constantly updated, ever expanding and always correct. Impala allows you to start selling hotel rooms and earn a commission with every booking in hours.
+
+
+    Getting started is easy:
+
+
+    > **1. Sign-up within seconds**: Head to the [Impala website](https://impala.travel), enter your details and receive your sandbox API key immediately (no credit card needed).
+
+
+    > **2. Start building within minutes**: Build against a sandbox API with realistic test data. Use a [step-by-step walkthrough](https://impala.travel) to see what''s possible. Check for available hotels and their rates. Make and manage fake bookings without any risk. Add room booking to your existing website or app, or start an online travel agency from scratch. [![Run in Postman](https://run.pstmn.io/button.svg)](https://god.gw.postman.com/run-collection/11303451-9b241872-9961-424d-9ef4-9d949534567d?action=collection%2Ffork&collection-url=entityId%3D11303451-9b241872-9961-424d-9ef4-9d949534567d%26entityType%3Dcollection%26workspaceId%3D5ae55f12-332c-4e7d-8acc-3e75df3b2ee2)
+
+
+    > **3. Go live within hours**: Once your app or integration is ready for prime time, move to production within your Impala dashboard and start making real hotel bookings for your customers right away.
+
+
+    Want to see how it all works? Watch [a 5-minute walkthrough](https://www.youtube.com/watch?v=7B3evCL3nrY) of the two API requests you need to make a booking, and a demo of one of our customer''s apps.'
+  termsOfService: https://impala.travel/terms-and-conditions/
+  title: Impala Hotel Booking Bookings Hotels API
+  version: '1.003'
+  x-apisguru-categories:
+  - ecommerce
+  x-logo:
+    url: https://api.apis.guru/v2/cache/logo/https_images.prismic.io_impala-v2_8d1fd8ad-ef74-46e6-99b8-a8dca8265c60_IM_LI_POST_LAUNCH.jpg
+  x-origin:
+  - format: openapi
+    url: https://docs.impala.travel/api/v1/projects/impala/booking-api/nodes/spec/openapi.seller.yaml?branch=v1.003
+    version: '3.0'
+  x-providerName: impala.travel
+  x-serviceName: hotels
+servers:
+- description: Hotel Booking API Sandbox
+  url: https://sandbox.impala.travel/v1
+- description: Hotel Booking API Production
+  url: https://api.impala.travel/v1
+security:
+- API_Key_Authentication: []
+tags:
+- description: Accessing hotel content, available rooms and rates.
+  name: Hotels
+paths:
+  /hotels:
+    get:
+      description: 'Returns a list of all hotels worldwide that can be booked through Impala.
+
+
+        You can **filter** the results:
+
+
+        * Adding `longitude`, `latitude` and a `radius` (in meters) query parameters will filter the results to hotels around this location.
+
+        * Adding `start` and `end` dates (in ISO 8601 notation, e.g. `2021-12-31`) for the expected arrival and departure dates of your guests will limit the results to hotels that have at least one room bookable for this timeframe.
+
+        * Adding `starRating`, `name` or `country` allows you to filter to hotels based on these values (e.g. `?starRating[gte]=4&name[like]=palace` for hotels with a rating of 4 or up with a name containing "palace")
+
+        * Adding `hotelIds` allows you to limit the results to include only hotels with the ids listed. Its value should be a comma-separated list of hotel ids (e.g. `?hotelIds[]=hotelIdA,hotelIdB`)
+
+
+        * Adding `contractable` allows you to filter to hotels that you can directly negotiate with through our [deals feature](https://docs.impala.travel/docs/booking-api/ZG9jOjcyNjgzMTA-contracting-with-hotels). (e.g `?contractable=true` or `?contractable=false`)
+
+
+        You can specify the **sorting order** in which hotels are returned:
+
+        * This is done by using the `sortBy` query parameter.
+
+        * Results can be sorted by `name` alphabetically, star `rating` and `distance_m` (in meters from the specified latitude/longitude location).
+
+        * The parameter allows for a comma-separated list of arguments with optional `:asc` (ascending, the default if the modifier is omitted) and `:desc` (descending) modifiers.
+
+
+        If no hotels match your filter criteria, an empty array will be returned.'
+      operationId: listHotels
+      parameters:
+      - description: 'Allows for filtering based on the property name. Available modifiers include equal to (`eq`) or case insensitive search (`like`). Usage example: `?name[like]=palace`'
+        example:
+          eq: Minimalist Palace
+          like: palace
+        explode: true
+        in: query
+        name: name
+        schema:
+          type: object
+        style: deepObject
+      - description: 'Allows for filtering based on the starRating of a property. Available modifiers include less than (`lt`), greater than (`gt`), less than or equal to (`lte`), greater than or equal to (`gte`) and equal to (`eq`). Usage example: `?starRating[gt]=3&starRating[lt]=5`'
+        example:
+          eq: 4
+          gt: 3
+          gte: 4
+          lt: 4
+          lte: 3
+        explode: true
+        in: query
+        name: starRating
+        schema:
+          type: object
+        style: deepObject
+      - description: 'Allows for filtering based on the country of a property. The only available modifier for this parameter is equal to (`eq`). Usage example: `?country[eq]=GBR`'
+        example:
+          eq: GBR
+        explode: true
+        in: query
+        name: country
+        schema:
+          type: object
+        style: deepObject
+      - description: The arrival day of the desired stay range in ISO 8601 format (`YYYY-MM-DD`).
+        in: query
+        name: start
+        schema:
+          example: '2021-05-20'
+          type: string
+      - description: The departure day of the desired stay range in ISO 8601 format (`YYYY-MM-DD`).
+        in: query
+        name: end
+        schema:
+          example: '2021-05-22'
+          type: string
+      - description: The WGS 84 latitude of the location to search around (e.g. `58.386186`).
+        in: query
+        name: latitude
+        schema:
+          example: 58.386186
+          format: double
+          maximum: 90
+          minimum: -90
+          type: number
+      - description: The WGS 84 longitude of the location to search around (e.g. `-9.952549`).
+        in: query
+        name: longitude
+        schema:
+          example: -9.952549
+          format: double
+          maximum: 180
+          minimum: -180
+          type: number
+      - description: The distance (in meters) to search around the specified location (e.g. `10000` for 10 km).
+        in: query
+        name: radius
+        schema:
+          example: 25000
+          format: int32
+          minimum: 0
+          type: integer
+      - description: A comma-separated list of hotel ids you wish to filter by (e.g. `60a06628-2c71-44bf-9685-efbd2df4179e,60a06628-2c71-44bf-9685-efbd2df4179e`).
+        explode: false
+        in: query
+        name: hotelIds
+        schema:
+          example:
+          - 0e25533a-2db2-4894-9db1-4c1ff92d798c,77c272b6-18e6-4036-b9c3-7fc5454e3f6a
+          items:
+            example: 8a39290a-bcd0-461e-92c6-38e71a06d2f7
+            type: string
+          type: array
+        style: form
+      - description: 'Allows for filtering based on the date and time when this hotel was first added to the Impala platform, in ISO 8601 format (e.g. `2020-11-04T17:37:37Z`) and UTC timezone. Available modifiers include less than (`lt`), greater than (`gt`), lower than or equal to (`lte`), greater than or equal to (`gte`) and equal to (`eq`). Usage example: `?created[lte]=2020-11-04T19:37:37Z&created[gte]=2020-11-04T15:56:37.000Z`'
+        example:
+          eq: '2020-11-04T15:56:37.000Z'
+          gt: '2020-11-04T15:56:37.000Z'
+          gte: '2020-11-04T15:56:37.000Z'
+          lt: '2020-11-04T15:56:37.000Z'
+          lte: '2020-11-04T15:56:37.000Z'
+        explode: true
+        in: query
+        name: created
+        schema:
+          type: object
+        style: deepObject
+      - description: 'Allows for filtering based on the date and time the content of this hotel was last updated, in ISO 8601 format (e.g. `2020-11-04T17:37:37Z`) and UTC timezone. Available modifiers include less than (`lt`), greater than (`gt`), lower than or equal to (`lte`), greater than or equal to (`gte`) and equal to (`eq`). Usage example: `?updated[lte]=2020-11-04T19:37:37Z&updated[gte]=2020-11-04T15:56:37.000Z`'
+        example:
+          eq: '2020-11-04T15:56:37.000Z'
+          gt: '2020-11-04T15:56:37.000Z'
+          gte: '2020-11-04T15:56:37.000Z'
+          lt: '2020-11-04T15:56:37.000Z'
+          lte: '2020-11-04T15:56:37.000Z'
+        explode: true
+        in: query
+        name: updated
+        schema:
+          type: object
+        style: deepObject
+      - description: Number of hotels returned on a given page (pagination).
+        in: query
+        name: size
+        schema:
+          default: 25
+          example: 40
+          format: int32
+          maximum: 300
+          minimum: 1
+          type: number
+      - description: Offset from the first hotel in the result (for pagination).
+        in: query
+        name: offset
+        schema:
+          default: 0
+          example: 25
+          format: int32
+          type: number
+      - description: Order in which the results should be sorted. Currently allows you to sort by `name` (alphabetical), star `rating`, and `distance_m` in meters from the specified latitude/longitude. Allows for a comma-separated list of of arguments with modifiers for `:asc` (ascending) and `:desc` (descending) ordering.
+        in: query
+        name: sortBy
+        schema:
+          default: createdAt:desc
+          example: name:asc,distance_m:desc
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                List of available hotels:
+                  $ref: '#/components/examples/ExampleHotels'
+                No hotels available:
+                  $ref: '#/components/examples/NoHotelsAvailable'
+              schema:
+                properties:
+                  data:
+                    items:
+                      $ref: '#/components/schemas/hotelFullDetail'
+                    type: array
+                  pagination:
+                    $ref: '#/components/schemas/pagination'
+                type: object
+          description: Returns a paginated list of hotels.
+        '400':
+          content:
+            application/json:
+              examples:
+                Validation error:
+                  summary: Bad request
+                  value:
+                    code: VALIDATION_ERROR
+                    message: '"start" must be in YYYY-MM-DD format. "foo" is not allowed. "lorem" missing required peer "ipsum"'
+                    validations:
+                    - code: DATE_FORMAT
+                      message: '"start" must be in YYYY-MM-DD format'
+                      property: start
+                    - code: OBJECT_UNKNOWN
+                      message: '"foo" is not allowed'
+                      property: foo
+                    - code: OBJECT_WITH
+                      message: '"lorem" missing required peer "ipsum"'
+                      property: lorem
+              schema:
+                $ref: '#/components/schemas/validationError'
+          description: Your request wasn't formatted correctly and therefore couldn't be processed. This most frequently happens when query parameters or request body values are missing, incorrectly formatted or added where they don't exist (e.g. due to typos). We're including a list of `validations` to point out where things are going wrong and should be fixed.
+        '401':
+          content:
+            application/json:
+              examples:
+                API key invalid:
+                  value:
+                    message: Invalid authentication credentials
+                API key missing:
+                  value:
+                    message: No API key found in request
+              schema:
+                $ref: '#/components/schemas/genericError'
+          description: Your request was sent without or with an incorrect API key. This most frequently happens when the `x-api-key` header wasn't added or contains an incorrect value. This might also happen if you're trying to access the production API endpoints with a sandbox API key or vice versa.
+        '500':
+          content:
+            application/json:
+              examples:
+                Internal Server Error:
+                  summary: Server has encountered an internal error.
+                  value:
+                    message: InternalServerError
+              schema:
+                $ref: '#/components/schemas/genericError'
+          description: 'An internal server error within the Impala platform has occurred. Our team will investigate the error.
+
+            We recommend that you contact us at support@impala.travel with the x-correlation-id value contained
+
+            within the response headers. Sending us this value will allow us to identify the precise error you encountered.'
+      summary: List all hotels
+      tags:
+      - Hotels
+  /hotels/{hotelId}:
+    get:
+      description: 'Returns the full content, room types and rates for the specified hotel.
+
+
+        When querying the hotels API you can query with or without dates. Where querying with dates requires providing valid values for the `start` and `end` parameters. Requests without these values will be considered a query without dates.
+
+
+        **Querying without dates:**
+
+
+        When you query without dates, the search result will include all properties that match your request. Including all content that is associated with those properties. However you will find that the `rates` attribute for each room will always be empty.
+
+
+        **Querying with dates:**
+
+
+        When you query with dates, the search result will include all properties that match your request, including all content that is associated with those properties. Rooms which do not have available prices for the provided dates will appear with an empty `rates` array.
+
+
+        For rooms where there are available prices the `rates` array will include both the public rates of the hotel, along with prices that come from deals in which you are participating. This would include private deals which you have negotiated with a hotel, along with Impala deals which you have been verified for.
+
+
+        Using the `rateId` of any of those rates, you can use the [Create a booking](https://docs.impala.travel/docs/booking-api/spec/openapi.seller.yaml/paths/~1bookings/post) endpoint to make a booking.'
+      operationId: retrieveHotel
+      parameters:
+      - description: The unique identifier of this hotel on the Impala platform.
+        in: path
+        name: hotelId
+        required: true
+        schema:
+          format: uuid
+          type: string
+      - description: The arrival day of the desired stay range in ISO 8601 format (`YYYY-MM-DD`).
+        in: query
+        name: start
+        schema:
+          example: '2021-05-20'
+          type: string
+      - description: The departure day of the desired stay range in ISO 8601 format (`YYYY-MM-DD`).
+        in: query
+        name: end
+        schema:
+          example: '2021-05-22'
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                List Single Hotel:
+                  $ref: '#/components/examples/ExampleHotel'
+              schema:
+                $ref: '#/components/schemas/hotelFullDetail'
+          description: Returns the requested hotel.
+        '400':
+          content:
+            application/json:
+              examples:
+                Validation error:
+                  summary: Bad request
+                  value:
+                    code: VALIDATION_ERROR
+                    message: '"start" must be in YYYY-MM-DD format. "foo" is not allowed. "lorem" missing required peer "ipsum"'
+                    validations:
+                    - code: DATE_FORMAT
+                      message: '"start" must be in YYYY-MM-DD format'
+                      property: start
+                    - code: OBJECT_UNKNOWN
+                      message: '"foo" is not allowed'
+                      property: foo
+                    - code: OBJECT_WITH
+                      message: '"lorem" missing required peer "ipsum"'
+                      property: lorem
+              schema:
+                $ref: '#/components/schemas/validationError'
+          description: Your request wasn't formatted correctly and therefore couldn't be processed. This most frequently happens when query parameters or request body values are missing, incorrectly formatted or added where they don't exist (e.g. due to typos). We're including a list of `validations` to point out where things are going wrong and should be fixed.
+        '401':
+          content:
+            application/json:
+              examples:
+                API key invalid:
+                  value:
+                    message: Invalid authentication credentials
+                API key missing:
+                  value:
+                    message: No API key found in request
+              schema:
+                $ref: '#/components/schemas/genericError'
+          description: Your request was sent without or with an incorrect API key. This most frequently happens when the `x-api-key` header wasn't added or contains an incorrect value. This might also happen if you're trying to access the production API endpoints with a sandbox API key or vice versa.
+        '403':
+          content:
+            application/json:
+              examples:
+                fail:
+                  summary: No access
+                  value:
+                    message: Forbidden resource
+              schema:
+                $ref: '#/components/schemas/genericError'
+          description: Forbidden
+        '500':
+          content:
+            application/json:
+              examples:
+                Internal Server Error:
+                  summary: Server has encountered an internal error.
+                  value:
+                    message: Internal Server Error
+              schema:
+                $ref: '#/components/schemas/genericError'
+          description: 'An internal server error within the Impala platform has occurred. Our team will investigate the error.
+
+            We recommend that you contact us at support@impala.travel with the x-correlation-id value contained
+
+            within the response headers. Sending us this value will allow us to identify the precise error you encountered.'
+      summary: Retrieve a hotel
+      tags:
+      - Hotels
+components:
+  schemas:
+    money:
+      description: An amount of money in the specified currency (used in the context of prices, fees, refunds etc.)
+      properties:
+        amount:
+          description: Amount in the smallest unit of the currency. E.g. 234.56 € is expressed as 23456 (in Euro cents to avoid rounding errors in calculations).
+          example: 9500
+          type: integer
+        currency:
+          description: Details of the currency.
+          properties:
+            code:
+              description: Three-character currency code in ISO 4217 notation.
+              example: EUR
+              type: string
+          required:
+          - code
+          title: CurrencyDetails
+          type: object
+      required:
+      - amount
+      - currency
+      title: Money
+      type: object
+      x-examples:
+        Double-decimal currency (EUR):
+          amount: 9500
+          currency:
+            code: EUR
+        Zero-decimal currency (JPY):
+          amount: 37747
+          currency:
+            code: JPY
+    rate:
+      description: Information on the price of the room, other components of the room (such as breakfast, lunch or a welcome drink) and the cancellation policies that apply.
+      properties:
+        cancellationPolicies:
+          items:
+            $ref: '#/components/schemas/cancellationPolicy'
+          minItems: 1
+          type: array
+          uniqueItems: true
+        components:
+          items:
+            $ref: '#/components/schemas/rateComponent'
+          minItems: 0
+          type: array
+          uniqueItems: true
+        end:
+          example: '2021-11-23'
+          format: date
+          minLength: 1
+          type: string
+        hotelAgreement:
+          $ref: '#/components/schemas/hotelAgreementStub'
+        maxOccupancy:
+          description: Maximum number of adults included in the rate.
+          example: 2
+          type: integer
+        rateId:
+          example: 3rX3IaqkpJaPlttxoFoM3uDcHJEZCAuByqfBSLUPMvkBGyu7IAlhbxl3rZ7cVmVj6TbXL4EfiHlTA
+          minLength: 1
+          type: string
+        ratePlanId:
+          description: The rate plan ID that is attached to this rate. Each rate plan ID can specify a unique combination of a cancellation policy and a meal plan.
+          example: 1
+          type: integer
+        retailRate:
+          description: The public retail rate you should quote and charge your guest. You're not allowed to quote or charge an amount lower than this if your website or app is publicly accessible.
+          properties:
+            taxesAndFees:
+              description: Breakdown of taxes (e.g. VAT, city tax) and fees (e.g. cleaning or resort fees).
+              properties:
+                includedInRate:
+                  description: Taxes and fees that are included in the `retailRate.total` price paid at the time of booking.
+                  items:
+                    $ref: '#/components/schemas/taxOrFee'
+                  minItems: 0
+                  type: array
+                payAtHotel:
+                  description: Taxes and fees that need to be payed at the hotel (often upon arrival or departure). This frequently happens for fees that only need to be collected based on certain conditions (e.g. a guest coming from abroad or being older than a certain age).
+                  items:
+                    $ref: '#/components/schemas/taxOrFee'
+                  minItems: 0
+                  type: array
+              type: object
+            total:
+              $ref: '#/components/schemas/money'
+          required:
+          - total
+          - taxesAndFees
+          type: object
+        roomsSellable:
+          description: Amount of rooms which can be sold for this occupancy level and room type at this rate price.
+          type: number
+        sellerCommissionPercentage:
+          description: The commission percentage you as a seller will earn from this booking, based on `retailRate.total`.
+          example: 9.5
+          format: float
+          type: number
+        sellerToImpalaPayment:
+          allOf:
+          - $ref: '#/components/schemas/money'
+          description: This is the amount payable to the hotel, which Impala will collect from you on the hotel's behalf. The Impala fee will be requested in addition to this, and also documented in a VAT invoice.
+        start:
+          example: '2021-11-20'
+          format: date
+          minLength: 1
+          type: string
+      required:
+      - rateId
+      - start
+      - end
+      - hotelAgreement
+      - maxOccupancy
+      - retailRate
+      - sellerCommissionPercentage
+      - components
+      - cancellationPolicies
+      title: Room rate
+      type: object
+      x-examples:
+        Example:
+          cancellationPolicies:
+          - end: '2020-12-17 23:59:59.999'
+            fee:
+              count: 100
+              price:
+                amount: 9500
+                currency:
+                  code: EUR
+              type: PERCENTAGE
+            formatted: Non-refundable after October 19, 2021 00:00
+            start: '2020-12-15 23:59:59.999'
+          components:
+          - formatted: Breakfast
+            includedInRate: true
+            type: BREAKFAST
+          end: '2021-11-23'
+          rateId: dBFo
+          ratePlanId: 1
+          retailRate:
+            total:
+              amount: 9500
+              currency:
+                code: EUR
+          roomsSellable: 100
+          sellerCommissionPercentage: 9.5
+          sellerToImpalaPayment:
+            amount: 8598
+            currency:
+              code: EUR
+          start: '2021-11-20'
+    roomType:
+      description: Bookable category of bookable rooms within a hotel
+      properties:
+        amenities:
+          items:
+            $ref: '#/components/schemas/amenity'
+          type: array
+        description:
+          description: Description
+          example: Modern room with plenty of natural light and modern furniture.
+          type: string
+        images:
+          description: Lists photos of this room type
+          items:
+            $ref: '#/components/schemas/image'
+          type: array
+        maxOccupancy:
+          description: Maximum number of adults that can occupy the room.
+          example: 4
+          type: integer
+        name:
+          description: Name
+          example: Standard Room
+          type: string
+        rates:
+          description: Bookable rates for this room type and the start and end dates of your availability search.
+          items:
+            $ref: '#/components/schemas/rate'
+          type: array
+        roomTypeId:
+          description: Unique identifier of the room type within the Impala platform.
+          example: d5b192ce-c45f-46da-abf5-3880b429b7cc
+          format: uuid
+          type: string
+      required:
+      - roomTypeId
+      - name
+      - description
+      - maxOccupancy
+      - amenities
+      - images
+      title: Room type
+      type: object
+    address:
+      description: Physical address
+      properties:
+        city:
+          example: Impalaland
+          type: string
+        country:
+          description: Three-character country code in ISO alpha-3 format.
+          example: GBR
+          type: string
+        countryName:
+          description: English name of the country.
+          example: United Kingdom
+          type: string
+        line1:
+          description: First line of the address.
+          example: 12 Sample Avenue
+          type: string
+        line2:
+          description: Second line of the address.
+          nullable: true
+          type: string
+        postalCode:
+          example: '12345'
+          type: string
+        region:
+          nullable: true
+          type: string
+      required:
+      - line1
+      - city
+      - country
+      - countryName
+      - postalCode
+      title: Address
+      type: object
+    amenity:
+      description: "<!--\ntype: tab\ntitle: Description\n-->\nFeature or facility available in the hotel or room type. For the full list of property and room amenity codes, you can click on the \"Room Amenities\" and \"Property Amenities\" tab.\n\n<!--\ntype: tab\ntitle: Room Amenities\n-->\nBelow you will find a list of all room amenities in JSON format.\n```json\n{\n  \"2\": \"Air conditioning\",\n  \"3\": \"Alarm clock\",\n  \"5\": \"AM/FM radio\",\n  \"8\": \"Barbeque grills\",\n  \"9\": \"Bath tub with spray jets\",\n  \"10\": \"Bathrobe\",\n  \"11\": \"Bathroom amenities (free toiletries)\",\n  \"13\": \"Bathtub\",\n  \"14\": \"Bathtub only\",\n  \"15\": \"Bath or Shower\",\n  \"16\": \"Bidet\",\n  \"18\": \"Cable television\",\n  \"19\": \"Coffee/Tea maker\",\n  \"20\": \"Color television\",\n  \"21\": \"Computer\",\n  \"22\": \"Connecting rooms\",\n  \"25\": \"Cordless phone\",\n  \"28\": \"Desk\",\n  \"29\": \"Desk with lamp\",\n  \"32\": \"Dishwasher\",\n  \"38\": \"Fax machine\",\n  \"41\": \"Fireplace\",\n  \"46\": \"Free movies/video\",\n  \"47\": \"Full kitchen\",\n  \"49\": \"Grecian tub\",\n  \"50\": \"Hairdryer\",\n  \"54\": \"Internet access\",\n  \"55\": \"Iron (ironing facilities)\",\n  \"56\": \"Ironing board\",\n  \"57\": \"Whirpool\",\n  \"59\": \"Kitchen\",\n  \"60\": \"Kitchen supplies\",\n  \"61\": \"Kitchenette\",\n  \"63\": \"Laptop\",\n  \"64\": \"Large desk\",\n  \"68\": \"Microwave\",\n  \"69\": \"Minibar\",\n  \"72\": \"Multi-line phone\",\n  \"77\": \"Oven\",\n  \"78\": \"Pay per view movies on TV\",\n  \"80\": \"Phone in bathroom\",\n  \"81\": \"Plates and bowls\",\n  \"85\": \"Private bathroom\",\n  \"88\": \"Refrigerator\",\n  \"89\": \"Refrigerator with ice maker\",\n  \"92\": \"Safe\",\n  \"94\": \"Separate closet\",\n  \"97\": \"Shower only\",\n  \"98\": \"Silverware/utensils\",\n  \"99\": \"Sitting area\",\n  \"103\": \"Speaker phone\",\n  \"105\": \"Stove\",\n  \"108\": \"Telephone for hearing impaired\",\n  \"115\": \"VCR movies\",\n  \"117\": \"Video games\",\n  \"119\": \"Wake-up calls\",\n  \"123\": \"Wireless internet connection\",\n  \"126\": \"Air conditioning individually controlled in room\",\n  \"127\": \"Bathtub & whirlpool separate\",\n  \"129\": \"CD  player\",\n  \"133\": \"Desk with electrical outlet\",\n  \"138\": \"Marble bathroom\",\n  \"139\": \"List of movie channels available\",\n  \"141\": \"Oversized bathtub\",\n  \"142\": \"Shower\",\n  \"144\": \"Soundproofed room\",\n  \"146\": \"Tables and chairs\",\n  \"147\": \"Two-line phone\",\n  \"149\": \"Washer/dryer\",\n  \"155\": \"Separate tub and shower\",\n  \"157\": \"Ceiling fan\",\n  \"158\": \"CNN available\",\n  \"162\": \"Closets in room\",\n  \"163\": \"DVD player\",\n  \"164\": \"Mini-refrigerator\",\n  \"166\": \"Self-controlled heating/cooling system\",\n  \"167\": \"Toaster\",\n  \"193\": \"Shared bathroom\",\n  \"194\": \"Telephone TDD/Textphone\",\n  \"210\": \"Satellite television\",\n  \"214\": \"iPod docking station\",\n  \"217\": \"Satellite radio\",\n  \"218\": \"Video on demand\",\n  \"220\": \"Gulf view\",\n  \"223\": \"Mountain view\",\n  \"224\": \"Ocean view\",\n  \"228\": \"Slippers\",\n  \"230\": \"Chair provided with desk\",\n  \"234\": \"Luxury linen type\",\n  \"245\": \"Private pool\",\n  \"246\": \"High Definition (HD) Flat Panel Television  - 32 inches or greater\",\n  \"251\": \"TV\",\n  \"254\": \"Video game player:\",\n  \"256\": \"Dining room seats\",\n  \"258\": \"Mobile/cellular phones\",\n  \"259\": \"Movies\",\n  \"260\": \"Multiple closets\",\n  \"262\": \"Safe large enough to accommodate a laptop\",\n  \"265\": \"Bluray player\",\n  \"268\": \"Non-allergenic room\",\n  \"270\": \"Seating area with sofa/chair\",\n  \"271\": \"Separate toilet area\",\n  \"273\": \"Widescreen TV\",\n  \"276\": \"Separate tub or shower\",\n  \"249\": \"Double (Bed)\",\n  \"200\": \"Futon Mat\",\n  \"58\": \"Extra large Double\",\n  \"86\": \"Large Double\",\n  \"102\": \"Sofa Bed\",\n  \"113\": \"Twin (bed)\",\n  \"203\": \"Single (bed)\",\n  \"4001\": \"Bunk bed\",\n  \"5001\": \"Coffee/Tea maker\",\n  \"5002\": \"Internet facilities\",\n  \"5003\": \"Mini-bar\",\n  \"5004\": \"Shower\",\n  \"5005\": \"Bath\",\n  \"5006\": \"Safe Deposit Box\",\n  \"5007\": \"Pay-per-view Channels\",\n  \"5008\": \"TV\",\n  \"5009\": \"Telephone\",\n  \"5010\": \"Fax\",\n  \"5011\": \"Airconditioning\",\n  \"5012\": \"Hair Dryer\",\n  \"5013\": \"Wake Up Service/Alarm-clock\",\n  \"5014\": \"Hot Tub\",\n  \"5015\": \"Clothing Iron\",\n  \"5016\": \"Kitchenette\",\n  \"5017\": \"Balcony\",\n  \"5018\": \"Trouser Press\",\n  \"5019\": \"Bath-robe\",\n  \"5020\": \"Spa Bath\",\n  \"5021\": \"Radio\",\n  \"5022\": \"Refrigerator\",\n  \"5023\": \"Desk\",\n  \"5024\": \"Shared Bathroom\",\n  \"5025\": \"Ironing facilities\",\n  \"5026\": \"Seating area\",\n  \"5027\": \"Free Toiletries\",\n  \"5028\": \"DVD-Player\",\n  \"5029\": \"CD-Player\",\n  \"5030\": \"Fan\",\n  \"5031\": \"Toilet\",\n  \"5032\": \"Microwave\",\n  \"5033\": \"Dishwasher\",\n  \"5034\": \"Washing machine\",\n  \"5035\": \"Video\",\n  \"5036\": \"Video Games\",\n  \"5037\": \"Patio\",\n  \"5038\": \"Bathroom\",\n  \"5039\": \"Extra long beds (> 2 meter)\",\n  \"5040\": \"Heating\",\n  \"5041\": \"Dressing room\",\n  \"5042\": \"Guest toilet\",\n  \"5043\": \"Slippers\",\n  \"5044\": \"Satellite Channels\",\n  \"5045\": \"Kitchen\",\n  \"5046\": \"Wireless internet\",\n  \"5068\": \"Cable channels\",\n  \"5069\": \"Bath or Shower\",\n  \"5070\": \"Carpeted Floor\",\n  \"5071\": \"Fireplace\",\n  \"5072\": \"Additional Toilet\",\n  \"5073\": \"Interconnecting Room(s) available\",\n  \"5074\": \"Laptop Safe Box\",\n  \"5075\": \"Flat-screen TV\",\n  \"5076\": \"Private Entrance\",\n  \"5077\": \"Sofa\",\n  \"5079\": \"Soundproofing\",\n  \"5080\": \"Tiled / Marble floor\",\n  \"5081\": \"View\",\n  \"5082\": \"Wooden / Parquet floor\",\n  \"5083\": \"Wake Up Service\",\n  \"5084\": \"Alarm Clock\",\n  \"5085\": \"Dining Area\",\n  \"5086\": \"Electric Kettle\",\n  \"5087\": \"Executive Lounge Access\",\n  \"5088\": \"iPod Docking Station\",\n  \"5089\": \"Kitchenware\",\n  \"5090\": \"Mosquito Net\",\n  \"5091\": \"Towels/Linens at surcharge\",\n  \"5092\": \"Sauna\",\n  \"5093\": \"Private Pool\",\n  \"5094\": \"Tumble dryer (machine)\",\n  \"5095\": \"Wardrobe/Closet\",\n  \"5096\": \"Oven\",\n  \"5097\": \"Stove\",\n  \"5098\": \"Toaster\",\n  \"5099\": \"Barbecue\",\n  \"5100\": \"Bidet\",\n  \"5101\": \"Computer\",\n  \"5102\": \"iPad\",\n  \"5103\": \"Game Console\",\n  \"5104\": \"Game Console - Xbox 360\",\n  \"5105\": \"Game Console - PS2\",\n  \"5106\": \"Game Console - PS3\",\n  \"5107\": \"Game Console - Nintendo Wii\",\n  \"5108\": \"Sea View\",\n  \"5109\": \"Lake View\",\n  \"5110\": \"Garden View\",\n  \"5111\": \"Pool View\",\n  \"5112\": \"Mountain View\",\n  \"5113\": \"Landmark View\",\n  \"5114\": \"Laptop\",\n  \"5115\": \"Allergy-Free\",\n  \"5116\": \"Cleaning products\",\n  \"5117\": \"Electric blankets\",\n  \"5118\": \"Additional Bathroom\",\n  \"5119\": \"Blu-ray player\",\n  \"5120\": \"Coffee Machine\",\n  \"5121\": \"City View\",\n  \"5122\": \"River View\",\n  \"5123\": \"Terrace\",\n  \"5124\": \"Towels\",\n  \"5125\": \"Linen\",\n  \"5126\": \"Dining table\",\n  \"5127\": \"Children highchair\",\n  \"5129\": \"Outdoor furniture\",\n  \"5130\": \"Outdoor dining area\",\n  \"5131\": \"Entire property on ground floor\",\n  \"5132\": \"Upper floor reachable by lift\",\n  \"5133\": \"Upper floor reachable by stairs only\",\n  \"5134\": \"Entire unit wheelchair accessible\",\n  \"5135\": \"Detached\",\n  \"5136\": \"Semi-detached\",\n  \"5137\": \"Private flat in block of flats\",\n  \"5138\": \"Clothes Rack\",\n  \"5139\": \"Rollaway bed\",\n  \"5140\": \"Clothes drying rack\",\n  \"5141\": \"Toilet paper\",\n  \"5142\": \"Child safety socket covers\",\n  \"5143\": \"Board games/puzzles\",\n  \"5144\": \"Book/DVD/Music library for children\",\n  \"5145\": \"Baby safety gates\",\n  \"5146\": \"Sofa bed\",\n  \"5147\": \"toilet with grab rails\",\n  \"5148\": \"adapted bath\",\n  \"5149\": \"roll in shower\",\n  \"5150\": \"walk in shower\",\n  \"5151\": \"higher level toilet\",\n  \"5152\": \"low bathroom sink\",\n  \"5153\": \"bathroom emergency pull cord\",\n  \"5154\": \"shower chair\",\n  \"5157\": \"rooftop pool\",\n  \"5158\": \"infinity pool\",\n  \"5159\": \"pool with view\",\n  \"5160\": \"heated pool\",\n  \"5161\": \"salt-water pool\",\n  \"5162\": \"plunge pool\",\n  \"5163\": \"pool towels\",\n  \"5164\": \"shallow end\",\n  \"5165\": \"pool cover\",\n  \"5166\": \"wine/champagne\",\n  \"5167\": \"bottle of water\",\n  \"5168\": \"fruits\",\n  \"5169\": \"chocolate/cookies\",\n  \"5170\": \"Trash cans\",\n  \"5171\": \"Wine glasses\",\n  \"5172\": \"Game console - Xbox One\",\n  \"5173\": \"Game console - Wii U\",\n  \"5174\": \"Game console - PS4\",\n  \"5175\": \"Children crib/cots\",\n  \"5176\": \"toothbrush\",\n  \"5177\": \"shampoo\",\n  \"5178\": \"conditioner\",\n  \"5179\": \"body soap\",\n  \"5180\": \"shower cap\",\n  \"5181\": \"pajamas\",\n  \"5182\": \"yukata\",\n  \"5184\": \"socket near the bed\",\n  \"5185\": \"adapter\",\n  \"5186\": \"feather pillow\",\n  \"5187\": \"non-feather pillow\",\n  \"5188\": \"hypoallergenic pillow\",\n  \"5189\": \"Accessible by Lift\",\n  \"5190\": \"Inner courtyard view\",\n  \"5191\": \"Quiet street view\",\n  \"5196\": \"Portable Wifi\",\n  \"5198\": \"Smartphone\",\n  \"5199\": \"Streaming service (such as Netflix)\",\n  \"5200\": \"Lockers\",\n  \"5201\": \"Fire alarms or smoke detectors\",\n  \"5202\": \"Fire extinguishers\",\n  \"5203\": \"Metal keys access\",\n  \"5204\": \"Electronic key card access\",\n  \"5205\": \"Reading light\",\n  \"5206\": \"Earplugs\",\n  \"5207\": \"Private curtain\",\n  \"5211\": \"Carbon monoxide detector\",\n  \"5212\": \"Carbon monoxide source\"\n}\n\n```\n\n\n<!--\ntype: tab\ntitle: Property Amenities\n-->\nBelow you will find a list of all property amenities in JSON format.\n```JSON\n{\n  \"1\": \"24-hour front desk\",\n  \"5\": \"Air conditioning\",\n  \"7\": \"ATM on site\",\n  \"8\": \"Baby sitting\",\n  \"9\": \"BBQ/Picnic area\",\n  \"14\": \"Library\",\n  \"15\": \"Car rental\",\n  \"16\": \"Casino\",\n  \"22\": \"Concierge desk\",\n  \"26\": \"Currency exchange\",\n  \"33\": \"Elevators\",\n  \"35\": \"Fitness Center\",\n  \"36\": \"Express Check-in/Check-out\",\n  \"41\": \"Airport shuttle (free)\",\n  \"44\": \"Game room\",\n  \"45\": \"Souvenir/Gift Shop\",\n  \"49\": \"Heated pool\",\n  \"50\": \"Housekeeping - daily\",\n  \"53\": \"Indoor parking\",\n  \"54\": \"Indoor pool\",\n  \"55\": \"Jacuzzi (Hot Tub)\",\n  \"60\": \"Evening Entertainment\",\n  \"61\": \"Massage\",\n  \"62\": \"Nightclub/DJ\",\n  \"66\": \"Outdoor pool\",\n  \"76\": \"Restaurant\",\n  \"77\": \"Room service\",\n  \"78\": \"Safe\",\n  \"79\": \"Sauna\",\n  \"81\": \"Shoeshine\",\n  \"83\": \"Solarium\",\n  \"86\": \"Turkish/ Steam Bath\",\n  \"91\": \"Tour Desk\",\n  \"96\": \"Dry cleaning\",\n  \"97\": \"Valet parking\",\n  \"98\": \"Vending Machine(snacks)\",\n  \"116\": \"Accessible parking\",\n  \"122\": \"Shops (on site)\",\n  \"149\": \"Grocery shopping service available\",\n  \"165\": \"Bar\",\n  \"168\": \"Laundry\",\n  \"173\": \"Breakfast\",\n  \"186\": \"Street parking\",\n  \"193\": \"Playground\",\n  \"197\": \"Lockers\",\n  \"198\": \"Non-smoking rooms\",\n  \"202\": \"Bicycle rentals\",\n  \"228\": \"Business center\",\n  \"230\": \"Secured parking\",\n  \"233\": \"Tennis court\",\n  \"234\": \"Water Sport Facilities (on site)\",\n  \"236\": \"Golf Course (within 2 miles)\",\n  \"237\": \"Horseback riding\",\n  \"239\": \"Beachfront\",\n  \"242\": \"Heating\",\n  \"262\": \"Shared Kitchen\",\n  \"269\": \"Meeting/Banquet Facilities\",\n  \"272\": \"Skiing\",\n  \"282\": \"Airport shuttle service (surcharge)\",\n  \"283\": \"Baggage Storage\",\n  \"292\": \"Newspaper\",\n  \"310\": \"Hypoallergenic room available\",\n  \"312\": \"All Spaces Non-Smoking (public and private)\",\n  \"316\": \"Electric vehicle charging station\",\n  \"327\": \"Events ticket service\",\n  \"342\": \"Snack bar\",\n  \"5154\": \"Swimming pool\",\n  \"5044\": \"Spa and wellness centre\",\n  \"5041\": \"Family Rooms\",\n  \"5123\": \"Airport shuttle with surcharge\",\n  \"5086\": \"Fitness centre\",\n  \"5006\": \"Terrace\",\n  \"5005\": \"Garden\",\n  \"5056\": \"Water park\",\n  \"5054\": \"Kids' club\",\n  \"5000\": \"Breakfast in the room\",\n  \"5001\": \"Public transport tickets\",\n  \"5002\": \"Bikes available (free)\",\n  \"5003\": \"Outdoor furniture\",\n  \"5004\": \"Outdoor fireplace\",\n  \"5007\": \"Sun terrace\",\n  \"5008\": \"Chapel/shrine\",\n  \"5009\": \"Shared lounge/TV area\",\n  \"5010\": \"Ironing service\",\n  \"5011\": \"Trouser press\",\n  \"5012\": \"Designated smoking area\",\n  \"5013\": \"Pet basket\",\n  \"5014\": \"Pet bowls\",\n  \"5015\": \"Beach\",\n  \"5016\": \"Bowling\",\n  \"5017\": \"Darts\",\n  \"5018\": \"Fishing\",\n  \"5020\": \"Hiking\",\n  \"5021\": \"Minigolf\",\n  \"5022\": \"Snorkeling\",\n  \"5023\": \"Squash\",\n  \"5024\": \"Windsurfing\",\n  \"5025\": \"Billiard\",\n  \"5026\": \"Table tennis\",\n  \"5027\": \"Canoeing\",\n  \"5028\": \"Ski-to-door access\",\n  \"5029\": \"Diving\",\n  \"5030\": \"Tennis equipment\",\n  \"5031\": \"Badminton equipment\",\n  \"5032\": \"Cycling\",\n  \"5033\": \"Ski storage\",\n  \"5034\": \"Ski school\",\n  \"5035\": \"Ski equipment hire (on site)\",\n  \"5036\": \"Ski pass vendor\",\n  \"5037\": \"Private beach area\",\n  \"5039\": \"Rooms/Facilities for Disabled\",\n  \"5040\": \"Hair dresser-beautician\",\n  \"5042\": \"Viproom facilities\",\n  \"5043\": \"Bridal Suite\",\n  \"5045\": \"Karaoke\",\n  \"5046\": \"Soundproof-rooms\",\n  \"5047\": \"Packed Lunches\",\n  \"5048\": \"Ticket service\",\n  \"5049\": \"Entertainment Staff\",\n  \"5050\": \"Private Check-in/Check-out\",\n  \"5051\": \"Special Diet Menus (on request)\",\n  \"5052\": \"Vending Machine (drinks)\",\n  \"5053\": \"Hot Spring Bath\",\n  \"5055\": \"Minimarket on site\",\n  \"5057\": \"Adult only\",\n  \"5058\": \"Open-air bath\",\n  \"5059\": \"Public bath\",\n  \"5060\": \"Water slide\",\n  \"5061\": \"Board games/puzzles\",\n  \"5062\": \"Book/DVD/Music library for children\",\n  \"5063\": \"Indoor play area\",\n  \"5064\": \"Kids' outdoor play equipment\",\n  \"5065\": \"Baby safety gates\",\n  \"5066\": \"Children television networks\",\n  \"5067\": \"Kid meals\",\n  \"5068\": \"Kid-friendly buffet\",\n  \"5069\": \"Pool towels\",\n  \"5070\": \"Wine/Champagne\",\n  \"5071\": \"Bottle of water\",\n  \"5072\": \"Fruits\",\n  \"5073\": \"Chocolate/Cookies\",\n  \"5074\": \"Strollers\",\n  \"5075\": \"On-site coffee house\",\n  \"5076\": \"Sun loungers or beach chairs\",\n  \"5077\": \"Sun umbrellas\",\n  \"5078\": \"Picnic area\",\n  \"5079\": \"Beauty Services\",\n  \"5080\": \"Spa Facilities\",\n  \"5081\": \"Steam room\",\n  \"5082\": \"Spa lounge/relaxation area\",\n  \"5083\": \"Foot bath\",\n  \"5084\": \"Spa/wellness packages\",\n  \"5085\": \"Massage chair\",\n  \"5087\": \"Yoga classes\",\n  \"5088\": \"Fitness classes\",\n  \"5089\": \"Personal trainer\",\n  \"5090\": \"Fitness/spa locker rooms\",\n  \"5091\": \"Kids pool\",\n  \"5092\": \"Shuttle Service\",\n  \"5093\": \"Temporary art galleries\",\n  \"5094\": \"Pub crawls\",\n  \"5095\": \"Stand-up comedy\",\n  \"5096\": \"Movie nights\",\n  \"5097\": \"Walking tours\",\n  \"5098\": \"Bike tours\",\n  \"5099\": \"Themed dinner nights\",\n  \"5100\": \"Happy hour\",\n  \"5101\": \"Tour or class about local culture\",\n  \"5102\": \"Cooking class\",\n  \"5103\": \"Live music/performance\",\n  \"5104\": \"Live sports events (broadcast)\",\n  \"5105\": \"Archery\",\n  \"5106\": \"Aerobics\",\n  \"5107\": \"Bingo\",\n  \"5108\": \"Ski Shuttle\",\n  \"5109\": \"Outdoor Swimming Pool (all year)\",\n  \"5110\": \"Outdoor Swimming Pool (seasonal)\",\n  \"5111\": \"Indoor Swimming Pool (all year)\",\n  \"5112\": \"Indoor Swimming Pool (seasonal)\",\n  \"5113\": \"Swimming pool toys\",\n  \"5114\": \"Rooftop pool\",\n  \"5115\": \"Infinity pool\",\n  \"5116\": \"Pool with view\",\n  \"5117\": \"Salt-water pool\",\n  \"5118\": \"Plunge pool\",\n  \"5119\": \"Pool bar\",\n  \"5120\": \"Shallow end pool\",\n  \"5121\": \"Pool cover\",\n  \"5122\": \"Fence around pool\",\n  \"5124\": \"Property is wheel chair accessible\",\n  \"5125\": \"Toilet with grab rails\",\n  \"5126\": \"Higher level toilet\",\n  \"5127\": \"Low bathroom sink\",\n  \"5128\": \"Bathroom emergency pull cord\",\n  \"5129\": \"Visual aids: Braille\",\n  \"5130\": \"Visual aids: Tactile Signs\",\n  \"5131\": \"Auditory Guidance\",\n  \"5132\": \"Back massage\",\n  \"5133\": \"Neck massage\",\n  \"5134\": \"Foot massage\",\n  \"5135\": \"Couples massage\",\n  \"5136\": \"Head massage\",\n  \"5137\": \"Hand massage\",\n  \"5138\": \"Full body massage\",\n  \"5139\": \"Facial treatments\",\n  \"5140\": \"Waxing services\",\n  \"5141\": \"Make up services\",\n  \"5142\": \"Hair treatments\",\n  \"5143\": \"Manicure\",\n  \"5144\": \"Pedicure\",\n  \"5145\": \"Hair cut\",\n  \"5146\": \"Hair colouring\",\n  \"5147\": \"Hair styling\",\n  \"5148\": \"Body Treatments\",\n  \"5149\": \"Body scrub\",\n  \"5150\": \"Body wrap\",\n  \"5151\": \"Light therapy\",\n  \"5152\": \"Shuttle Service (free)\",\n  \"5153\": \"Shuttle Service (surcharge)\",\n  \"5156\": \"No Single-Use Toiletries\",\n  \"5157\": \"Towels Changed Upon Request\",\n  \"5158\": \"24-hour security\",\n  \"5159\": \"Security alarm\",\n  \"5160\": \"Smoke alarms\",\n  \"5161\": \"CCTV in common areas\",\n  \"5162\": \"CCTV outside property\",\n  \"5163\": \"Fire extinguishers\",\n  \"5164\": \"Key access\",\n  \"5165\": \"Key card access\",\n  \"5166\": \"Carbon monoxide detector\",\n  \"5167\": \"Carbon monoxide source\",\n  \"5168\": \"No plastic stirrers\",\n  \"5169\": \"No plastic straws\",\n  \"5170\": \"No plastic cups\",\n  \"5171\": \"No plastic bottles for water\",\n  \"5172\": \"No plastic bottles for non-water\",\n  \"5173\": \"No plastic cutlery\",\n  \"5174\": \"Keycard for room electricity\",\n  \"5175\": \"Opt-out from daily room cleaning\",\n  \"5176\": \"Refillable water stations\",\n  \"5177\": \"Bike rental\",\n  \"5178\": \"Bike parking\",\n  \"6000\": \"Lunch\",\n  \"6001\": \"Dinner\"\n}\n```\n\n<!-- type: tab-end -->"
+      properties:
+        code:
+          description: Unique identifier of this amenity according to the Open Travel Alliance HAC (Hotel Amenity Code) standard for hotels and RAC (Room Amenity Code) standard for rooms.
+          example: 1234
+          type: number
+        formatted:
+          description: A human-readable English description of the amenity.
+          example: WiFi
+          type: string
+      required:
+      - code
+      - formatted
+      title: Amenity
+      type: object
+      x-examples: {}
+      x-internal: false
+    hotelFullDetail:
+      description: Full details on a hotel, including its room types and available rates
+      properties:
+        address:
+          $ref: '#/components/schemas/address'
+        amenities:
+          items:
+            $ref: '#/components/schemas/amenity'
+          type: array
+        checkIn:
+          $ref: '#/components/schemas/timeRange'
+        checkOut:
+          $ref: '#/components/schemas/timeRange'
+        contractable:
+          description: 'This determines if you can negotiate directly with the hotel. '
+          example: true
+          type: boolean
+        createdAt:
+          description: Date and time (in UTC and ISO 8601 format) when the hotel's stable content (i.e. all the details of the hotel excluding its rates) was created.
+          example: '2020-01-01T10:36:25.267Z'
+          format: date-time
+          type: string
+        currency:
+          description: The standard currency code used by the hotel.
+          example: USD
+          type: string
+        description:
+          properties:
+            short:
+              description: A short description that helps highlight what's special about this hotel.
+              example: Don't expect anything fancy. This fictional example hotel has the bare minimum content, rate availability and features you can expect from any hotel on the Impala platform (https://impala.travel). It contains minimum photography at the minimum resolution, only the fields that you can expect to see on every hotel on the platform, and only one room type and rate. Testing with this hotel means your app works well in the rare cases where a hotel has only minimum content available.
+              type: string
+          type: object
+        emails:
+          items:
+            type: string
+          type: array
+        externalUrls:
+          items:
+            $ref: '#/components/schemas/externalUrl'
+          type: array
+        hotelId:
+          description: Unique identifier for this hotel within the Impala platform.
+          example: 60a06628-2c71-44bf-9685-efbd2df4179e
+          format: uuid
+          type: string
+        images:
+          description: Photos of the hotel, sorted in the recommended display order (e.g. for photo galleries) starting with the recommended hero image.
+          items:
+            $ref: '#/components/schemas/image'
+          type: array
+        location:
+          $ref: '#/components/schemas/location'
+        name:
+          description: Name of the hotel.
+          example: Impala Minimalist Palace
+          type: string
+        phoneNumbers:
+          description: The hotel's phone number(s)
+          items:
+            type: string
+          type: array
+        roomCount:
+          description: The number of rooms at the hotel.
+          example: 30
+          type: number
+        roomTypes:
+          description: List of room types available at this hotel.
+          items:
+            $ref: '#/components/schemas/roomType'
+          type: array
+        starRating:
+          description: The star rating (or star-equivalent rating)
+          example: 2.5
+          format: double
+          nullable: true
+          type: number
+        termsAndConditions:
+          description: Rules and terms that apply to this hotel and have to be shown to your guest before the make their booking.
+          example: Please note that passport details will be collected at check-in.
+          type: string
+        timezone:
+          description: The timezone the hotel is in - e.g AST
+          example: ATC
+          type: string
+        updatedAt:
+          description: Date and time (in UTC and ISO 8601 format) when the hotel's stable content (i.e. all the details of the hotel excluding its rates)  was last updated.
+          example: '2020-11-27T10:46:35.569Z'
+          format: date-time
+          type: string
+        websiteUrl:
+          description: The URL to the hotel's website.
+          nullable: true
+          type: string
+      required:
+      - hotelId
+      - name
+      - starRating
+      - currency
+      - websiteUrl
+      - externalUrls
+      - phoneNumbers
+      - emails
+      - images
+      - address
+      - location
+      - amenities
+      - roomTypes
+      - roomCount
+      - checkIn
+      - checkOut
+      - contractable
+      - termsAndConditions
+      title: Hotel information (full)
+      type: object
+      x-examples: {}
+    validationError:
+      allOf:
+      - $ref: '#/components/schemas/genericError'
+      - properties:
+          validations:
+            items:
+              $ref: '#/components/schemas/validationResult'
+            type: array
+        type: object
+      title: Validation error response
+      x-examples: {}
+    rateComponent:
+      description: Product or service offered as part of a rate in addition to accommodation in the room.
+      properties:
+        formatted:
+          description: Human-readable plain English version of the component included in the rate, ready to be shown to your guests.
+          example: breakfast
+          type: string
+        includedInRate:
+          type: boolean
+        type:
+          description: The type of product or service included in the price. We currently support rates including "BREAKFAST", "LUNCH", "DINNER" and "ALL_INCLUSIVE".
+          enum:
+          - BREAKFAST
+          - LUNCH
+          - DINNER
+          - WELCOME_BEVERAGE
+          - ALL_INCLUSIVE
+          example: BREAKFAST
+          type: string
+      required:
+      - formatted
+      - type
+      title: Rate component
+      type: object
+      x-examples: {}
+    cancellationPolicy:
+      description: A rule that applies if the booking is cancelled.
+      properties:
+        end:
+          description: The time (in the hotel's local timezone) at which the policy takes effect, in ISO 8601 format. If omitted, the policy applies open-ended until the guests' stay.
+          example: '2020-12-17 23:59:59.999'
+          type: string
+        fee:
+          $ref: '#/components/schemas/cancellationFee'
+        formatted:
+          description: Human-readable plain English cancellation policy information, ready to be shown to your guests.
+          example: Non-refundable after October 19, 2021 00:00
+          type: string
+        start:
+          description: The time (in the hotel's local timezone) at which the policy takes effect, in ISO 8601 format. If omitted, the policy is already in effect.
+          example: '2020-12-15 23:59:59.999'
+          type: string
+      required:
+      - start
+      - formatted
+      - fee
+      title: Cancellation policy
+      type: object
+    cancellationFee:
+      description: Describes the costs associated with a cancellation and how it is calculated.
+      properties:
+        count:
+          description: The value that is used in calculation of the cost. This could be 50 in case of a 50% fee being charged for a type "PERCENTAGE" or 2 in case of the initial two nights of the stay being charged in full as a fee if the type is "NIGHTS".
+          example: 100
+          type: number
+        price:
+          $ref: '#/components/schemas/money'
+        type:
+          description: The way in which the cancellation fee is calculated. This can be "NONE" in case a full refund is paid out, "NON_REFUNDABLE" if no refund is paid out and the full amount is due, "PERCENTAGE" if a percentage of the total price for the stay is charged as cancellation fee, "NIGHTS" if a defined number of initial nights of the stay are charged in full as cancellation fee or "FLAT" in case a flat cancellation fee is charged.
+          enum:
+          - NON_REFUNDABLE
+          - PERCENTAGE
+          - NONE
+          - NIGHTS
+          - FLAT
+          example: PERCENTAGE
+          type: string
+      required:
+      - type
+      - price
+      title: Cancellation fee
+      type: object
+      x-examples:
+        example-1:
+          count: 100
+          price:
+            amount: 9500
+            currency:
+              code: EUR
+          type: PERCENTAGE
+    hotelAgreementStub:
+      description: Essential information on an agreement with a hotel.
+      nullable: true
+      properties:
+        conditions:
+          description: A deal may have conditions set to it. For example, the deal may only apply for a closed user group (PRIVATE_RATE) or sold along with another component e.g flights (PACKAGED)
+          items:
+            example: PRIVATE_RATE
+            type: string
+          type: array
+        dealId:
+          description: The unique identifier for this deal request.
+          example: D1234
+          type: string
+        dealsSellable:
+          description: 'There is a limit to the number of deals that can be sold. '
+          properties:
+            remaining:
+              description: The amount of deals remaining that can sold.
+              example: 5
+              type: number
+          type: object
+        discount:
+          description: Rather than selling the hotel's generally available public rates, if a discount is agreed on, bookings made with this deal will have a reduced rate.
+          example:
+            count: 10
+            type: PERCENTAGE
+          properties:
+            count:
+              description: This is the amount of discount received.
+              example: 10
+              type: number
+            type:
+              description: 'This is the type of discount which can be: PERCENTAGE or FLAT_FEE.'
+              example: FLATFEE
+              type: string
+          type: object
+        hotelAgreementId:
+          description: Unique identifier for the hotel agreement.
+          example: A82983
+          type: string
+        href:
+          description: URI that allows access to the full deal information.
+          example: v1/deal-requests/D1234/agreements/A76543
+          type: string
+        specialInstructions:
+          description: 'These are conditions set by you the seller or the hotel for which the deal can be sold. For example: this deal can only be sold on mobile. Any specialInstructions will override other variables, for example, if an instruction includes: All bookings are non refundable, this will override any pre-existing cancellationPolicy.'
+          example: This deal can only be sold via desktop (not allowed for mobile apps)
+          nullable: true
+          type: string
+      required:
+      - hotelAgreementId
+      - dealId
+      - specialInstructions
+      title: Hotel Agreement (stub)
+      type: object
+      x-examples: {}
+    taxOrFee:
+      description: Details of a tax or fee (included or excluded in a rate).
+      properties:
+        category:
+          description: Structured information on what type the type of tax or fee.
+          enum:
+          - VAT
+          - CITY_TAX
+          - OTHER
+          minLength: 1
+          type: string
+        charges:
+          $ref: '#/components/schemas/money'
+        formatted:
+          description: Formatted English description of this tax or fee, ready to be shown to your guests.
+          example: 10% VAT
+          minLength: 1
+          type: string
+      title: Tax / fee
+      type: object
+    pagination:
+      description: Information that helps paginate through lists of resources.
+      properties:
+        count:
+          description: The number of items returned on this page.
+          example: 10
+          format: int32
+          type: number
+        next:
+          description: The absolute URL pointing to the next page. Will be null if there are no next pages.
+          example: /v1/sample?size=20&offset=120
+          nullable: true
+          type: string
+        prev:
+          description: The absolute URL pointing to the previous page. Will be null if there are no previous pages.
+          example: /v1/sample?size=20&offset=80
+          nullable: true
+          type: string
+        total:
+          description: The total number of items that exist for your query across all pages.
+          example: 1500
+          format: int32
+          type: number
+      required:
+      - count
+      - total
+      - next
+      - prev
+      title: Pagination information
+      type: object
+    validationResult:
+      description: Describes the validation that failed.
+      properties:
+        code:
+          description: Error code intended for logging and debugging.
+          example: ANY_REQUIRED
+          type: string
+        field:
+          description: Name of the field that has failed to validate. Intended to aid developers in finding and fixing implementation mistakes.
+          example: start
+          type: string
+        message:
+          description: Error message in English intended to aid developers in finding and solving implementation mistakes. Do not display to your guests as it **might contain sensitive implementation information**.
+          example: '"start" is required'
+          type: string
+      required:
+      - message
+      - code
+      title: Validation result
+      type: object
+      x-examples: {}
+    location:
+      description: Precise location on a map (using WGS 84 longitude and latitude notation)
+      properties:
+        latitude:
+          description: WGS 84 latitude.
+          example: 58.386186
+          type: number
+        longitude:
+          description: WGS 84 longitude.
+          example: -9.952549
+          type: number
+      required:
+      - latitude
+      - longitude
+      title: Location
+      type: object
+    timeRange:
+      description: A time range. Open-ended time ranges are indicated by omitting either `start` or `end` in the object.
+      example:
+        from: '12:00'
+        to: '21:00'
+      properties:
+        from:
+          description: Time in ISO 8601 time format.
+          example: '13:00'
+          type: string
+        to:
+          description: Time in ISO 8601 time format.
+          example: '21:00'
+          type: string
+      title: Time range
+      type: object
+    image:
+      properties:
+        altText:
+          description: Alternative text for the image (to be used e.g. to cater to screenreaders).
+          example: A photo of an object
+          nullable: true
+          type: string
+        height:
+          description: Height in pixels.
+          example: 4000
+          type: number
+        url:
+          description: The url of this image. The url of an image might change over time, and we therefore advise not to store or cache image URLs within your app beyond a few minutes.
+          example: https://cdn.impala.travel/ckhlsuxbb000b3b666rr9ussq.jpg
+          format: uri
+          type: string
+        width:
+          description: Width in pixels.
+          example: 4000
+          type: number
+      required:
+      - height
+      - width
+      - url
+      title: Image
+      type: object
+      x-examples: {}
+    genericError:
+      properties:
+        code:
+          description: Error code for you to use programatically, for error logging and debugging.
+          example: ERROR_CODE
+          type: string
+        message:
+          description: Error message intended to aid developers in debugging issues. We strongly advise against displaying this information publicly to your guests as it **might contain sensitive implementation details**.
+          example: Resource not found
+          type: string
+      required:
+      - message
+      title: Error response
+      type: object
+    externalUrl:
+      properties:
+        name:
+          description: Destination of the external url
+          enum:
+          - BOOKING.COM
+          - HOTELS.COM
+        url:
+          description: Value of the external url
+          type: string
+      type: object
+  examples:
+    ExampleHotel:
+      value:
+        address:
+          city: Impalaland
+          country: GBR
+          countryName: United Kingdom of Great Britain and Northern Ireland
+          line1: 456 Impala Street
+          line2: null
+          postalCode: 0987-654
+          region: Impalaland Beach
+        amenities:
+        - code: 5
+          formatted: Air conditioning
+        - code: 7
+          formatted: ATM/Cash machine
+        - code: 8
+          formatted: Baby sitting
+        - code: 9
+          formatted: BBQ/Picnic area
+        - code: 14
+          formatted: Business library
+        - code: 16
+          formatted: Casino
+        - code: 22
+          formatted: Concierge desk
+        checkIn:
+          from: '15:00'
+        checkOut:
+          to: '12:00'
+        contractable: true
+        createdAt: '2020-12-18T13:29:22.865Z'
+        currency: GBP
+        description:
+          short: This fictional example hotel allows you to experience all the content, rates and features the Impala platform (https://impala.travel) has to offer. Testing with this hotel allows you to experience the full breadth of functionality and rate options hotels might offer on Impala – and to ensure your app displays everything correctly.
+        emails:
+        - mail@impala-all-avaialable-resort.hotel
+        externalUrls:
+        - name: BOOKING.COM
+          url: https://www.booking.com/hotel/im/impala
+        - name: HOTELS.COM
+          url: https://uk.hotels.com/imp123456/
+        hotelId: 0e25533a-2db2-4894-9db1-4c1ff92d798c
+        images:
+        - altText: null
+          height: 1536
+          isHeroImage: true
+          url: https://cdn.impala.travel/properties/ckiuattho00013e6ar0tiilgt.jpg
+          width: 2884
+        - altText: null
+          height: 2461
+          isHeroImage: false
+          url: https://cdn.impala.travel/properties/ckiuavcvm00023e6aordygdiy.jpg
+          width: 3072
+        - altText: null
+          height: 3640
+          isHeroImage: false
+          url: https://cdn.impala.travel/properties/ckiuavvr100033e6ajep6w5dl.jpg
+          width: 2912
+        - altText: null
+          height: 2848
+          isHeroImage: false
+          url: https://cdn.impala.travel/properties/ckiuawdeo00043e6ajyqc70nm.jpg
+          width: 4288
+        - altText: null
+          height: 3072
+          isHeroImage: false
+          url: https://cdn.impala.travel/properties/ckiuawt9y00053e6a76l0qgqe.jpg
+          width: 4608
+        location:
+          latitude: 58.386186
+          longitude: -9.952549
+        name: Impala All-Inclusive Always Available Resort (Example Hotel)
+        phoneNumbers:
+        - '+48789789789'
+        roomCount: 200
+        roomTypes:
+        - amenities:
+          - code: 11
+            formatted: Bathroom amenities (free toiletries)
+          - code: 15
+            formatted: Bath or Shower
+          - code: 28
+            formatted: Desk
+          - code: 50
+            formatted: Hairdryer
+          - code: 69
+            formatted: Minibar
+          - code: 85
+            formatted: Private bathroom
+          - code: 123
+            formatted: Wireless internet connection
+          - code: 144
+            formatted: Soundproofed room
+          - code: 210
+            formatted: Satellite television
+          - code: 228
+            formatted: Slippers
+          description: This is a fictional example room type that you can use to test all the features you might encounter on any hotel available on the Impala platform on the Impala platform (https://impala.travel). Testing with this room type means your app or site will be able to handle any values that you might find on Impala.
+          images:
+          - altText: null
+            height: 3255
+            url: https://cdn.impala.travel/area-types/ckiub6h8c00093e6ag7kufw24.jpg
+            width: 4890
+          maxOccupancy: 1
+          name: Single Room
+          rates:
+          - cancellationPolicies:
+            - fee:
+                count: 100
+                price:
+                  amount: 10500
+                  currency:
+                    code: EUR
+                type: PERCENTAGE
+              formatted: Non-refundable after March 11, 2021 00:23
+              start: '2021-03-11 00:23:35.718'
+            components: []
+            end: '2021-07-02'
+            hotelAgreement: null
+            maxOccupancy: 1
+            notes:
+              fromGuest: ''
+              fromSeller: ''
+            rateId: b0e2ec0fa2ae1b3697f467393558a69a:474f39c17490c46b4e622da1bffbd5c1
+            ratePlanId: 7
+            retailRate:
+              taxesAndFees:
+                includedInRate: []
+                payAtHotel: []
+              total:
+                amount: 10500
+                currency:
+                  code: EUR
+            sellerCommissionPercentage: 10
+            start: '2021-07-01'
+          - cancellationPolicies:
+            - end: '2021-06-28 23:59:59.999'
+              fee:
+                price:
+                  amount: 0
+                  currency:
+                    code: EUR
+                type: NONE
+              formatted: Fully refundable until June 28, 2021 23:59
+              start: '2021-03-11 00:23:35.718'
+            - fee:
+                count: 100
+                price:
+                  amount: 12600
+                  currency:
+                    code: EUR
+                type: PERCENTAGE
+              formatted: Non-refundable after June 29, 2021 00:00
+              start: '2021-06-29 00:00:00.000'
+            components: []
+            end: '2021-07-02'
+            hotelAgreement: null
+            maxOccupancy: 1
+            rateId: 17b005e4c35575b654171d4589191b5d:bd277330e925805cad8686093554efe5
+            retailRate:
+              taxesAndFees:
+                includedInRate: []
+                payAtHotel: []
+              total:
+                amount: 12600
+                currency:
+                  code: EUR
+            sellerCommissionPercentage: 10
+            start: '2021-07-01'
+          - cancellationPolicies:
+            - fee:
+                count: 100
+                price:
+                  amount: 9975
+                  currency:
+                    code: EUR
+                type: PERCENTAGE
+              formatted: Non-refundable after March 11, 2021 00:23
+              start: '2021-03-11 00:23:35.718'
+            components: []
+            end: '2021-07-02'
+            hotelAgreement: null
+            maxOccupancy: 1
+            rateId: 058e478777fe3b4248670c6d6be3722c:06bbe6754161b5991e02e51849c6ae83
+            retailRate:
+              deal:
+                conditions: []
+                dealId: D3
+                discount:
+                  count: 5
+                  type: PERCENTAGE
+              taxesAndFees:
+                includedInRate: []
+                payAtHotel: []
+              total:
+                amount: 9975
+                currency:
+                  code: EUR
+            sellerCommissionPercentage: 15
+            start: '2021-07-01'
+          - cancellationPolicies:
+            - end: '2021-06-28 23:59:59.999'
+              fee:
+                price:
+                  amount: 0
+                  currency:
+                    code: EUR
+                type: NONE
+              formatted: Fully refundable until June 28, 2021 23:59
+              start: '2021-03-11 00:23:35.718'
+            - fee:
+                count: 100
+                price:
+                  amount: 11970
+                  currency:
+                    code: EUR
+                type: PERCENTAGE
+              formatted: Non-refundable after June 29, 2021 00:00
+              start: '2021-06-29 00:00:00.000'
+            components: []
+            end: '2021-07-02'
+            hotelAgreement: null
+            maxOccupancy: 1
+            rateId: 38143de2077774891c4f136d86ce817a:7fa93ac18e3851dec34dead83648148f
+            retailRate:
+              deal:
+                conditions: []
+                dealId: D3
+                discount:
+                  count: 5
+                  type: PERCENTAGE
+              taxesAndFees:
+                includedInRate: []
+                payAtHotel: []
+              total:
+                amount: 11970
+                currency:
+                  code: EUR
+            sellerCommissionPercentage: 15
+            start: '2021-07-01'
+          roomTypeId: 7b4e914f-0551-4fdc-b349-db3c32c5afed
+        - amenities:
+          - code: 228
+            formatted: Slippers
+          - code: 144
+            formatted: Soundproofed room
+          - code: 210
+            formatted: Satellite television
+          - code: 11
+            formatted: Bathroom amenities (free toiletries)
+          - code: 15
+            formatted: Bath or Shower
+          - code: 28
+            formatted: Desk
+          - code: 50
+            formatted: Hairdryer
+          - code: 69
+            formatted: Minibar
+          - code: 85
+            formatted: Private bathroom
+          - code: 123
+            formatted: Wireless internet connection
+          description: This is a fictional example room type that you can use to test all the features you might encounter on any hotel available on the Impala platform on the Impala platform (https://impala.travel). Testing with this room type means your app or site will be able to handle any values that you might find on Impala.
+          images:
+          - altText: null
+            height: 3024
+            url: https://cdn.impala.travel/area-types/ckiub0igb00063e6am6q2b0w3.jpg
+            width: 4032
+          maxOccupancy: 2
+          name: Junior Suite
+          rates:
+          - cancellationPolicies:
+            - end: '2021-06-28 23:59:59.999'
+              fee:
+                price:
+                  amount: 0
+                  currency:
+                    code: EUR
+                type: NONE
+              formatted: Fully refundable until June 28, 2021 23:59
+              start: '2021-03-11 00:23:35.719'
+            - fee:
+                count: 100
+                price:
+                  amount: 31500
+                  currency:
+                    code: EUR
+                type: PERCENTAGE
+              formatted: Non-refundable after June 29, 2021 00:00
+              start: '2021-06-29 00:00:00.000'
+            components: []
+            end: '2021-07-02'
+            hotelAgreement: null
+            maxOccupancy: 2
+            rateId: b815b95a5b6a847b7b0c09c1a9ea5827:77a228b50273fad2c224468c91739c3c
+            ratePlanId: 5
+            retailRate:
+              taxesAndFees:
+                includedInRate: []
+                payAtHotel: []
+              total:
+                amount: 31500
+                currency:
+                  code: EUR
+            sellerCommissionPercentage: 10
+            start: '2021-07-01'
+          - cancellationPolicies:
+            - end: '2021-06-28 23:59:59.999'
+              fee:
+                price:
+                  amount: 0
+                  currency:
+                    code: EUR
+                type: NONE
+              formatted: Fully refundable until June 28, 2021 23:59
+              start: '2021-03-11 00:23:35.719'
+            - fee:
+                count: 100
+                price:
+                  amount: 28875
+                  currency:
+                    code: EUR
+                type: PERCENTAGE
+              formatted: Non-refundable after June 29, 2021 00:00
+              start: '2021-06-29 00:00:00.000'
+            components: []
+            end: '2021-07-02'
+            hotelAgreement: null
+            maxOccupancy: 1
+            rateId: bcd9e5f11c6e747374d63d635b6f2d07:f5d244b004c18e3fef40606f83b72e76
+            ratePlanId: 1
+            retailRate:
+              taxesAndFees:
+                includedInRate: []
+                payAtHotel: []
+              total:
+                amount: 28875
+                currency:
+                  code: EUR
+            sellerCommissionPercentage: 10
+            start: '2021-07-01'
+          - cancellationPolicies:
+            - end: '2021-06-28 23:59:59.999'
+              fee:
+                price:
+                  amount: 0
+                  currency:
+                    code: EUR
+                type: NONE
+              formatted: Fully refundable until June 28, 2021 23:59
+              start: '2021-03-11 00:23:35.719'
+            - fee:
+                count: 100
+                price:
+                  amount: 29925
+                  currency:
+                    code: EUR
+                type: PERCENTAGE
+              formatted: Non-refundable after June 29, 2021 00:00
+              start: '2021-06-29 00:00:00.000'
+            components: []
+            end: '2021-07-02'
+            hotelAgreement: null
+            maxOccupancy: 2
+            rateId: e3d5af44011974bf705e792735778b44:88853f3b36a97a6adf8009d97102ad79
+            ratePlanId: 1
+            retailRate:
+              deal:
+                conditions: []
+                dealId: D3
+                discount:
+                  count: 5
+                  type: PERCENTAGE
+              taxesAndFees:
+                includedInRate: []
+                payAtHotel: []
+              total:
+                amount: 29925
+                currency:
+                  code: EUR
+            sellerCommissionPercentage: 15
+            start: '2021-07-01'
+          - cancellationPolicies:
+            - end: '2021-06-28 23:59:59.999'
+              fee:
+                price:
+                  amount: 0
+                  currency:
+                    code: EUR
+                type: NONE
+              formatted: Fully refundable until June 28, 2021 23:59
+              start: '2021-03-11 00:23:35.719'
+            - fee:
+                count: 100
+                price:
+                  amount: 27431
+                  currency:
+                    code: EUR
+                type: PERCENTAGE
+              formatted: Non-refundable after June 29, 2021 00:00
+              start: '2021-06-29 00:00:00.000'
+            components: []
+            end: '2021-07-02'
+            hotelAgreement: null
+            maxOccupancy: 1
+            rateId: 5c0db8cb17c9e5316b2a62bda48f1dd4:39b27339fc838dfbfc48216e22a8ce44
+            ratePlanId: 1
+            retailRate:
+              deal:
+                conditions: []
+                dealId: D3
+                discount:
+                  count: 5
+                  type: PERCENTAGE
+              taxesAndFees:
+                includedInRate: []
+                payAtHotel: []
+              total:
+                amount: 27431
+                currency:
+                  code: EUR
+            sellerCommissionPercentage: 15
+            start: '2021-07-01'
+          roomTypeId: 280b6f5a-c645-44c0-a63d-03f1d7bc3d55
+        - amenities:
+          - code: 2
+            formatted: Air conditioning
+          - code: 228
+            formatted: Slippers
+          - code: 210
+            formatted: Satellite television
+          - code: 144
+            formatted: Soundproofed room
+          - code: 123
+            formatted: Wireless internet connection
+          - code: 85
+            formatted: Private bathroom
+          - code: 69
+            formatted: Minibar
+          - code: 50
+            formatted: Hairdryer
+          - code: 28
+            formatted: Desk
+          - code: 15
+            formatted: Bath or Shower
+          - code: 11
+            formatted: Bathroom amenities (free toiletries)
+          description: This is a fictional example room type that you can use to test all the features you might encounter on any hotel available on the Impala platform on the Impala platform (https://impala.travel). Testing with this room type means your app or site will be able to handle any values that you might find on Impala.
+          images:
+          - altText: null
+            height: 6000
+            url: https://cdn.impala.travel/area-types/ckiub4vym00083e6amqnt3a6u.jpg
+            width: 4000
+          maxOccupancy: 2
+          name: Double Room
+          rates:
+          - cancellationPolicies:
+            - fee:
+                count: 100
+                price:
+                  amount: 14700
+                  currency:
+                    code: EUR
+                type: PERCENTAGE
+              formatted: Non-refundable after March 11, 2021 00:23
+              start: '2021-03-11 00:23:35.719'
+            components: []
+            end: '2021-07-02'
+            hotelAgreement: null
+            maxOccupancy: 2
+            rateId: 470a4b225742d213e9182a8ca650fe61:7b5f9d774a96e402438537b1e73fcfe5
+            ratePlanId: 1
+            retailRate:
+              taxesAndFees:
+                includedInRate: []
+                payAtHotel: []
+              total:
+                amount: 14700
+                currency:
+                  code: EUR
+            sellerCommissionPercentage: 10
+            start: '2021-07-01'
+          - cancellationPolicies:
+            - end: '2021-06-28 23:59:59.999'
+              fee:
+                price:
+                  amount: 0
+                  currency:
+                    code: EUR
+                type: NONE
+              formatted: Fully refundable until June 28, 2021 23:59
+              start: '2021-03-11 00:23:35.719'
+            - fee:
+                count: 100
+                price:
+                  amount: 15750
+                  currency:
+                    code: EUR
+                type: PERCENTAGE
+              formatted: Non-refundable after June 29, 2021 00:00
+              start: '2021-06-29 00:00:00.000'
+            components: []
+            end: '2021-07-02'
+            hotelAgreement: null
+            maxOccupancy: 1
+            rateId: 19ba73ba97cda6d3febfe533acc25ba1:338e5ff8073767a23fdf0edc4cec1892
+            ratePlanId: 3
+            retailRate:
+              taxesAndFees:
+                includedInRate: []
+                payAtHotel: []
+              total:
+                amount: 15750
+                currency:
+                  code: EUR
+            sellerCommissionPercentage: 10
+            start: '2021-07-01'
+          - cancellationPolicies:
+            - end: '2021-06-28 23:59:59.999'
+              fee:
+                price:
+                  amount: 0
+                  currency:
+                    code: EUR
+                type: NONE
+              formatted: Fully refundable until June 28, 2021 23:59
+              start: '2021-03-11 00:23:35.719'
+            - fee:
+                count: 100
+                price:
+                  amount: 16800
+                  currency:
+                    code: EUR
+                type: PERCENTAGE
+              formatted: Non-refundable after June 29, 2021 00:00
+              start: '2021-06-29 00:00:00.000'
+            components: []
+            end: '2021-07-02'
+            hotelAgreement: null
+            maxOccupancy: 2
+            rateId: e7df0bcb2d335124b609ad188b1c364d:7bee69f1eafb714cadcbd90bd06cf66d
+            ratePlanId: 5
+            retailRate:
+              taxesAndFees:
+                includedInRate: []
+                payAtHotel: []
+              total:
+                amount: 16800
+                currency:
+                  code: EUR
+            sellerCommissionPercentage: 10
+            start: '2021-07-01'
+          - cancellationPolicies:
+            - fee:
+                count: 100
+                price:
+                  amount: 13650
+                  currency:
+                    code: EUR
+                type: PERCENTAGE
+              formatted: Non-refundable after March 11, 2021 00:23
+              start: '2021-03-11 00:23:35.719'
+            components: []
+            end: '2021-07-02'
+            hotelAgreement: null
+            maxOccupancy: 1
+            rateId: 2463f0474c058652951adbefd3bc8ff2:f2873919bedce820524ded4e2947e9b5
+            ratePlanId: 6
+            retailRate:
+              taxesAndFees:
+                includedInRate: []
+                payAtHotel: []
+              total:
+                amount: 13650
+                currency:
+                  code: EUR
+            sellerCommissionPercentage: 10
+            start: '2021-07-01'
+          - cancellationPolicies:
+            - fee:
+                count: 100
+                price:
+                  amount: 13965
+                  currency:
+                    code: EUR
+                type: PERCENTAGE
+              formatted: Non-refundable after March 11, 2021 00:23
+              start: '2021-03-11 00:23:35.719'
+            components: []
+            end: '2021-07-02'
+            hotelAgreement: null
+            maxOccupancy: 2
+            rateId: 022166b0c439dc27b83a96be5e561d97:fc7b648edf136c63b7114a2d13bfc02d
+            ratePlanId: 7
+            retailRate:
+              deal:
+                conditions: []
+                dealId: D3
+                discount:
+                  count: 5
+                  type: PERCENTAGE
+              taxesAndFees:
+                includedInRate: []
+                payAtHotel: []
+              total:
+                amount: 13965
+                currency:
+                  code: EUR
+            sellerCommissionPercentage: 15
+            start: '2021-07-01'
+          - cancellationPolicies:
+            - end: '2021-06-28 23:59:59.999'
+              fee:
+                price:
+                  amount: 0
+                  currency:
+                    code: EUR
+                type: NONE
+              formatted: Fully refundable until June 28, 2021 23:59
+              start: '2021-03-11 00:23:35.720'
+            - fee:
+                count: 100
+                price:
+                  amount: 14962
+                  currency:
+                    code: EUR
+                type: PERCENTAGE
+              formatted: Non-refundable after June 29, 2021 00:00
+              start: '2021-06-29 00:00:00.000'
+            components: []
+            end: '2021-07-02'
+            hotelAgreement: null
+            maxOccupancy: 1
+            rateId: 35a9baa5068ba59163e930b14af4949b:bf061e368daac6ac9d57172d91f01f1b
+            ratePlanId: 1
+            retailRate:
+              deal:
+                conditions: []
+                dealId: D3
+                discount:
+                  count: 5
+                  type: PERCENTAGE
+              taxesAndFees:
+                includedInRate: []
+                payAtHotel: []
+              total:
+                amount: 14962
+                currency:
+                  code: EUR
+            sellerCommissionPercentage: 15
+            start: '2021-07-01'
+          - cancellationPolicies:
+            - end: '2021-06-28 23:59:59.999'
+              fee:
+                price:
+                  amount: 0
+                  currency:
+                    code: EUR
+                type: NONE
+              formatted: Fully refundable until June 28, 2021 23:59
+              start: '2021-03-11 00:23:35.720'
+            - fee:
+                count: 100
+                price:
+                  amount: 15960
+                  currency:
+                    code: EUR
+                type: PERCENTAGE
+              formatted: Non-refundable after June 29, 2021 00:00
+              start: '2021-06-29 00:00:00.000'
+            components: []
+            end: '2021-07-02'
+            hotelAgreement: null
+            maxOccupancy: 2
+            rateId: caf9b66563911b0e1525debcd9cf0ada:6fa29977e8403d97cfca5f6dcd6da6eb
+            ratePlanId: 3
+            retailRate:
+              deal:
+                conditions: []
+                dealId: D3
+                discount:
+                  count: 5
+                  type: PERCENTAGE
+              taxesAndFees:
+                includedInRate: []
+                payAtHotel: []
+              total:
+                amount: 15960
+                currency:
+                  code: EUR
+            sellerCommissionPercentage: 15
+            start: '2021-07-01'
+          - cancellationPolicies:
+            - fee:
+                count: 100
+                price:
+                  amount: 12967
+                  currency:
+                    code: EUR
+                type: PERCENTAGE
+              formatted: Non-refundable after March 11, 2021 00:23
+              start: '2021-03-11 00:23:35.720'
+            components: []
+            end: '2021-07-02'
+            hotelAgreement: null
+            maxOccupancy: 1
+            rateId: 891394f48e8ab2f406f4a9087c840768:933a218d184e74c5a67a59a649f4285f
+            ratePlanId: 3
+            retailRate:
+              deal:
+                conditions: []
+                dealId: D3
+                discount:
+                  count: 5
+                  type: PERCENTAGE
+              taxesAndFees:
+                includedInRate: []
+                payAtHotel: []
+              total:
+                amount: 12967
+                currency:
+                  code: EUR
+            sellerCommissionPercentage: 15
+            start: '2021-07-01'
+          roomTypeId: 8cb8ce9e-221a-4220-a358-35b6852fb359
+        - amenities:
+          - code: 228
+            formatted: Slippers
+          - code: 144
+            formatted: Soundproofed room
+          - code: 123
+            formatted: Wireless internet connection
+          - code: 85
+            formatted: Private bathroom
+          - code: 69
+            formatted: Minibar
+          - code: 50
+            formatted: Hairdryer
+          - code: 28
+            formatted: Desk
+          - code: 15
+            formatted: Bath or Shower
+          - code: 11
+            formatted: Bathroom amenities (free toiletries)
+          description: This is a fictional example room type that you can use to test all the features you might encounter on any hotel available on the Impala platform on the Impala platform (https://impala.travel). Testing with this room type means your app or site will be able to handle any values that you might find on Impala.
+          images:
+          - altText: null
+            height: 4480
+            url: https://cdn.impala.travel/area-types/ckiub3dw100073e6alkifv3ok.jpg
+            width: 6720
+          maxOccupancy: 4
+          name: Presidential Suite
+          rates:
+          - cancellationPolicies:
+            - end: '2021-06-28 23:59:59.999'
+              fee:
+                price:
+                  amount: 0
+                  currency:
+                    code: EUR
+                type: NONE
+              formatted: Fully refundable until June 28, 2021 23:59
+              start: '2021-03-11 00:23:35.720'
+            - fee:
+                count: 100
+                price:
+                  amount: 47250
+                  currency:
+                    code: EUR
+                type: PERCENTAGE
+              formatted: Non-refundable after June 29, 2021 00:00
+              start: '2021-06-29 00:00:00.000'
+            components: []
+            end: '2021-07-02'
+            hotelAgreement: null
+            maxOccupancy: 2
+            rateId: 42efaad56d0f614f5cc65e0c5c30669f:1866b6b4e0b2ca054a68ee58565fc6e9
+            ratePlanId: 1
+            retailRate:
+              taxesAndFees:
+                includedInRate: []
+                payAtHotel: []
+              total:
+                amount: 47250
+                currency:
+                  code: EUR
+            sellerCommissionPercentage: 10
+            start: '2021-07-01'
+          - cancellationPolicies:
+            - fee:
+                count: 100
+                price:
+                  amount: 42000
+                  currency:
+                    code: EUR
+                type: PERCENTAGE
+              formatted: Non-refundable after March 11, 2021 00:23
+              start: '2021-03-11 00:23:35.720'
+            components: []
+            end: '2021-07-02'
+            hotelAgreement: null
+            maxOccupancy: 2
+            rateId: 2fb14f477f41541d5598b61aab21f1b4:afc6e4cfb689d05fd17e9780be16af9d
+            ratePlanId: 2
+            retailRate:
+              taxesAndFees:
+                includedInRate: []
+                payAtHotel: []
+              total:
+                amount: 42000
+                currency:
+                  code: EUR
+            sellerCommissionPercentage: 10
+            start: '2021-07-01'
+          - cancellationPolicies:
+            - end: '2021-06-28 23:59:59.999'
+              fee:
+                price:
+                  amount: 0
+                  currency:
+                    code: EUR
+                type: NONE
+              formatted: Fully refundable until June 28, 2021 23:59
+              start: '2021-03-11 00:23:35.720'
+            - fee:
+                count: 100
+                price:
+                  amount: 44625
+                  currency:
+                    code: EUR
+                type: PERCENTAGE
+              formatted: Non-refundable after June 29, 2021 00:00
+              start: '2021-06-29 00:00:00.000'
+            components: []
+            end: '2021-07-02'
+            hotelAgreement: null
+            maxOccupancy: 1
+            rateId: 896624e8d1733cf9f533d58080b0f217:f77b2b8805413ec948c3f609eb241c33
+            ratePlanId: 3
+            retailRate:
+              taxesAndFees:
+                includedInRate: []
+                payAtHotel: []
+              total:
+                amount: 44625
+                currency:
+                  code: EUR
+            sellerCommissionPercentage: 10
+            start: '2021-07-01'
+          - cancellationPolicies:
+            - fee:
+                count: 100
+                price:
+                  amount: 39900
+                  currency:
+                    code: EUR
+                type: PERCENTAGE
+              formatted: Non-refundable after March 11, 2021 00:23
+              start: '2021-03-11 00:23:35.720'
+            components: []
+            end: '2021-07-02'
+            hotelAgreement: null
+            maxOccupancy: 1
+            rateId: 0fc4232f1726473c3f12c99849262e84:3fca5c554e779783c73a5ea293da831f
+            ratePlanId: 7
+            retailRate:
+              taxesAndFees:
+                includedInRate: []
+                payAtHotel: []
+              total:
+                amount: 39900
+                currency:
+                  code: EUR
+            sellerCommissionPercentage: 10
+            start: '2021-07-01'
+          - cancellationPolicies:
+            - end: '2021-06-28 23:59:59.999'
+              fee:
+                price:
+                  amount: 0
+                  currency:
+                    code: EUR
+                type: NONE
+              formatted: Fully refundable until June 28, 2021 23:59
+              start: '2021-03-11 00:23:35.720'
+            - fee:
+                count: 100
+                price:
+                  amount: 44887
+                  currency:
+                    code: EUR
+                type: PERCENTAGE
+              formatted: Non-refundable after June 29, 2021 00:00
+              start: '2021-06-29 00:00:00.000'
+            components: []
+            end: '2021-07-02'
+            hotelAgreement: null
+            maxOccupancy: 2
+            rateId: 1471020e7f634138b7088a081e45231a:15006e156c471ef4a22d38fee7f84c68
+            ratePlanId: 8
+            retailRate:
+              deal:
+                conditions: []
+                dealId: D3
+                discount:
+                  count: 5
+                  type: PERCENTAGE
+              taxesAndFees:
+                includedInRate: []
+                payAtHotel: []
+              total:
+                amount: 44887
+                currency:
+                  code: EUR
+            sellerCommissionPercentage: 15
+            start: '2021-07-01'
+          - cancellationPolicies:
+            - fee:
+                count: 100
+                price:
+                  amount: 39900
+                  currency:
+                    code: EUR
+                type: PERCENTAGE
+              formatted: Non-refundable after March 11, 2021 00:23
+              start: '2021-03-11 00:23:35.720'
+            components: []
+            end: '2021-07-02'
+            hotelAgreement: null
+            maxOccupancy: 2
+            rateId: 23888f2637881fed0fb1253d2ebeace6:a844bb82cab7f71f0514a7d458dfec99
+            ratePlanId: 22
+            retailRate:
+              deal:
+                conditions: []
+                dealId: D3
+                discount:
+                  count: 5
+                  type: PERCENTAGE
+              taxesAndFees:
+                includedInRate: []
+                payAtHotel: []
+              total:
+                amount: 39900
+                currency:
+                  code: EUR
+            sellerCommissionPercentage: 15
+            start: '2021-07-01'
+          - cancellationPolicies:
+            - end: '2021-06-28 23:59:59.999'
+              fee:
+                price:
+                  amount: 0
+                  currency:
+                    code: EUR
+                type: NONE
+              formatted: Fully refundable until June 28, 2021 23:59
+              start: '2021-03-11 00:23:35.720'
+            - fee:
+                count: 100
+                price:
+                  amount: 42393
+                  currency:
+                    code: EUR
+                type: PERCENTAGE
+              formatted: Non-refundable after June 29, 2021 00:00
+              start: '2021-06-29 00:00:00.000'
+            components: []
+            end: '2021-07-02'
+            hotelAgreement: null
+            maxOccupancy: 1
+            rateId: bacf1877347d8936da6ea4b9609f2e06:3b8938ba186b5788dae45a868d1a5228
+            ratePlanId: 19
+            retailRate:
+              deal:
+                conditions: []
+                dealId: D3
+                discount:
+                  count: 5
+                  type: PERCENTAGE
+              taxesAndFees:
+                includedInRate: []
+                payAtHotel: []
+              total:
+                amount: 42393
+                currency:
+                  code: EUR
+            sellerCommissionPercentage: 15
+            start: '2021-07-01'
+          - cancellationPolicies:
+            - fee:
+                count: 100
+                price:
+                  amount: 37905
+                  currency:
+                    code: EUR
+                type: PERCENTAGE
+              formatted: Non-refundable after March 11, 2021 00:23
+              start: '2021-03-11 00:23:35.720'
+            components: []
+            end: '2021-07-02'
+            hotelAgreement: null
+            maxOccupancy: 1
+            rateId: 7f1f053b76157a70e19cade3e38fd763:8f82c19071c9f4d12f5bdf92e181c140
+            ratePlanId: 7
+            retailRate:
+              taxesAndFees:
+                includedInRate: []
+                payAtHotel: []
+              total:
+                amount: 37905
+                currency:
+                  code: EUR
+            sellerCommissionPercentage: 15
+            start: '2021-07-01'
+          roomTypeId: 1bd16eed-e10f-47f6-8f28-67c40deb4f3b
+        starRating: 5
+        termsAndConditions: ''
+        updatedAt: '2021-02-17T09:07:41.615Z'
+        websiteUrl: https://impala-all-avaialable-resort.hotel/
+    NoHotelsAvailable:
+      value:
+        data: []
+        pagination:
+          count: 0
+          next: null
+          prev: null
+          total: 0
+    ExampleHotels:
+      value:
+        data:
+        - address:
+            city: Impalaland
+            country: GBR
+            countryName: United Kingdom of Great Britain and Northern Ireland
+            line1: 456 Impala Street
+            line2: null
+            postalCode: 0987-654
+            region: Impalaland Beach
+          amenities:
+          - code: 5
+            formatted: Air conditioning
+          - code: 7
+            formatted: ATM/Cash machine
+          - code: 8
+            formatted: Baby sitting
+          - code: 9
+            formatted: BBQ/Picnic area
+          - code: 14
+            formatted: Business library
+          - code: 16
+            formatted: Casino
+          - code: 22
+            formatted: Concierge desk
+          checkIn:
+            from: '15:00'
+          checkOut:
+            to: '12:00'
+          contractable: true
+          createdAt: '2020-12-18T13:29:22.865Z'
+          currency: GBP
+          description:
+            short: This fictional example hotel allows you to experience all the content, rates and features the Impala platform (https://impala.travel) has to offer. Testing with this hotel allows you to experience the full breadth of functionality and rate options hotels might offer on Impala – and to ensure your app displays everything correctly.
+          emails:
+          - mail@impala-all-avaialable-resort.hotel
+          externalUrls:
+          - name: BOOKING.COM
+            url: https://www.booking.com/hotel/im/impala
+          - name: HOTELS.COM
+            url: https://uk.hotels.com/imp123456/
+          hotelId: 0e25533a-2db2-4894-9db1-4c1ff92d798c
+          images:
+          - altText: null
+            height: 1536
+            isHeroImage: true
+            url: https://cdn.impala.travel/properties/ckiuattho00013e6ar0tiilgt.jpg
+            width: 2884
+          - altText: null
+            height: 2461
+            isHeroImage: false
+            url: https://cdn.impala.travel/properties/ckiuavcvm00023e6aordygdiy.jpg
+            width: 3072
+          - altText: null
+            height: 3640
+            isHeroImage: false
+            url: https://cdn.impala.travel/properties/ckiuavvr100033e6ajep6w5dl.jpg
+            width: 2912
+          - altText: null
+            height: 2848
+            isHeroImage: false
+            url: https://cdn.impala.travel/properties/ckiuawdeo00043e6ajyqc70nm.jpg
+            width: 4288
+          - altText: null
+            height: 3072
+            isHeroImage: false
+            url: https://cdn.impala.travel/properties/ckiuawt9y00053e6a76l0qgqe.jpg
+            width: 4608
+          location:
+            latitude: 58.386186
+            longitude: -9.952549
+          name: Impala All-Inclusive Always Available Resort (Example Hotel)
+          phoneNumbers:
+          - '+48789789789'
+          roomCount: 200
+          roomTypes:
+          - amenities:
+            - code: 11
+              formatted: Bathroom amenities (free toiletries)
+            - code: 15
+              formatted: Bath or Shower
+            - code: 28
+              formatted: Desk
+            - code: 50
+              formatted: Hairdryer
+            - code: 69
+              formatted: Minibar
+            - code: 85
+              formatted: Private bathroom
+            - code: 123
+              formatted: Wireless internet connection
+            - code: 144
+              formatted: Soundproofed room
+            - code: 210
+              formatted: Satellite television
+            - code: 228
+              formatted: Slippers
+            description: This is a fictional example room type that you can use to test all the features you might encounter on any hotel available on the Impala platform on the Impala platform (https://impala.travel). Testing with this room type means your app or site will be able to handle any values that you might find on Impala.
+            images:
+            - altText: null
+              height: 3255
+              url: https://cdn.impala.travel/area-types/ckiub6h8c00093e6ag7kufw24.jpg
+              width: 4890
+            maxOccupancy: 1
+            name: Single Room
+            rates:
+            - cancellationPolicies:
+              - fee:
+                  count: 100
+                  price:
+                    amount: 10500
+                    currency:
+                      code: EUR
+                  type: PERCENTAGE
+                formatted: Non-refundable after March 11, 2021 00:23
+                start: '2021-03-11 00:23:35.718'
+              components: []
+              end: '2021-07-02'
+              hotelAgreement: null
+              maxOccupancy: 1
+              rateId: b0e2ec0fa2ae1b3697f467393558a69a:474f39c17490c46b4e622da1bffbd5c1
+              ratePlanId: 1
+              retailRate:
+                taxesAndFees:
+                  includedInRate: []
+                  payAtHotel: []
+                total:
+                  amount: 10500
+                  currency:
+                    code: EUR
+              sellerCommissionPercentage: 10
+              start: '2021-07-01'
+            - cancellationPolicies:
+              - end: '2021-06-28 23:59:59.999'
+                fee:
+                  price:
+                    amount: 0
+                    currency:
+                      code: EUR
+                  type: NONE
+                formatted: Fully refundable until June 28, 2021 23:59
+                start: '2021-03-11 00:23:35.718'
+              - fee:
+                  count: 100
+                  price:
+                    amount: 12600
+                    currency:
+                      code: EUR
+                  type: PERCENTAGE
+                formatted: Non-refundable after June 29, 2021 00:00
+                start: '2021-06-29 00:00:00.000'
+              components: []
+              end: '2021-07-02'
+              hotelAgreement: null
+              maxOccupancy: 1
+              rateId: 17b005e4c35575b654171d4589191b5d:bd277330e925805cad8686093554efe5
+              ratePlanId: 2
+              retailRate:
+                taxesAndFees:
+                  includedInRate: []
+                  payAtHotel: []
+                total:
+                  amount: 12600
+                  currency:
+                    code: EUR
+              sellerCommissionPercentage: 10
+              start: '2021-07-01'
+            - cancellationPolicies:
+              - fee:
+                  count: 100
+                  price:
+                    amount: 9975
+                    currency:
+                      code: EUR
+                  type: PERCENTAGE
+                formatted: Non-refundable after March 11, 2021 00:23
+                start: '2021-03-11 00:23:35.718'
+              components: []
+              end: '2021-07-02'
+              hotelAgreement: null
+              maxOccupancy: 1
+              rateId: 058e478777fe3b4248670c6d6be3722c:06bbe6754161b5991e02e51849c6ae83
+              ratePlanId: 3
+              retailRate:
+                deal:
+                  conditions: []
+                  dealId: D3
+                  discount:
+                    count: 5
+                    type: PERCENTAGE
+                taxesAndFees:
+                  includedInRate: []
+                  payAtHotel: []
+                total:
+                  amount: 9975
+                  currency:
+                    code: EUR
+              sellerCommissionPercentage: 15
+              start: '2021-07-01'
+            - cancellationPolicies:
+              - end: '2021-06-28 23:59:59.999'
+                fee:
+                  price:
+                    amount: 0
+                    currency:
+                      code: EUR
+                  type: NONE
+                formatted: Fully refundable until June 28, 2021 23:59
+                start: '2021-03-11 00:23:35.718'
+              - fee:
+                  count: 100
+                  price:
+                    amount: 11970
+                    currency:
+                      code: EUR
+                  type: PERCENTAGE
+                formatted: Non-refundable after June 29, 2021 00:00
+                start: '2021-06-29 00:00:00.000'
+              components: []
+              end: '2021-07-02'
+              hotelAgreement: null
+              maxOccupancy: 1
+              rateId: 38143de2077774891c4f136d86ce817a:7fa93ac18e3851dec34dead83648148f
+              ratePlanId: 4
+              retailRate:
+                deal:
+                  conditions: []
+                  dealId: D3
+                  discount:
+                    count: 5
+                    type: PERCENTAGE
+                taxesAndFees:
+                  includedInRate: []
+                  payAtHotel: []
+                total:
+                  amount: 11970
+                  currency:
+                    code: EUR
+              sellerCommissionPercentage: 15
+              start: '2021-07-01'
+            roomTypeId: 7b4e914f-0551-4fdc-b349-db3c32c5afed
+          - amenities:
+            - code: 228
+              formatted: Slippers
+            - code: 144
+              formatted: Soundproofed room
+            - code: 210
+              formatted: Satellite television
+            - code: 11
+              formatted: Bathroom amenities (free toiletries)
+            - code: 15
+              formatted: Bath or Shower
+            - code: 28
+              formatted: Desk
+            - code: 50
+              formatted: Hairdryer
+            - code: 69
+              formatted: Minibar
+            - code: 85
+              formatted: Private bathroom
+            - code: 123
+              formatted: Wireless internet connection
+            description: This is a fictional example room type that you can use to test all the features you might encounter on any hotel available on the Impala platform on the Impala platform (https://impala.travel). Testing with this room type means your app or site will be able to handle any values that you might find on Impala.
+            images:
+            - altText: null
+              height: 3024
+              url: https://cdn.impala.travel/area-types/ckiub0igb00063e6am6q2b0w3.jpg
+              width: 4032
+            maxOccupancy: 2
+            name: Junior Suite
+            rates:
+            - cancellationPolicies:
+              - end: '2021-06-28 23:59:59.999'
+                fee:
+                  price:
+                    amount: 0
+                    currency:
+                      code: EUR
+                  type: NONE
+                formatted: Fully refundable until June 28, 2021 23:59
+                start: '2021-03-11 00:23:35.719'
+              - fee:
+                  count: 100
+                  price:
+                    amount: 31500
+                    currency:
+                      code: EUR
+                  type: PERCENTAGE
+                formatted: Non-refundable after June 29, 2021 00:00
+                start: '2021-06-29 00:00:00.000'
+              components: []
+              end: '2021-07-02'
+              hotelAgreement: null
+              maxOccupancy: 2
+              rateId: b815b95a5b6a847b7b0c09c1a9ea5827:77a228b50273fad2c224468c91739c3c
+              ratePlanId: 1
+              retailRate:
+                taxesAndFees:
+                  includedInRate: []
+                  payAtHotel: []
+                total:
+                  amount: 31500
+                  currency:
+                    code: EUR
+              sellerCommissionPercentage: 10
+              start: '2021-07-01'
+            - cancellationPolicies:
+              - end: '2021-06-28 23:59:59.999'
+                fee:
+                  price:
+                    amount: 0
+                    currency:
+                      code: EUR
+                  type: NONE
+                formatted: Fully refundable until June 28, 2021 23:59
+                start: '2021-03-11 00:23:35.719'
+              - fee:
+                  count: 100
+                  price:
+                    amount: 28875
+                    currency:
+                      code: EUR
+                  type: PERCENTAGE
+                formatted: Non-refundable after June 29, 2021 00:00
+                start: '2021-06-29 00:00:00.000'
+              components: []
+              end: '2021-07-02'
+              hotelAgreement: null
+              maxOccupancy: 1
+              rateId: bcd9e5f11c6e747374d63d635b6f2d07:f5d244b004c18e3fef40606f83b72e76
+              ratePlanId: 22
+              retailRate:
+                taxesAndFees:
+                  includedInRate: []
+                  payAtHotel: []
+                total:
+                  amount: 28875
+                  currency:
+                    code: EUR
+              sellerCommissionPercentage: 10
+              start: '2021-07-01'
+            - cancellationPolicies:
+              - end: '2021-06-28 23:59:59.999'
+                fee:
+                  price:
+                    amount: 0
+                    currency:
+                      code: EUR
+                  type: NONE
+                formatted: Fully refundable until June 28, 2021 23:59
+                start: '2021-03-11 00:23:35.719'
+              - fee:
+                  count: 100
+                  price:
+                    amount: 29925
+                    currency:
+                      code: EUR
+                  type: PERCENTAGE
+                formatted: Non-refundable after June 29, 2021 00:00
+                start: '2021-06-29 00:00:00.000'
+              components: []
+              end: '2021-07-02'
+              hotelAgreement: null
+              maxOccupancy: 2
+              rateId: e3d5af44011974bf705e792735778b44:88853f3b36a97a6adf8009d97102ad79
+              ratePlanId: 11
+              retailRate:
+                deal:
+                  conditions: []
+                  dealId: D3
+                  discount:
+                    count: 5
+                    type: PERCENTAGE
+                taxesAndFees:
+                  includedInRate: []
+                  payAtHotel: []
+                total:
+                  amount: 29925
+                  currency:
+                    code: EUR
+              sellerCommissionPercentage: 15
+              start: '2021-07-01'
+            - cancellationPolicies:
+              - end: '2021-06-28 23:59:59.999'
+                fee:
+                  price:
+                    amount: 0
+                    currency:
+                      code: EUR
+                  type: NONE
+                formatted: Fully refundable until June 28, 2021 23:59
+                start: '2021-03-11 00:23:35.719'
+              - fee:
+                  count: 100
+                  price:
+                    amount: 27431
+                    currency:
+                      code: EUR
+                  type: PERCENTAGE
+                formatted: Non-refundable after June 29, 2021 00:00
+                start: '2021-06-29 00:00:00.000'
+              components: []
+              end: '2021-07-02'
+              hotelAgreement: null
+              maxOccupancy: 1
+              rateId: 5c0db8cb17c9e5316b2a62bda48f1dd4:39b27339fc838dfbfc48216e22a8ce44
+              ratePlanId: 19
+              retailRate:
+                deal:
+                  conditions: []
+                  dealId: D3
+                  discount:
+                    count: 5
+                    type: PERCENTAGE
+                taxesAndFees:
+                  includedInRate: []
+                  payAtHotel: []
+                total:
+                  amount: 27431
+                  currency:
+                    code: EUR
+              sellerCommissionPercentage: 15
+              start: '2021-07-01'
+            roomTypeId: 280b6f5a-c645-44c0-a63d-03f1d7bc3d55
+          - amenities:
+            - code: 2
+              formatted: Air conditioning
+            - code: 228
+              formatted: Slippers
+            - code: 210
+              formatted: Satellite television
+            - code: 144
+              formatted: Soundproofed room
+            - code: 123
+              formatted: Wireless internet connection
+            - code: 85
+              formatted: Private bathroom
+            - code: 69
+              formatted: Minibar
+            - code: 50
+              formatted: Hairdryer
+            - code: 28
+              formatted: Desk
+            - code: 15
+              formatted: Bath or Shower
+            - code: 11
+              formatted: Bathroom amenities (free toiletries)
+            description: This is a fictional example room type that you can use to test all the features you might encounter on any hotel available on the Impala platform on the Impala platform (https://impala.travel). Testing with this room type means your app or site will be able to handle any values that you might find on Impala.
+            images:
+            - altText: null
+              height: 6000
+              url: https://cdn.impala.travel/area-types/ckiub4vym00083e6amqnt3a6u.jpg
+              width: 4000
+            maxOccupancy: 2
+            name: Double Room
+            rates:
+            - cancellationPolicies:
+              - fee:
+                  count: 100
+                  price:
+                    amount: 14700
+                    currency:
+                      code: EUR
+                  type: PERCENTAGE
+                formatted: Non-refundable after March 11, 2021 00:23
+                start: '2021-03-11 00:23:35.719'
+              components: []
+              end: '2021-07-02'
+              hotelAgreement: null
+              maxOccupancy: 2
+              rateId: 470a4b225742d213e9182a8ca650fe61:7b5f9d774a96e402438537b1e73fcfe5
+              ratePlanId: 1
+              retailRate:
+                taxesAndFees:
+                  includedInRate: []
+                  payAtHotel: []
+                total:
+                  amount: 14700
+                  currency:
+                    code: EUR
+              sellerCommissionPercentage: 10
+              start: '2021-07-01'
+            - cancellationPolicies:
+              - end: '2021-06-28 23:59:59.999'
+                fee:
+                  price:
+                    amount: 0
+                    currency:
+                      code: EUR
+                  type: NONE
+                formatted: Fully refundable until June 28, 2021 23:59
+                start: '2021-03-11 00:23:35.719'
+              - fee:
+                  count: 100
+                  price:
+                    amount: 15750
+                    currency:
+                      code: EUR
+                  type: PERCENTAGE
+                formatted: Non-refundable after June 29, 2021 00:00
+                start: '2021-06-29 00:00:00.000'
+              components: []
+              end: '2021-07-02'
+              hotelAgreement: null
+              maxOccupancy: 1
+              rateId: 19ba73ba97cda6d3febfe533acc25ba1:338e5ff8073767a23fdf0edc4cec1892
+              ratePlanId: 2
+              retailRate:
+                taxesAndFees:
+                  includedInRate: []
+                  payAtHotel: []
+                total:
+                  amount: 15750
+                  currency:
+                    code: EUR
+              sellerCommissionPercentage: 10
+              start: '2021-07-01'
+            - cancellationPolicies:
+              - end: '2021-06-28 23:59:59.999'
+                fee:
+                  price:
+                    amount: 0
+                    currency:
+                      code: EUR
+                  type: NONE
+                formatted: Fully refundable until June 28, 2021 23:59
+                start: '2021-03-11 00:23:35.719'
+              - fee:
+                  count: 100
+                  price:
+                    amount: 16800
+                    currency:
+                      code: EUR
+                  type: PERCENTAGE
+                formatted: Non-refundable after June 29, 2021 00:00
+                start: '2021-06-29 00:00:00.000'
+              components: []
+              end: '2021-07-02'
+              hotelAgreement: null
+              maxOccupancy: 2
+              rateId: e7df0bcb2d335124b609ad188b1c364d:7bee69f1eafb714cadcbd90bd06cf66d
+              ratePlanId: 3
+              retailRate:
+                taxesAndFees:
+                  includedInRate: []
+                  payAtHotel: []
+                total:
+                  amount: 16800
+                  currency:
+                    code: EUR
+              sellerCommissionPercentage: 10
+              start: '2021-07-01'
+            - cancellationPolicies:
+              - fee:
+                  count: 100
+                  price:
+                    amount: 13650
+                    currency:
+                      code: EUR
+                  type: PERCENTAGE
+                formatted: Non-refundable after March 11, 2021 00:23
+                start: '2021-03-11 00:23:35.719'
+              components: []
+              end: '2021-07-02'
+              hotelAgreement: null
+              maxOccupancy: 1
+              rateId: 2463f0474c058652951adbefd3bc8ff2:f2873919bedce820524ded4e2947e9b5
+              ratePlanId: 22
+              retailRate:
+                taxesAndFees:
+                  includedInRate: []
+                  payAtHotel: []
+                total:
+                  amount: 13650
+                  currency:
+                    code: EUR
+              sellerCommissionPercentage: 10
+              start: '2021-07-01'
+            - cancellationPolicies:
+              - fee:
+                  count: 100
+                  price:
+                    amount: 13965
+                    currency:
+                      code: EUR
+                  type: PERCENTAGE
+                formatted: Non-refundable after March 11, 2021 00:23
+                start: '2021-03-11 00:23:35.719'
+              components: []
+              end: '2021-07-02'
+              hotelAgreement: null
+              maxOccupancy: 2
+              rateId: 022166b0c439dc27b83a96be5e561d97:fc7b648edf136c63b7114a2d13bfc02d
+              ratePlanId: 23
+              retailRate:
+                deal:
+                  conditions: []
+                  dealId: D3
+                  discount:
+                    count: 5
+                    type: PERCENTAGE
+                taxesAndFees:
+                  includedInRate: []
+                  payAtHotel: []
+                total:
+                  amount: 13965
+                  currency:
+                    code: EUR
+              sellerCommissionPercentage: 15
+              start: '2021-07-01'
+            - cancellationPolicies:
+              - end: '2021-06-28 23:59:59.999'
+                fee:
+                  price:
+                    amount: 0
+                    currency:
+                      code: EUR
+                  type: NONE
+                formatted: Fully refundable until June 28, 2021 23:59
+                start: '2021-03-11 00:23:35.720'
+              - fee:
+                  count: 100
+                  price:
+                    amount: 14962
+                    currency:
+                      code: EUR
+                  type: PERCENTAGE
+                formatted: Non-refundable after June 29, 2021 00:00
+                start: '2021-06-29 00:00:00.000'
+              components: []
+              end: '2021-07-02'
+              hotelAgreement: null
+              maxOccupancy: 1
+              rateId: 35a9baa5068ba59163e930b14af4949b:bf061e368daac6ac9d57172d91f01f1b
+              ratePlanId: 9
+              retailRate:
+                deal:
+                  conditions: []
+                  dealId: D3
+                  discount:
+                    count: 5
+                    type: PERCENTAGE
+                taxesAndFees:
+                  includedInRate: []
+                  payAtHotel: []
+                total:
+                  amount: 14962
+                  currency:
+                    code: EUR
+              sellerCommissionPercentage: 15
+              start: '2021-07-01'
+            - cancellationPolicies:
+              - end: '2021-06-28 23:59:59.999'
+                fee:
+                  price:
+                    amount: 0
+                    currency:
+                      code: EUR
+                  type: NONE
+                formatted: Fully refundable until June 28, 2021 23:59
+                start: '2021-03-11 00:23:35.720'
+              - fee:
+                  count: 100
+                  price:
+                    amount: 15960
+                    currency:
+                      code: EUR
+                  type: PERCENTAGE
+                formatted: Non-refundable after June 29, 2021 00:00
+                start: '2021-06-29 00:00:00.000'
+              components: []
+              end: '2021-07-02'
+              hotelAgreement: null
+              maxOccupancy: 2
+              rateId: caf9b66563911b0e1525debcd9cf0ada:6fa29977e8403d97cfca5f6dcd6da6eb
+              ratePlanId: 11
+              retailRate:
+                deal:
+                  conditions: []
+                  dealId: D3
+                  discount:
+                    count: 5
+                    type: PERCENTAGE
+                taxesAndFees:
+                  includedInRate: []
+                  payAtHotel: []
+                total:
+                  amount: 15960
+                  currency:
+                    code: EUR
+              sellerCommissionPercentage: 15
+              start: '2021-07-01'
+            - cancellationPolicies:
+              - fee:
+                  count: 100
+                  price:
+                    amount: 12967
+                    currency:
+                      code: EUR
+                  type: PERCENTAGE
+                formatted: Non-refundable after March 11, 2021 00:23
+                start: '2021-03-11 00:23:35.720'
+              components: []
+              end: '2021-07-02'
+              hotelAgreement: null
+              maxOccupancy: 1
+              rateId: 891394f48e8ab2f406f4a9087c840768:933a218d184e74c5a67a59a649f4285f
+              ratePlanId: 4
+              retailRate:
+                deal:
+                  conditions: []
+                  dealId: D3
+                  discount:
+                    count: 5
+                    type: PERCENTAGE
+                taxesAndFees:
+                  includedInRate: []
+                  payAtHotel: []
+                total:
+                  amount: 12967
+                  currency:
+                    code: EUR
+              sellerCommissionPercentage: 15
+              start: '2021-07-01'
+            roomTypeId: 8cb8ce9e-221a-4220-a358-35b6852fb359
+          - amenities:
+            - code: 228
+              formatted: Slippers
+            - code: 144
+              formatted: Soundproofed room
+            - code: 123
+              formatted: Wireless internet connection
+            - code: 85
+              formatted: Private bathroom
+            - code: 69
+              formatted: Minibar
+            - code: 50
+              formatted: Hairdryer
+            - code: 28
+              formatted: Desk
+            - code: 15
+              formatted: Bath or Shower
+            - code: 11
+              formatted: Bathroom amenities (free toiletries)
+            description: This is a fictional example room type that you can use to test all the features you might encounter on any hotel available on the Impala platform on the Impala platform (https://impala.travel). Testing with this room type means your app or site will be able to handle any values that you might find on Impala.
+            images:
+            - altText: null
+              height: 4480
+              url: https://cdn.impala.travel/area-types/ckiub3dw100073e6alkifv3ok.jpg
+              width: 6720
+            maxOccupancy: 4
+            name: Presidential Suite
+            rates:
+            - cancellationPolicies:
+              - end: '2021-06-28 23:59:59.999'
+                fee:
+                  price:
+                    amount: 0
+                    currency:
+                      code: EUR
+                  type: NONE
+                formatted: Fully refundable until June 28, 2021 23:59
+                start: '2021-03-11 00:23:35.720'
+              - fee:
+                  count: 100
+                  price:
+                    amount: 47250
+                    currency:
+                      code: EUR
+                  type: PERCENTAGE
+                formatted: Non-refundable after June 29, 2021 00:00
+                start: '2021-06-29 00:00:00.000'
+              components: []
+              end: '2021-07-02'
+              hotelAgreement: null
+              maxOccupancy: 2
+              rateId: 42efaad56d0f614f5cc65e0c5c30669f:1866b6b4e0b2ca054a68ee58565fc6e9
+              ratePlanId: 3
+              retailRate:
+                taxesAndFees:
+                  includedInRate: []
+                  payAtHotel: []
+                total:
+                  amount: 47250
+                  currency:
+                    code: EUR
+              sellerCommissionPercentage: 10
+              start: '2021-07-01'
+            - cancellationPolicies:
+              - fee:
+                  count: 100
+                  price:
+                    amount: 42000
+                    currency:
+                      code: EUR
+                  type: PERCENTAGE
+                formatted: Non-refundable after March 11, 2021 00:23
+                start: '2021-03-11 00:23:35.720'
+              components: []
+              end: '2021-07-02'
+              hotelAgreement: null
+              maxOccupancy: 2
+              rateId: 2fb14f477f41541d5598b61aab21f1b4:afc6e4cfb689d05fd17e9780be16af9d
+              ratePlanId: 2
+              retailRate:
+                taxesAndFees:
+                  includedInRate: []
+                  payAtHotel: []
+                total:
+                  amount: 42000
+                  currency:
+                    code: EUR
+              sellerCommissionPercentage: 10
+              start: '2021-07-01'
+            - cancellationPolicies:
+              - end: '2021-06-28 23:59:59.999'
+                fee:
+                  price:
+                    amount: 0
+                    currency:
+                      code: EUR
+                  type: NONE
+                formatted: Fully refundable until June 28, 2021 23:59
+                start: '2021-03-11 00:23:35.720'
+              - fee:
+                  count: 100
+                  price:
+                    amount: 44625
+                    currency:
+                      code: EUR
+                  type: PERCENTAGE
+                formatted: Non-refundable after June 29, 2021 00:00
+                start: '2021-06-29 00:00:00.000'
+              components: []
+              end: '2021-07-02'
+              hotelAgreement: null
+              maxOccupancy: 1
+              rateId: 896624e8d1733cf9f533d58080b0f217:f77b2b8805413ec948c3f609eb241c33
+              ratePlanId: 4
+              retailRate:
+                taxesAndFees:
+                  includedInRate: []
+                  payAtHotel: []
+                total:
+                  amount: 44625
+                  currency:
+                    code: EUR
+              sellerCommissionPercentage: 10
+              start: '2021-07-01'
+            - cancellationPolicies:
+              - fee:
+                  count: 100
+                  price:
+                    amount: 39900
+                    currency:
+                      code: EUR
+                  type: PERCENTAGE
+                formatted: Non-refundable after March 11, 2021 00:23
+                start: '2021-03-11 00:23:35.720'
+              components: []
+              end: '2021-07-02'
+              hotelAgreement: null
+              maxOccupancy: 1
+              rateId: 0fc4232f1726473c3f12c99849262e84:3fca5c554e779783c73a5ea293da831f
+              ratePlanId: 5
+              retailRate:
+                taxesAndFees:
+                  includedInRate: []
+                  payAtHotel: []
+                total:
+                  amount: 39900
+                  currency:
+                    code: EUR
+              sellerCommissionPercentage: 10
+              start: '2021-07-01'
+            - cancellationPolicies:
+              - end: '2021-06-28 23:59:59.999'
+                fee:
+                  price:
+                    amount: 0
+                    currency:
+                      code: EUR
+                  type: NONE
+                formatted: Fully refundable until June 28, 2021 23:59
+                start: '2021-03-11 00:23:35.720'
+              - fee:
+                  count: 100
+                  price:
+                    amount: 44887
+                    currency:
+                      code: EUR
+                  type: PERCENTAGE
+                formatted: Non-refundable after June 29, 2021 00:00
+                start: '2021-06-29 00:00:00.000'
+              components: []
+              end: '2021-07-02'
+              hotelAgreement: null
+              maxOccupancy: 2
+              rateId: 1471020e7f634138b7088a081e45231a:15006e156c471ef4a22d38fee7f84c68
+              ratePlanId: 22
+              retailRate:
+                deal:
+                  conditions: []
+                  dealId: D3
+                  discount:
+                    count: 5
+                    type: PERCENTAGE
+                taxesAndFees:
+                  includedInRate: []
+                  payAtHotel: []
+                total:
+                  amount: 44887
+                  currency:
+                    code: EUR
+              sellerCommissionPercentage: 15
+              start: '2021-07-01'
+            - cancellationPolicies:
+              - fee:
+                  count: 100
+                  price:
+                    amount: 39900
+                    currency:
+                      code: EUR
+                  type: PERCENTAGE
+                formatted: Non-refundable after March 11, 2021 00:23
+                start: '2021-03-11 00:23:35.720'
+              components: []
+              end: '2021-07-02'
+              hotelAgreement: null
+              maxOccupancy: 2
+              rateId: 23888f2637881fed0fb1253d2ebeace6:a844bb82cab7f71f0514a7d458dfec99
+              ratePlanId: 7
+              retailRate:
+                deal:
+                  conditions: []
+                  dealId: D3
+                  discount:
+                    count: 5
+                    type: PERCENTAGE
+                taxesAndFees:
+                  includedInRate: []
+                  payAtHotel: []
+                total:
+                  amount: 39900
+                  currency:
+                    code: EUR
+              sellerCommissionPercentage: 15
+              start: '2021-07-01'
+            - cancellationPolicies:
+              - end: '2021-06-28 23:59:59.999'
+                fee:
+                  price:
+                    amount: 0
+                    currency:
+                      code: EUR
+                  type: NONE
+                formatted: Fully refundable until June 28, 2021 23:59
+                start: '2021-03-11 00:23:35.720'
+              - fee:
+                  count: 100
+                  price:
+                    amount: 42393
+                    currency:
+                      code: EUR
+                  type: PERCENTAGE
+                formatted: Non-refundable after June 29, 2021 00:00
+                start: '2021-06-29 00:00:00.000'
+              components: []
+              end: '2021-07-02'
+              hotelAgreement: null
+              maxOccupancy: 1
+              rateId: bacf1877347d8936da6ea4b9609f2e06:3b8938ba186b5788dae45a868d1a5228
+              ratePlanId: 9
+              retailRate:
+                deal:
+                  conditions: []
+                  dealId: D3
+                  discount:
+                    count: 5
+                    type: PERCENTAGE
+                taxesAndFees:
+                  includedInRate: []
+                  payAtHotel: []
+                total:
+                  amount: 42393
+                  currency:
+                    code: EUR
+              sellerCommissionPercentage: 15
+              start: '2021-07-01'
+            - cancellationPolicies:
+              - fee:
+                  count: 100
+                  price:
+                    amount: 37905
+                    currency:
+                      code: EUR
+                  type: PERCENTAGE
+                formatted: Non-refundable after March 11, 2021 00:23
+                start: '2021-03-11 00:23:35.720'
+              components: []
+              end: '2021-07-02'
+              hotelAgreement: null
+              maxOccupancy: 1
+              rateId: 7f1f053b76157a70e19cade3e38fd763:8f82c19071c9f4d12f5bdf92e181c140
+              ratePlanId: 8
+              retailRate:
+                taxesAndFees:
+                  includedInRate: []
+                  payAtHotel: []
+                total:
+                  amount: 37905
+                  currency:
+                    code: EUR
+              sellerCommissionPercentage: 15
+              start: '2021-07-01'
+            roomTypeId: 1bd16eed-e10f-47f6-8f28-67c40deb4f3b
+          starRating: 5
+          termsAndConditions: ''
+          updatedAt: '2021-02-17T09:07:41.615Z'
+          websiteUrl: https://impala-all-avaialable-resort.hotel/
+  securitySchemes:
+    API_Key_Authentication:
+      in: header
+      name: x-api-key
+      type: apiKey
+    paymentAuth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http
