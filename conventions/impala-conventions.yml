@@ -1,0 +1,46 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/impala-hotels-openapi-original.json
+authentication:
+  style: api-key
+  header: x-api-key
+  notes: >-
+    All requests authenticate with an x-api-key header. Confirming a booking
+    additionally requires a payment bearer token (paymentAuth, http bearer JWT).
+    Sandbox and production keys are distinct and are not interchangeable across
+    environments.
+  ref: authentication/impala-authentication.yml
+idempotency:
+  supported: false
+  notes: The Impala Hotel Booking API did not document an idempotency-key mechanism.
+pagination:
+  style: offset
+  request_params:
+    - size
+    - offset
+  response:
+    envelope: pagination
+    fields:
+      - count   # items returned on this page
+      - next    # absolute URL of next page, null when last page
+  notes: List endpoints return a pagination object; follow the absolute `next` URL to page forward.
+versioning:
+  scheme: uri-path
+  current: v1
+  notes: >-
+    Version is carried in the base path (/v1). Each application also has an API
+    version stored against it in the Impala Management Console, which controls
+    status codes and request/response format.
+error_envelope:
+  schema: genericError
+  fields: [code, message]
+  ref: errors/impala-problem-types.yml
+tracing:
+  correlation_header: x-correlation-id
+  notes: Responses carry an x-correlation-id header; quote it when contacting support about errors.
+partial_success:
+  header: Warning
+  notes: A success response may include a Warning header indicating something was not processed as expected.
+rate_limiting:
+  documented: false
+  notes: No rate-limit response headers are declared in the OpenAPI.

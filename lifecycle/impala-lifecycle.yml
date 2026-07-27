@@ -1,0 +1,29 @@
+generated: '2026-07-19'
+method: searched
+source: openapi/impala-hotels-openapi-original.json
+status: defunct
+note: >-
+  Impala (getimpala.com / impala.travel) is no longer operating. The API hosts
+  (api.impala.travel, sandbox.impala.travel) and the docs host
+  (docs.impala.travel / docs.getimpala.com) no longer resolve; the getimpala.com
+  domain is now held by an unrelated party. This lifecycle record captures the
+  versioning model from the historical OpenAPI. No live status page or SLA
+  exists.
+versioning:
+  scheme: uri-path
+  current: v1
+  per_application_version: true
+  notes: >-
+    Base path carries the major version (/v1). Each application additionally has
+    an API version pinned in the Impala Management Console that governs status
+    codes and request/response format.
+deprecation:
+  policy_url: null
+  sunset_header: false
+sla:
+  url: null
+status_page: null
+deprecated_operations: []
+beta_operations:
+  - openapi/impala-hotels-openapi-original.json#listRatePlansForHotel
+  - openapi/impala-hotels-openapi-original.json#listRatePlanForHotelForRatePlanId

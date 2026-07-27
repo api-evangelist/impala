@@ -1,0 +1,23 @@
+# Impala Hotel Booking API
+
+> Impala offered a single, standardized REST API to search, book, and manage hotel rooms across property management systems (PMS) — "the API of the hotel industry." A Speedinvest / Lakestar / Kima Ventures-backed startup (London, founded 2016), it let apps sell rooms and earn commission per booking. The company is defunct: getimpala.com / impala.travel and the API and docs hosts no longer resolve. This profile preserves the historical OpenAPI (apis.guru impala.travel:hotels 1.003) and derived artifacts for reference.
+
+## Specs
+- [OpenAPI 3.0 (Impala Hotel Booking API 1.003)](openapi/impala-hotels-openapi-original.json): 10 operations across hotels, rate plans, and bookings.
+
+## Artifacts
+- [Authentication](authentication/impala-authentication.yml): x-api-key header + payment bearer (JWT) for booking confirmation.
+- [Conventions](conventions/impala-conventions.yml): offset pagination, genericError envelope, x-correlation-id tracing, uri-path versioning.
+- [Error catalog](errors/impala-problem-types.yml): 400/401/403/404/500 with the genericError (code/message) envelope.
+- [Data model](data-model/impala-data-model.yml): hotel, roomType, ratePlan, booking, bookedRoom.
+- [Sandbox](sandbox/impala-sandbox.yml): sandbox.impala.travel base, sandbox hotel "The Charleston", key separation.
+- [Conformance](conformance/impala-conformance.yml): OpenAPI 3.0, apiKey/http-bearer, offset pagination.
+- [Lifecycle](lifecycle/impala-lifecycle.yml): defunct; uri-path v1; two Beta rate-plan endpoints.
+- [MCP candidate](mcp/impala-mcp.yml): derived candidate tool list (10 tools).
+- [Packages](packages/impala-packages.yml): get-impala/impala-php (Packagist, official); community JS wrapper.
+- [Agent skills](skills/_index.yml): search-and-book, manage-booking.
+
+## Reference
+- [Postman collection](https://www.postman.com/getimpala/impala-hotel-booking-api/documentation/fdkbiih/impala-hotel-booking-api)
+- [GitHub org (GetImpala)](https://github.com/GetImpala)
+- [apis.guru entry](https://api.apis.guru/v2/specs/impala.travel/hotels/1.003/openapi.json)

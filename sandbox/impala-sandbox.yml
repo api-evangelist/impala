@@ -1,0 +1,31 @@
+generated: '2026-07-19'
+method: searched
+source: openapi/impala-hotels-openapi-original.json
+status: historical
+note: >-
+  Captured from the Impala Hotel Booking API docs/OpenAPI. The sandbox hosts no
+  longer resolve (the company is defunct) — these are the published test-mode
+  conventions for the historical record. No secret test values are invented here.
+environments:
+  - name: sandbox
+    base_url: https://sandbox.impala.travel/v1
+    key_type: sandbox API key (x-api-key)
+  - name: production
+    base_url: https://api.impala.travel/v1
+    key_type: production API key (x-api-key)
+key_separation: >-
+  Sandbox and production keys are distinct and not interchangeable; using a
+  sandbox key against production (or vice versa) returns 401.
+test_fixtures:
+  - description: >-
+      A sandbox API key is issued immediately on sign-up (no credit card) and is
+      retrieved from the Impala Management Console.
+  - description: >-
+      Each account is provisioned a sandbox hotel named "The Charleston"; its
+      hotel ID is shown in the Management Console and is used to run search /
+      availability / booking flows against realistic test data.
+  - description: >-
+      Bookings created in sandbox are fake ("without any risk") and never touch a
+      real property.
+postman:
+  workspace: https://www.postman.com/getimpala/impala-hotel-booking-api/documentation/fdkbiih/impala-hotel-booking-api

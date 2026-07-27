@@ -1,0 +1,40 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/impala-hotels-openapi-original.json
+format: custom
+envelope:
+  schema: genericError
+  fields:
+    - code       # machine-readable error code string, e.g. ERROR_CODE
+    - message    # developer-facing message; may contain sensitive detail — do not surface to guests
+  required: [message]
+  correlation_header: x-correlation-id
+  partial_success_header: Warning
+note: >-
+  Impala did not use RFC 9457 problem+json; errors are returned as the
+  genericError object (code + message) with application/json. A Warning response
+  header signals that a 2xx response was only partially processed. The
+  x-correlation-id response header should be quoted to support@impala.travel when
+  reporting 500s.
+problems:
+  - status: 400
+    title: Bad request
+    detail: Request wasn't formatted correctly; query params or body values missing/malformed.
+    media_type: application/json
+  - status: 401
+    title: Unauthorized
+    detail: Missing or incorrect x-api-key, or using a sandbox key against production (or vice versa).
+    media_type: application/json
+  - status: 403
+    title: Forbidden
+    detail: Not authorized to use this service. Contact support@impala.travel to gain access.
+    media_type: application/json
+  - status: 404
+    title: Not found
+    detail: The requested resource does not exist.
+    media_type: application/json
+  - status: 500
+    title: Internal server error
+    detail: >-
+      Internal error within the Impala platform. Contact support@impala.travel with the
+      x-correlation-id response header value for diagnosis.

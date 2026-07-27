@@ -1,0 +1,12 @@
+generated: '2026-07-19'
+method: generated
+source: openapi/impala-hotels-openapi-original.json
+skills:
+  - file: impala-search-and-book.md
+    name: Search hotels and create a booking
+    api: openapi/impala-hotels-openapi-original.json
+    operations: [listHotels, retrieveHotel, listRatePlansForHotel, listRatePlanForHotelForRatePlanId, createBooking]
+  - file: impala-manage-booking.md
+    name: Retrieve, amend, or cancel a booking
+    api: openapi/impala-hotels-openapi-original.json
+    operations: [listBookings, retrieveBooking, updateBooking, updateBookingContact, cancelBooking]

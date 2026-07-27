@@ -1,0 +1,52 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/impala-hotels-openapi-original.json
+entities:
+  - name: hotel
+    id_field: hotelId
+    schema: hotelFullDetail
+    summary: A bookable property with address, location, amenities, images, room types and rate plans.
+  - name: roomType
+    schema: roomType
+    summary: A category of room within a hotel.
+  - name: ratePlan
+    id_field: ratePlanId
+    schema: ratePlan
+    summary: A rate calendar (pricing, restrictions, conditions) for a hotel's room types.
+  - name: booking
+    id_field: bookingId
+    schema: booking
+    summary: A guest stay in one or more rooms over concurrent nights, with contact, status and payment tokens.
+  - name: bookedRoom
+    schema: bookedRoom
+    summary: A room reserved within a booking, with occupancy, rate and payment split.
+relationships:
+  - from: ratePlan
+    to: hotel
+    type: belongs_to
+    via: hotelId
+  - from: ratePlan
+    to: roomType
+    type: has_many
+    via: roomTypes
+  - from: hotel
+    to: roomType
+    type: has_many
+    via: roomTypes
+  - from: booking
+    to: hotel
+    type: belongs_to
+    via: hotel
+  - from: booking
+    to: bookedRoom
+    type: has_many
+    via: bookedRooms
+  - from: bookedRoom
+    to: roomType
+    type: has_one
+    via: roomType
+notes: >-
+  Impala structured reservations as Booking Sets containing one or more bookings;
+  a booking represents a guest staying in one room or hostel bed over concurrent
+  nights. Payment is carried on the booking via paymentBearerToken /
+  paymentClientSecret.

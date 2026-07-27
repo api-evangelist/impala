@@ -1,0 +1,18 @@
+{
+  "provider": "impala",
+  "sources": [
+    "impala-bookings-api-openapi.yml",
+    "impala-hotels-api-openapi.yml",
+    "impala-rate-calendar-api-openapi.yml"
+  ],
+  "outputs": [
+    "impala-bookings-api-openapi.yml",
+    "impala-hotels-api-openapi.yml",
+    "impala-rate-calendar-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

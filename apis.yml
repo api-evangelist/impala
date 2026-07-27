@@ -1,7 +1,29 @@
 aid: impala
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/impala.png
 name: Impala
-description: Impala is a company surfaced as a portfolio company of speedinvest and added to the API Evangelist
-  network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+description: >-
+  Impala built a single, standardized REST API for the hotel industry — one
+  integration to search availability, read rate plans, and create, amend, and
+  cancel bookings across many property management systems (PMS), so any app could
+  sell hotel rooms and earn commission per booking. Founded in London in 2016 and
+  backed by Speedinvest, Lakestar, and Kima Ventures, Impala shipped a sandbox
+  (with a demo hotel, "The Charleston"), a Postman collection, and PHP/JavaScript
+  wrappers. The company is now defunct: getimpala.com / impala.travel and the API
+  and docs hosts no longer resolve, and the primary domain is held by an unrelated
+  party. This profile preserves the historical OpenAPI (apis.guru
+  impala.travel:hotels 1.003) and pipeline-derived artifacts for the record.
 url: https://raw.githubusercontent.com/api-evangelist/impala/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -9,14 +31,88 @@ x-backed-by:
 - speedinvest
 x-tier: stub
 x-tier-reason: portfolio-lead
+x-status: defunct
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-19'
 tags:
 - Company
-apis: []
+- Hotels
+- Travel
+- Booking
+- Hospitality
+- Payments
+- Defunct
+apis:
+- aid: impala:impala-bookings-api
+  name: Impala Bookings API
+  description: Making and managing bookings.
+  humanURL: >-
+    https://www.postman.com/getimpala/impala-hotel-booking-api/documentation/fdkbiih/impala-hotel-booking-api
+  baseURL: https://api.impala.travel/v1
+  tags:
+  - Bookings
+  properties:
+  - type: OpenAPI
+    url: openapi/impala-bookings-api-openapi.yml
+- aid: impala:impala-hotels-api
+  name: Impala Hotels API
+  description: Accessing hotel content, available rooms and rates.
+  humanURL: >-
+    https://www.postman.com/getimpala/impala-hotel-booking-api/documentation/fdkbiih/impala-hotel-booking-api
+  baseURL: https://api.impala.travel/v1
+  tags:
+  - Hotels
+  properties:
+  - type: OpenAPI
+    url: openapi/impala-hotels-api-openapi.yml
+- aid: impala:impala-rate-calendar-api
+  name: Impala Rate Calendar API
+  description: Getting rates for future dates.
+  humanURL: >-
+    https://www.postman.com/getimpala/impala-hotel-booking-api/documentation/fdkbiih/impala-hotel-booking-api
+  baseURL: https://api.impala.travel/v1
+  tags:
+  - Rate Calendar
+  properties:
+  - type: OpenAPI
+    url: openapi/impala-rate-calendar-api-openapi.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+common:
+- type: Authentication
+  url: authentication/impala-authentication.yml
+- type: Packages
+  url: packages/impala-packages.yml
+- type: SDKs
+  url: packages/impala-packages.yml
+- type: MCPServer
+  url: mcp/impala-mcp.yml
+- type: LLMsTxt
+  url: llms/impala-llms.txt
+- type: Conventions
+  url: conventions/impala-conventions.yml
+- type: ErrorCatalog
+  url: errors/impala-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/impala-lifecycle.yml
+- type: Conformance
+  url: conformance/impala-conformance.yml
+- type: DataModel
+  url: data-model/impala-data-model.yml
+- type: Sandbox
+  url: sandbox/impala-sandbox.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: GitHubOrganization
+  url: https://github.com/GetImpala
+- type: Postman
+  url: https://www.postman.com/getimpala/impala-hotel-booking-api/documentation/fdkbiih/impala-hotel-booking-api
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence

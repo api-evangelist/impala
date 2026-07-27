@@ -1,0 +1,25 @@
+generated: '2026-07-19'
+method: searched
+source: https://packagist.org/packages/get-impala/impala-php
+note: >-
+  Impala (getimpala.com / impala.travel) is defunct; its primary domains no
+  longer resolve to the company. The historical client libraries below remain
+  published in their public registries. No first-party JavaScript SDK was
+  published to npm (impala-js on npm is a placeholder module); the community
+  JavaScript wrapper lives on GitHub as source only.
+packages:
+  - language: php
+    registry: packagist
+    name: get-impala/impala-php
+    url: https://packagist.org/packages/get-impala/impala-php
+    source: https://github.com/GetImpala/impala-php
+    install: composer require get-impala/impala-php
+    latest: 2.0.2
+    official: true
+  - language: javascript
+    registry: github
+    name: impala-js
+    url: https://github.com/rpallas/impala-js
+    install: "git clone https://github.com/rpallas/impala-js"
+    official: false
+    note: Community JavaScript wrapper for the Impala hotel PMS API (source only, not a maintained npm package).

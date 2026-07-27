@@ -1,0 +1,19 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Impala Hotel Booking API
+  version: 1.0.0
+extends: openapi/impala-hotels-openapi-original.json
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-status: defunct
+      x-apievangelist-notes: >-
+        Impala (getimpala.com / impala.travel) has ceased operating and its
+        domains no longer resolve to the company. Spec preserved from apis.guru
+        (impala.travel:hotels 1.003) for the historical record.
+      x-apievangelist-error-envelope: genericError (code, message); not RFC 9457
+      x-apievangelist-pagination: offset (size/offset; pagination object with count + next)
+      x-apievangelist-correlation-header: x-correlation-id
+  - target: $.info
+    update:
+      x-apievangelist-rating-band: stub

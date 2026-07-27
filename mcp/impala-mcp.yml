@@ -1,0 +1,43 @@
+generated: '2026-07-19'
+method: derived
+status: candidate
+source: openapi/impala-hotels-openapi-original.json
+note: >-
+  No official Impala MCP server exists (the company is defunct). This is a
+  DERIVED candidate tool list mapping each OpenAPI operation to an MCP tool, for
+  reference only. Auth is an x-api-key header; a payment bearer token
+  (paymentAuth) is required when confirming bookings.
+server:
+  name: impala-hotels
+  transport: http
+tools:
+  - name: list_bookings
+    description: List all bookings
+    source_operation: openapi/impala-hotels-openapi-original.json#listBookings
+  - name: create_booking
+    description: Create a booking
+    source_operation: openapi/impala-hotels-openapi-original.json#createBooking
+  - name: retrieve_booking
+    description: Retrieve a booking by id
+    source_operation: openapi/impala-hotels-openapi-original.json#retrieveBooking
+  - name: update_booking
+    description: Change a booking
+    source_operation: openapi/impala-hotels-openapi-original.json#updateBooking
+  - name: cancel_booking
+    description: Cancel a booking
+    source_operation: openapi/impala-hotels-openapi-original.json#cancelBooking
+  - name: update_booking_contact
+    description: Change a booking contact
+    source_operation: openapi/impala-hotels-openapi-original.json#updateBookingContact
+  - name: list_hotels
+    description: List all hotels
+    source_operation: openapi/impala-hotels-openapi-original.json#listHotels
+  - name: retrieve_hotel
+    description: Retrieve a hotel by id
+    source_operation: openapi/impala-hotels-openapi-original.json#retrieveHotel
+  - name: list_rate_plans_for_hotel
+    description: List all rate plans (rate calendar) for a hotel
+    source_operation: openapi/impala-hotels-openapi-original.json#listRatePlansForHotel
+  - name: retrieve_rate_plan
+    description: Retrieve a single rate plan (rate calendar) for a hotel
+    source_operation: openapi/impala-hotels-openapi-original.json#listRatePlanForHotelForRatePlanId
