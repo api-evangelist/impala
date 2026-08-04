@@ -22,7 +22,7 @@ info:
     Want to see how it all works? Watch [a 5-minute walkthrough](https://www.youtube.com/watch?v=7B3evCL3nrY) of the two API requests you need to make a booking, and a demo of one of our customer''s apps.'
   termsOfService: https://impala.travel/terms-and-conditions/
   title: Impala Hotel Booking Bookings Rate Calendar API
-  version: '1.003'
+  version: '3.0'
   x-apisguru-categories:
   - ecommerce
   x-logo:
@@ -30,7 +30,6 @@ info:
   x-origin:
   - format: openapi
     url: https://docs.impala.travel/api/v1/projects/impala/booking-api/nodes/spec/openapi.seller.yaml?branch=v1.003
-    version: '3.0'
   x-providerName: impala.travel
   x-serviceName: hotels
 servers:
