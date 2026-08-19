@@ -1,0 +1,1109 @@
+{
+  "item": [
+    {
+      "id": "e77d3612-50c8-447e-b1cc-1e2723be19c2",
+      "name": "Hotels",
+      "description": {
+        "content": "Accessing hotel content, available rooms and rates.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "42cfdb7b-4fbb-44d7-86cd-7c17e0bda3bc",
+          "name": "List all hotels",
+          "request": {
+            "name": "List all hotels",
+            "description": {
+              "content": "Returns a list of all hotels worldwide that can be booked through Impala.\n\nYou can **filter** the results:\n\n* Adding `longitude`, `latitude` and a `radius` (in meters) query parameters will filter the results to hotels around this location.\n* Adding `start` and `end` dates (in ISO 8601 notation, e.g. `2021-12-31`) for the expected arrival and departure dates of your guests will limit the results to hotels that have at least one room bookable for this timeframe.\n* Adding `starRating`, `name` or `country` allows you to filter to hotels based on these values (e.g. `?starRating[gte]=4&name[like]=palace` for hotels with a rating of 4 or up with a name containing \"palace\")\n* Adding `hotelIds` allows you to limit the results to include only hotels with the ids listed. Its value should be a comma-separated list of hotel ids (e.g. `?hotelIds[]=hotelIdA,hotelIdB`)\n\n* Adding `contractable` allows you to filter to hotels that you can directly negotiate with through our [deals feature](https://docs.impala.travel/docs/booking-api/ZG9jOjcyNjgzMTA-contracting-with-hotels). (e.g `?contractable=true` or `?contractable=false`)\n\nYou can specify the **sorting order** in which hotels are returned:\n* This is done by using the `sortBy` query parameter.\n* Results can be sorted by `name` alphabetically, star `rating` and `distance_m` (in meters from the specified latitude/longitude location).\n* The parameter allows for a comma-separated list of arguments with optional `:asc` (ascending, the default if the modifier is omitted) and `:desc` (descending) modifiers.\n\nIf no hotels match your filter criteria, an empty array will be returned.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "hotels"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "start",
+                  "value": "<string>",
+                  "description": "The arrival day of the desired stay range in ISO 8601 format (`YYYY-MM-DD`)."
+                },
+                {
+                  "disabled": false,
+                  "key": "end",
+                  "value": "<string>",
+                  "description": "The departure day of the desired stay range in ISO 8601 format (`YYYY-MM-DD`)."
+                },
+                {
+                  "disabled": false,
+                  "key": "latitude",
+                  "value": "<double>",
+                  "description": "The WGS 84 latitude of the location to search around (e.g. `58.386186`)."
+                },
+                {
+                  "disabled": false,
+                  "key": "longitude",
+                  "value": "<double>",
+                  "description": "The WGS 84 longitude of the location to search around (e.g. `-9.952549`)."
+                },
+                {
+                  "disabled": false,
+                  "key": "radius",
+                  "value": "<integer>",
+                  "description": "The distance (in meters) to search around the specified location (e.g. `10000` for 10 km)."
+                },
+                {
+                  "disabled": false,
+                  "key": "hotelIds",
+                  "value": "<string>,<string>",
+                  "description": "A comma-separated list of hotel ids you wish to filter by (e.g. `60a06628-2c71-44bf-9685-efbd2df4179e,60a06628-2c71-44bf-9685-efbd2df4179e`)."
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "25",
+                  "description": "Number of hotels returned on a given page (pagination)."
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "0",
+                  "description": "Offset from the first hotel in the result (for pagination)."
+                },
+                {
+                  "disabled": false,
+                  "key": "sortBy",
+                  "value": "createdAt:desc",
+                  "description": "Order in which the results should be sorted. Currently allows you to sort by `name` (alphabetical), star `rating`, and `distance_m` in meters from the specified latitude/longitude. Allows for a comma-separated list of of arguments with modifiers for `:asc` (ascending) and `:desc` (descending) ordering."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d11f57bf-a8c0-449c-9787-7ac5beb0e56a",
+              "name": "Returns a paginated list of hotels.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "name[eq]",
+                      "value": "Minimalist Palace"
+                    },
+                    {
+                      "key": "name[like]",
+                      "value": "palace"
+                    },
+                    {
+                      "key": "starRating[eq]",
+                      "value": "4"
+                    },
+                    {
+                      "key": "starRating[gt]",
+                      "value": "3"
+                    },
+                    {
+                      "key": "starRating[gte]",
+                      "value": "4"
+                    },
+                    {
+                      "key": "starRating[lt]",
+                      "value": "4"
+                    },
+                    {
+                      "key": "starRating[lte]",
+                      "value": "3"
+                    },
+                    {
+                      "key": "country[eq]",
+                      "value": "GBR"
+                    },
+                    {
+                      "key": "start",
+                      "value": "2021-05-20"
+                    },
+                    {
+                      "key": "end",
+                      "value": "2021-05-22"
+                    },
+                    {
+                      "key": "latitude",
+                      "value": "58.386186"
+                    },
+                    {
+                      "key": "longitude",
+                      "value": "-9.952549"
+                    },
+                    {
+                      "key": "radius",
+                      "value": "25000"
+                    },
+                    {
+                      "key": "hotelIds",
+                      "value": "0e25533a-2db2-4894-9db1-4c1ff92d798c,77c272b6-18e6-4036-b9c3-7fc5454e3f6a"
+                    },
+                    {
+                      "key": "created[eq]",
+                      "value": "2020-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "created[gt]",
+                      "value": "2020-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "created[gte]",
+                      "value": "2020-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "created[lt]",
+                      "value": "2020-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "created[lte]",
+                      "value": "2020-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updated[eq]",
+                      "value": "2020-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updated[gt]",
+                      "value": "2020-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updated[gte]",
+                      "value": "2020-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updated[lt]",
+                      "value": "2020-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updated[lte]",
+                      "value": "2020-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "size",
+                      "value": "40"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "25"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "name:asc,distance_m:desc"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"address\": {\n        \"city\": \"Impalaland\",\n        \"country\": \"GBR\",\n        \"countryName\": \"United Kingdom of Great Britain and Northern Ireland\",\n        \"line1\": \"456 Impala Street\",\n        \"line2\": null,\n        \"postalCode\": \"0987-654\",\n        \"region\": \"Impalaland Beach\"\n      },\n      \"amenities\": [\n        {\n          \"code\": 5,\n          \"formatted\": \"Air conditioning\"\n        },\n        {\n          \"code\": 7,\n          \"formatted\": \"ATM/Cash machine\"\n        },\n        {\n          \"code\": 8,\n          \"formatted\": \"Baby sitting\"\n        },\n        {\n          \"code\": 9,\n          \"formatted\": \"BBQ/Picnic area\"\n        },\n        {\n          \"code\": 14,\n          \"formatted\": \"Business library\"\n        },\n        {\n          \"code\": 16,\n          \"formatted\": \"Casino\"\n        },\n        {\n          \"code\": 22,\n          \"formatted\": \"Concierge desk\"\n        }\n      ],\n      \"checkIn\": {\n        \"from\": \"15:00\"\n      },\n      \"checkOut\": {\n        \"to\": \"12:00\"\n      },\n      \"contractable\": true,\n      \"createdAt\": \"2020-12-18T13:29:22.865Z\",\n      \"currency\": \"GBP\",\n      \"description\": {\n        \"short\": \"This fictional example hotel allows you to experience all the content, rates and features the Impala platform (https://impala.travel) has to offer. Testing with this hotel allows you to experience the full breadth of functionality and rate options hotels might offer on Impala – and to ensure your app displays everything correctly.\"\n      },\n      \"emails\": [\n        \"mail@impala-all-avaialable-resort.hotel\"\n      ],\n      \"externalUrls\": [\n        {\n          \"name\": \"BOOKING.COM\",\n          \"url\": \"https://www.booking.com/hotel/im/impala\"\n        },\n        {\n          \"name\": \"HOTELS.COM\",\n          \"url\": \"https://uk.hotels.com/imp123456/\"\n        }\n      ],\n      \"hotelId\": \"0e25533a-2db2-4894-9db1-4c1ff92d798c\",\n      \"images\": [\n        {\n          \"altText\": null,\n          \"height\": 1536,\n          \"isHeroImage\": true,\n          \"url\": \"https://cdn.impala.travel/properties/ckiuattho00013e6ar0tiilgt.jpg\",\n          \"width\": 2884\n        },\n        {\n          \"altText\": null,\n          \"height\": 2461,\n          \"isHeroImage\": false,\n          \"url\": \"https://cdn.impala.travel/properties/ckiuavcvm00023e6aordygdiy.jpg\",\n          \"width\": 3072\n        },\n        {\n          \"altText\": null,\n          \"height\": 3640,\n          \"isHeroImage\": false,\n          \"url\": \"https://cdn.impala.travel/properties/ckiuavvr100033e6ajep6w5dl.jpg\",\n          \"width\": 2912\n        },\n        {\n          \"altText\": null,\n          \"height\": 2848,\n          \"isHeroImage\": false,\n          \"url\": \"https://cdn.impala.travel/properties/ckiuawdeo00043e6ajyqc70nm.jpg\",\n          \"width\": 4288\n        },\n        {\n          \"altText\": null,\n          \"height\": 3072,\n          \"isHeroImage\": false,\n          \"url\": \"https://cdn.impala.travel/properties/ckiuawt9y00053e6a76l0qgqe.jpg\",\n          \"width\": 4608\n        }\n      ],\n      \"location\": {\n        \"latitude\": 58.386186,\n        \"longitude\": -9.952549\n      },\n      \"name\": \"Impala All-Inclusive Always Available Resort (Example Hotel)\",\n      \"phoneNumbers\": [\n        \"+48789789789\"\n      ],\n      \"roomCount\": 200,\n      \"roomTypes\": [\n        {\n          \"amenities\": [\n            {\n              \"code\": 11,\n              \"formatted\": \"Bathroom amenities (free toiletries)\"\n            },\n            {\n              \"code\": 15,\n              \"formatted\": \"Bath or Shower\"\n            },\n            {\n              \"code\": 28,\n              \"formatted\": \"Desk\"\n            },\n            {\n              \"code\": 50,\n              \"formatted\": \"Hairdryer\"\n            },\n            {\n              \"code\": 69,\n              \"formatted\": \"Minibar\"\n            },\n            {\n              \"code\": 85,\n              \"formatted\": \"Private bathroom\"\n            },\n            {\n              \"code\": 123,\n              \"formatted\": \"Wireless internet connection\"\n            },\n            {\n              \"code\": 144,\n              \"formatted\": \"Soundproofed room\"\n            },\n            {\n              \"code\": 210,\n              \"formatted\": \"Satellite television\"\n            },\n            {\n              \"code\": 228,\n              \"formatted\": \"Slippers\"\n            }\n          ],\n          \"description\": \"This is a fictional example room type that you can use to test all the features you might encounter on any hotel available on the Impala platform on the Impala platform (https://impala.travel). Testing with this room type means your app or site will be able to handle any values that you might find on Impala.\",\n          \"images\": [\n            {\n              \"altText\": null,\n              \"height\": 3255,\n              \"url\": \"https://cdn.impala.travel/area-types/ckiub6h8c00093e6ag7kufw24.jpg\",\n              \"width\": 4890\n            }\n          ],\n          \"maxOccupancy\": 1,\n          \"name\": \"Single Room\",\n          \"rates\": [\n            {\n              \"cancellationPolicies\": [\n                {\n                  \"fee\": {\n                    \"count\": 100,\n                    \"price\": {\n                      \"amount\": 10500,\n                      \"currency\": {\n                        \"code\": \"EUR\"\n                      }\n                    },\n                    \"type\": \"PERCENTAGE\"\n                  },\n                  \"formatted\": \"Non-refundable after March 11, 2021 00:23\",\n                  \"start\": \"2021-03-11 00:23:35.718\"\n                }\n              ],\n              \"components\": [],\n              \"end\": \"2021-07-02\",\n              \"hotelAgreement\": null,\n              \"maxOccupancy\": 1,\n              \"rateId\": \"b0e2ec0fa2ae1b3697f467393558a69a:474f39c17490c46b4e622da1bffbd5c1\",\n              \"ratePlanId\": 1,\n              \"retailRate\": {\n                \"taxesAndFees\": {\n                  \"includedInRate\": [],\n                  \"payAtHotel\": []\n                },\n                \"total\": {\n                  \"amount\": 10500,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                }\n              },\n              \"sellerCommissionPercentage\": 10,\n              \"start\": \"2021-07-01\"\n            },\n            {\n              \"cancellationPolicies\": [\n                {\n                  \"end\": \"2021-06-28 23:59:59.999\",\n                  \"fee\": {\n                    \"price\": {\n                      \"amount\": 0,\n                      \"currency\": {\n                        \"code\": \"EUR\"\n                      }\n                    },\n                    \"type\": \"NONE\"\n                  },\n                  \"formatted\": \"Fully refundable until June 28, 2021 23:59\",\n                  \"start\": \"2021-03-11 00:23:35.718\"\n                },\n                {\n                  \"fee\": {\n                    \"count\": 100,\n                    \"price\": {\n                      \"amount\": 12600,\n                      \"currency\": {\n                        \"code\": \"EUR\"\n                      }\n                    },\n                    \"type\": \"PERCENTAGE\"\n                  },\n                  \"formatted\": \"Non-refundable after June 29, 2021 00:00\",\n                  \"start\": \"2021-06-29 00:00:00.000\"\n                }\n              ],\n              \"components\": [],\n              \"end\": \"2021-07-02\",\n              \"hotelAgreement\": null,\n              \"maxOccupancy\": 1,\n              \"rateId\": \"17b005e4c35575b654171d4589191b5d:bd277330e925805cad8686093554efe5\",\n              \"ratePlanId\": 2,\n              \"retailRate\": {\n                \"taxesAndFees\": {\n                  \"includedInRate\": [],\n                  \"payAtHotel\": []\n                },\n                \"total\": {\n                  \"amount\": 12600,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                }\n              },\n              \"sellerCommissionPercentage\": 10,\n              \"start\": \"2021-07-01\"\n            },\n            {\n              \"cancellationPolicies\": [\n                {\n                  \"fee\": {\n                    \"count\": 100,\n                    \"price\": {\n                      \"amount\": 9975,\n                      \"currency\": {\n                        \"code\": \"EUR\"\n                      }\n                    },\n                    \"type\": \"PERCENTAGE\"\n                  },\n                  \"formatted\": \"Non-refundable after March 11, 2021 00:23\",\n                  \"start\": \"2021-03-11 00:23:35.718\"\n                }\n              ],\n              \"components\": [],\n              \"end\": \"2021-07-02\",\n              \"hotelAgreement\": null,\n              \"maxOccupancy\": 1,\n              \"rateId\": \"058e478777fe3b4248670c6d6be3722c:06bbe6754161b5991e02e51849c6ae83\",\n              \"ratePlanId\": 3,\n              \"retailRate\": {\n                \"deal\": {\n                  \"conditions\": [],\n                  \"dealId\": \"D3\",\n                  \"discount\": {\n                    \"count\": 5,\n                    \"type\": \"PERCENTAGE\"\n                  }\n                },\n                \"taxesAndFees\": {\n                  \"includedInRate\": [],\n                  \"payAtHotel\": []\n                },\n                \"total\": {\n                  \"amount\": 9975,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                }\n              },\n              \"sellerCommissionPercentage\": 15,\n              \"start\": \"2021-07-01\"\n            },\n            {\n              \"cancellationPolicies\": [\n                {\n                  \"end\": \"2021-06-28 23:59:59.999\",\n                  \"fee\": {\n                    \"price\": {\n                      \"amount\": 0,\n                      \"currency\": {\n                        \"code\": \"EUR\"\n                      }\n                    },\n                    \"type\": \"NONE\"\n                  },\n                  \"formatted\": \"Fully refundable until June 28, 2021 23:59\",\n                  \"start\": \"2021-03-11 00:23:35.718\"\n                },\n                {\n                  \"fee\": {\n                    \"count\": 100,\n                    \"price\": {\n                      \"amount\": 11970,\n                      \"currency\": {\n                        \"code\": \"EUR\"\n                      }\n                    },\n                    \"type\": \"PERCENTAGE\"\n                  },\n                  \"formatted\": \"Non-refundable after June 29, 2021 00:00\",\n                  \"start\": \"2021-06-29 00:00:00.000\"\n                }\n              ],\n              \"components\": [],\n              \"end\": \"2021-07-02\",\n              \"hotelAgreement\": null,\n              \"maxOccupancy\": 1,\n              \"rateId\": \"38143de2077774891c4f136d86ce817a:7fa93ac18e3851dec34dead83648148f\",\n              \"ratePlanId\": 4,\n              \"retailRate\": {\n                \"deal\": {\n                  \"conditions\": [],\n                  \"dealId\": \"D3\",\n                  \"discount\": {\n                    \"count\": 5,\n                    \"type\": \"PERCENTAGE\"\n                  }\n                },\n                \"taxesAndFees\": {\n                  \"includedInRate\": [],\n                  \"payAtHotel\": []\n                },\n                \"total\": {\n                  \"amount\": 11970,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                }\n              },\n              \"sellerCommissionPercentage\": 15,\n              \"start\": \"2021-07-01\"\n            }\n          ],\n          \"roomTypeId\": \"7b4e914f-0551-4fdc-b349-db3c32c5afed\"\n        },\n        {\n          \"amenities\": [\n            {\n              \"code\": 228,\n              \"formatted\": \"Slippers\"\n            },\n            {\n              \"code\": 144,\n              \"formatted\": \"Soundproofed room\"\n            },\n            {\n              \"code\": 210,\n              \"formatted\": \"Satellite television\"\n            },\n            {\n              \"code\": 11,\n              \"formatted\": \"Bathroom amenities (free toiletries)\"\n            },\n            {\n              \"code\": 15,\n              \"formatted\": \"Bath or Shower\"\n            },\n            {\n              \"code\": 28,\n              \"formatted\": \"Desk\"\n            },\n            {\n              \"code\": 50,\n              \"formatted\": \"Hairdryer\"\n            },\n            {\n              \"code\": 69,\n              \"formatted\": \"Minibar\"\n            },\n            {\n              \"code\": 85,\n              \"formatted\": \"Private bathroom\"\n            },\n            {\n              \"code\": 123,\n              \"formatted\": \"Wireless internet connection\"\n            }\n          ],\n          \"description\": \"This is a fictional example room type that you can use to test all the features you might encounter on any hotel available on the Impala platform on the Impala platform (https://impala.travel). Testing with this room type means your app or site will be able to handle any values that you might find on Impala.\",\n          \"images\": [\n            {\n              \"altText\": null,\n              \"height\": 3024,\n              \"url\": \"https://cdn.impala.travel/area-types/ckiub0igb00063e6am6q2b0w3.jpg\",\n              \"width\": 4032\n            }\n          ],\n          \"maxOccupancy\": 2,\n          \"name\": \"Junior Suite\",\n          \"rates\": [\n            {\n              \"cancellationPolicies\": [\n                {\n                  \"end\": \"2021-06-28 23:59:59.999\",\n                  \"fee\": {\n                    \"price\": {\n                      \"amount\": 0,\n                      \"currency\": {\n                        \"code\": \"EUR\"\n                      }\n                    },\n                    \"type\": \"NONE\"\n                  },\n                  \"formatted\": \"Fully refundable until June 28, 2021 23:59\",\n                  \"start\": \"2021-03-11 00:23:35.719\"\n                },\n                {\n                  \"fee\": {\n                    \"count\": 100,\n                    \"price\": {\n                      \"amount\": 31500,\n                      \"currency\": {\n                        \"code\": \"EUR\"\n                      }\n                    },\n                    \"type\": \"PERCENTAGE\"\n                  },\n                  \"formatted\": \"Non-refundable after June 29, 2021 00:00\",\n                  \"start\": \"2021-06-29 00:00:00.000\"\n                }\n              ],\n              \"components\": [],\n              \"end\": \"2021-07-02\",\n              \"hotelAgreement\": null,\n              \"maxOccupancy\": 2,\n              \"rateId\": \"b815b95a5b6a847b7b0c09c1a9ea5827:77a228b50273fad2c224468c91739c3c\",\n              \"ratePlanId\": 1,\n              \"retailRate\": {\n                \"taxesAndFees\": {\n                  \"includedInRate\": [],\n                  \"payAtHotel\": []\n                },\n                \"total\": {\n                  \"amount\": 31500,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                }\n              },\n              \"sellerCommissionPercentage\": 10,\n              \"start\": \"2021-07-01\"\n            },\n            {\n              \"cancellationPolicies\": [\n                {\n                  \"end\": \"2021-06-28 23:59:59.999\",\n                  \"fee\": {\n                    \"price\": {\n                      \"amount\": 0,\n                      \"currency\": {\n                        \"code\": \"EUR\"\n                      }\n                    },\n                    \"type\": \"NONE\"\n                  },\n                  \"formatted\": \"Fully refundable until June 28, 2021 23:59\",\n                  \"start\": \"2021-03-11 00:23:35.719\"\n                },\n                {\n                  \"fee\": {\n                    \"count\": 100,\n                    \"price\": {\n                      \"amount\": 28875,\n                      \"currency\": {\n                        \"code\": \"EUR\"\n                      }\n                    },\n                    \"type\": \"PERCENTAGE\"\n                  },\n                  \"formatted\": \"Non-refundable after June 29, 2021 00:00\",\n                  \"start\": \"2021-06-29 00:00:00.000\"\n                }\n              ],\n              \"components\": [],\n              \"end\": \"2021-07-02\",\n              \"hotelAgreement\": null,\n              \"maxOccupancy\": 1,\n              \"rateId\": \"bcd9e5f11c6e747374d63d635b6f2d07:f5d244b004c18e3fef40606f83b72e76\",\n              \"ratePlanId\": 22,\n              \"retailRate\": {\n                \"taxesAndFees\": {\n                  \"includedInRate\": [],\n                  \"payAtHotel\": []\n                },\n                \"total\": {\n                  \"amount\": 28875,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                }\n              },\n              \"sellerCommissionPercentage\": 10,\n              \"start\": \"2021-07-01\"\n            },\n            {\n              \"cancellationPolicies\": [\n                {\n                  \"end\": \"2021-06-28 23:59:59.999\",\n                  \"fee\": {\n                    \"price\": {\n                      \"amount\": 0,\n                      \"currency\": {\n                        \"code\": \"EUR\"\n                      }\n                    },\n                    \"type\": \"NONE\"\n                  },\n                  \"formatted\": \"Fully refundable until June 28, 2021 23:59\",\n                  \"start\": \"2021-03-11 00:23:35.719\"\n                },\n                {\n                  \"fee\": {\n                    \"count\": 100,\n                    \"price\": {\n                      \"amount\": 29925,\n                      \"currency\": {\n                        \"code\": \"EUR\"\n                      }\n                    },\n                    \"type\": \"PERCENTAGE\"\n                  },\n                  \"formatted\": \"Non-refundable after June 29, 2021 00:00\",\n                  \"start\": \"2021-06-29 00:00:00.000\"\n                }\n              ],\n              \"components\": [],\n              \"end\": \"2021-07-02\",\n              \"hotelAgreement\": null,\n              \"maxOccupancy\": 2,\n              \"rateId\": \"e3d5af44011974bf705e792735778b44:88853f3b36a97a6adf8009d97102ad79\",\n              \"ratePlanId\": 11,\n              \"retailRate\": {\n                \"deal\": {\n                  \"conditions\": [],\n                  \"dealId\": \"D3\",\n                  \"discount\": {\n                    \"count\": 5,\n                    \"type\": \"PERCENTAGE\"\n                  }\n                },\n                \"taxesAndFees\": {\n                  \"includedInRate\": [],\n                  \"payAtHotel\": []\n                },\n                \"total\": {\n                  \"amount\": 29925,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                }\n              },\n              \"sellerCommissionPercentage\": 15,\n              \"start\": \"2021-07-01\"\n            },\n            {\n              \"cancellationPolicies\": [\n                {\n                  \"end\": \"2021-06-28 23:59:59.999\",\n                  \"fee\": {\n                    \"price\": {\n                      \"amount\": 0,\n                      \"currency\": {\n                        \"code\": \"EUR\"\n                      }\n                    },\n                    \"type\": \"NONE\"\n                  },\n                  \"formatted\": \"Fully refundable until June 28, 2021 23:59\",\n                  \"start\": \"2021-03-11 00:23:35.719\"\n                },\n                {\n                  \"fee\": {\n                    \"count\": 100,\n                    \"price\": {\n                      \"amount\": 27431,\n                      \"currency\": {\n                        \"code\": \"EUR\"\n                      }\n                    },\n                    \"type\": \"PERCENTAGE\"\n                  },\n                  \"formatted\": \"Non-refundable after June 29, 2021 00:00\",\n                  \"start\": \"2021-06-29 00:00:00.000\"\n                }\n              ],\n              \"components\": [],\n              \"end\": \"2021-07-02\",\n              \"hotelAgreement\": null,\n              \"maxOccupancy\": 1,\n              \"rateId\": \"5c0db8cb17c9e5316b2a62bda48f1dd4:39b27339fc838dfbfc48216e22a8ce44\",\n              \"ratePlanId\": 19,\n              \"retailRate\": {\n                \"deal\": {\n                  \"conditions\": [],\n                  \"dealId\": \"D3\",\n                  \"discount\": {\n                    \"count\": 5,\n                    \"type\": \"PERCENTAGE\"\n                  }\n                },\n                \"taxesAndFees\": {\n                  \"includedInRate\": [],\n                  \"payAtHotel\": []\n                },\n                \"total\": {\n                  \"amount\": 27431,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                }\n              },\n              \"sellerCommissionPercentage\": 15,\n              \"start\": \"2021-07-01\"\n            }\n          ],\n          \"roomTypeId\": \"280b6f5a-c645-44c0-a63d-03f1d7bc3d55\"\n        },\n        {\n          \"amenities\": [\n            {\n              \"code\": 2,\n              \"formatted\": \"Air conditioning\"\n            },\n            {\n              \"code\": 228,\n              \"formatted\": \"Slippers\"\n            },\n            {\n              \"code\": 210,\n              \"formatted\": \"Satellite television\"\n            },\n            {\n              \"code\": 144,\n              \"formatted\": \"Soundproofed room\"\n            },\n            {\n              \"code\": 123,\n              \"formatted\": \"Wireless internet connection\"\n            },\n            {\n              \"code\": 85,\n              \"formatted\": \"Private bathroom\"\n            },\n            {\n              \"code\": 69,\n              \"formatted\": \"Minibar\"\n            },\n            {\n              \"code\": 50,\n              \"formatted\": \"Hairdryer\"\n            },\n            {\n              \"code\": 28,\n              \"formatted\": \"Desk\"\n            },\n            {\n              \"code\": 15,\n              \"formatted\": \"Bath or Shower\"\n            },\n            {\n              \"code\": 11,\n              \"formatted\": \"Bathroom amenities (free toiletries)\"\n            }\n          ],\n          \"description\": \"This is a fictional example room type that you can use to test all the features you might encounter on any hotel available on the Impala platform on the Impala platform (https://impala.travel). Testing with this room type means your app or site will be able to handle any values that you might find on Impala.\",\n          \"images\": [\n            {\n              \"altText\": null,\n              \"height\": 6000,\n              \"url\": \"https://cdn.impala.travel/area-types/ckiub4vym00083e6amqnt3a6u.jpg\",\n              \"width\": 4000\n            }\n          ],\n          \"maxOccupancy\": 2,\n          \"name\": \"Double Room\",\n          \"rates\": [\n            {\n              \"cancellationPolicies\": [\n                {\n                  \"fee\": {\n                    \"count\": 100,\n                    \"price\": {\n                      \"amount\": 14700,\n                      \"currency\": {\n                        \"code\": \"EUR\"\n                      }\n                    },\n                    \"type\": \"PERCENTAGE\"\n                  },\n                  \"formatted\": \"Non-refundable after March 11, 2021 00:23\",\n                  \"start\": \"2021-03-11 00:23:35.719\"\n                }\n              ],\n              \"components\": [],\n              \"end\": \"2021-07-02\",\n              \"hotelAgreement\": null,\n              \"maxOccupancy\": 2,\n              \"rateId\": \"470a4b225742d213e9182a8ca650fe61:7b5f9d774a96e402438537b1e73fcfe5\",\n              \"ratePlanId\": 1,\n              \"retailRate\": {\n                \"taxesAndFees\": {\n                  \"includedInRate\": [],\n                  \"payAtHotel\": []\n                },\n                \"total\": {\n                  \"amount\": 14700,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                }\n              },\n              \"sellerCommissionPercentage\": 10,\n              \"start\": \"2021-07-01\"\n            },\n            {\n              \"cancellationPolicies\": [\n                {\n                  \"end\": \"2021-06-28 23:59:59.999\",\n                  \"fee\": {\n                    \"price\": {\n                      \"amount\": 0,\n                      \"currency\": {\n                        \"code\": \"EUR\"\n                      }\n                    },\n                    \"type\": \"NONE\"\n                  },\n                  \"formatted\": \"Fully refundable until June 28, 2021 23:59\",\n                  \"start\": \"2021-03-11 00:23:35.719\"\n                },\n                {\n                  \"fee\": {\n                    \"count\": 100,\n                    \"price\": {\n                      \"amount\": 15750,\n                      \"currency\": {\n                        \"code\": \"EUR\"\n                      }\n                    },\n                    \"type\": \"PERCENTAGE\"\n                  },\n                  \"formatted\": \"Non-refundable after June 29, 2021 00:00\",\n                  \"start\": \"2021-06-29 00:00:00.000\"\n                }\n              ],\n              \"components\": [],\n              \"end\": \"2021-07-02\",\n              \"hotelAgreement\": null,\n              \"maxOccupancy\": 1,\n              \"rateId\": \"19ba73ba97cda6d3febfe533acc25ba1:338e5ff8073767a23fdf0edc4cec1892\",\n              \"ratePlanId\": 2,\n              \"retailRate\": {\n                \"taxesAndFees\": {\n                  \"includedInRate\": [],\n                  \"payAtHotel\": []\n                },\n                \"total\": {\n                  \"amount\": 15750,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                }\n              },\n              \"sellerCommissionPercentage\": 10,\n              \"start\": \"2021-07-01\"\n            },\n            {\n              \"cancellationPolicies\": [\n                {\n                  \"end\": \"2021-06-28 23:59:59.999\",\n                  \"fee\": {\n                    \"price\": {\n                      \"amount\": 0,\n                      \"currency\": {\n                        \"code\": \"EUR\"\n                      }\n                    },\n                    \"type\": \"NONE\"\n                  },\n                  \"formatted\": \"Fully refundable until June 28, 2021 23:59\",\n                  \"start\": \"2021-03-11 00:23:35.719\"\n                },\n                {\n                  \"fee\": {\n                    \"count\": 100,\n                    \"price\": {\n                      \"amount\": 16800,\n                      \"currency\": {\n                        \"code\": \"EUR\"\n                      }\n                    },\n                    \"type\": \"PERCENTAGE\"\n                  },\n                  \"formatted\": \"Non-refundable after June 29, 2021 00:00\",\n                  \"start\": \"2021-06-29 00:00:00.000\"\n                }\n              ],\n              \"components\": [],\n              \"end\": \"2021-07-02\",\n              \"hotelAgreement\": null,\n              \"maxOccupancy\": 2,\n              \"rateId\": \"e7df0bcb2d335124b609ad188b1c364d:7bee69f1eafb714cadcbd90bd06cf66d\",\n              \"ratePlanId\": 3,\n              \"retailRate\": {\n                \"taxesAndFees\": {\n                  \"includedInRate\": [],\n                  \"payAtHotel\": []\n                },\n                \"total\": {\n                  \"amount\": 16800,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                }\n              },\n              \"sellerCommissionPercentage\": 10,\n              \"start\": \"2021-07-01\"\n            },\n            {\n              \"cancellationPolicies\": [\n                {\n                  \"fee\": {\n                    \"count\": 100,\n                    \"price\": {\n                      \"amount\": 13650,\n                      \"currency\": {\n                        \"code\": \"EUR\"\n                      }\n                    },\n                    \"type\": \"PERCENTAGE\"\n                  },\n                  \"formatted\": \"Non-refundable after March 11, 2021 00:23\",\n                  \"start\": \"2021-03-11 00:23:35.719\"\n                }\n              ],\n              \"components\": [],\n              \"end\": \"2021-07-02\",\n              \"hotelAgreement\": null,\n              \"maxOccupancy\": 1,\n              \"rateId\": \"2463f0474c058652951adbefd3bc8ff2:f2873919bedce820524ded4e2947e9b5\",\n              \"ratePlanId\": 22,\n              \"retailRate\": {\n                \"taxesAndFees\": {\n                  \"includedInRate\": [],\n                  \"payAtHotel\": []\n                },\n                \"total\": {\n                  \"amount\": 13650,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                }\n              },\n              \"sellerCommissionPercentage\": 10,\n              \"start\": \"2021-07-01\"\n            },\n            {\n              \"cancellationPolicies\": [\n                {\n                  \"fee\": {\n                    \"count\": 100,\n                    \"price\": {\n                      \"amount\": 13965,\n                      \"currency\": {\n                        \"code\": \"EUR\"\n                      }\n                    },\n                    \"type\": \"PERCENTAGE\"\n                  },\n                  \"formatted\": \"Non-refundable after March 11, 2021 00:23\",\n                  \"start\": \"2021-03-11 00:23:35.719\"\n                }\n              ],\n              \"components\": [],\n              \"end\": \"2021-07-02\",\n              \"hotelAgreement\": null,\n              \"maxOccupancy\": 2,\n              \"rateId\": \"022166b0c439dc27b83a96be5e561d97:fc7b648edf136c63b7114a2d13bfc02d\",\n              \"ratePlanId\": 23,\n              \"retailRate\": {\n                \"deal\": {\n                  \"conditions\": [],\n                  \"dealId\": \"D3\",\n                  \"discount\": {\n                    \"count\": 5,\n                    \"type\": \"PERCENTAGE\"\n                  }\n                },\n                \"taxesAndFees\": {\n                  \"includedInRate\": [],\n                  \"payAtHotel\": []\n                },\n                \"total\": {\n                  \"amount\": 13965,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                }\n              },\n              \"sellerCommissionPercentage\": 15,\n              \"start\": \"2021-07-01\"\n            },\n            {\n              \"cancellationPolicies\": [\n                {\n                  \"end\": \"2021-06-28 23:59:59.999\",\n                  \"fee\": {\n                    \"price\": {\n                      \"amount\": 0,\n                      \"currency\": {\n                        \"code\": \"EUR\"\n                      }\n                    },\n                    \"type\": \"NONE\"\n                  },\n                  \"formatted\": \"Fully refundable until June 28, 2021 23:59\",\n                  \"start\": \"2021-03-11 00:23:35.720\"\n                },\n                {\n                  \"fee\": {\n                    \"count\": 100,\n                    \"price\": {\n                      \"amount\": 14962,\n                      \"currency\": {\n                        \"code\": \"EUR\"\n                      }\n                    },\n                    \"type\": \"PERCENTAGE\"\n                  },\n                  \"formatted\": \"Non-refundable after June 29, 2021 00:00\",\n                  \"start\": \"2021-06-29 00:00:00.000\"\n                }\n              ],\n              \"components\": [],\n              \"end\": \"2021-07-02\",\n              \"hotelAgreement\": null,\n              \"maxOccupancy\": 1,\n              \"rateId\": \"35a9baa5068ba59163e930b14af4949b:bf061e368daac6ac9d57172d91f01f1b\",\n              \"ratePlanId\": 9,\n              \"retailRate\": {\n                \"deal\": {\n                  \"conditions\": [],\n                  \"dealId\": \"D3\",\n                  \"discount\": {\n                    \"count\": 5,\n                    \"type\": \"PERCENTAGE\"\n                  }\n                },\n                \"taxesAndFees\": {\n                  \"includedInRate\": [],\n                  \"payAtHotel\": []\n                },\n                \"total\": {\n                  \"amount\": 14962,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                }\n              },\n              \"sellerCommissionPercentage\": 15,\n              \"start\": \"2021-07-01\"\n            },\n            {\n              \"cancellationPolicies\": [\n                {\n                  \"end\": \"2021-06-28 23:59:59.999\",\n                  \"fee\": {\n                    \"price\": {\n                      \"amount\": 0,\n                      \"currency\": {\n                        \"code\": \"EUR\"\n                      }\n                    },\n                    \"type\": \"NONE\"\n                  },\n                  \"formatted\": \"Fully refundable until June 28, 2021 23:59\",\n                  \"start\": \"2021-03-11 00:23:35.720\"\n                },\n                {\n                  \"fee\": {\n                    \"count\": 100,\n                    \"price\": {\n                      \"amount\": 15960,\n                      \"currency\": {\n                        \"code\": \"EUR\"\n                      }\n                    },\n                    \"type\": \"PERCENTAGE\"\n                  },\n                  \"formatted\": \"Non-refundable after June 29, 2021 00:00\",\n                  \"start\": \"2021-06-29 00:00:00.000\"\n                }\n              ],\n              \"components\": [],\n              \"end\": \"2021-07-02\",\n              \"hotelAgreement\": null,\n              \"maxOccupancy\": 2,\n              \"rateId\": \"caf9b66563911b0e1525debcd9cf0ada:6fa29977e8403d97cfca5f6dcd6da6eb\",\n              \"ratePlanId\": 11,\n              \"retailRate\": {\n                \"deal\": {\n                  \"conditions\": [],\n                  \"dealId\": \"D3\",\n                  \"discount\": {\n                    \"count\": 5,\n                    \"type\": \"PERCENTAGE\"\n                  }\n                },\n                \"taxesAndFees\": {\n                  \"includedInRate\": [],\n                  \"payAtHotel\": []\n                },\n                \"total\": {\n                  \"amount\": 15960,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                }\n              },\n              \"sellerCommissionPercentage\": 15,\n              \"start\": \"2021-07-01\"\n            },\n            {\n              \"cancellationPolicies\": [\n                {\n                  \"fee\": {\n                    \"count\": 100,\n                    \"price\": {\n                      \"amount\": 12967,\n                      \"currency\": {\n                        \"code\": \"EUR\"\n                      }\n                    },\n                    \"type\": \"PERCENTAGE\"\n                  },\n                  \"formatted\": \"Non-refundable after March 11, 2021 00:23\",\n                  \"start\": \"2021-03-11 00:23:35.720\"\n                }\n              ],\n              \"components\": [],\n              \"end\": \"2021-07-02\",\n              \"hotelAgreement\": null,\n              \"maxOccupancy\": 1,\n              \"rateId\": \"891394f48e8ab2f406f4a9087c840768:933a218d184e74c5a67a59a649f4285f\",\n              \"ratePlanId\": 4,\n              \"retailRate\": {\n                \"deal\": {\n                  \"conditions\": [],\n                  \"dealId\": \"D3\",\n                  \"discount\": {\n                    \"count\": 5,\n                    \"type\": \"PERCENTAGE\"\n                  }\n                },\n                \"taxesAndFees\": {\n                  \"includedInRate\": [],\n                  \"payAtHotel\": []\n                },\n                \"total\": {\n                  \"amount\": 12967,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                }\n              },\n              \"sellerCommissionPercentage\": 15,\n              \"start\": \"2021-07-01\"\n            }\n          ],\n          \"roomTypeId\": \"8cb8ce9e-221a-4220-a358-35b6852fb359\"\n        },\n        {\n          \"amenities\": [\n            {\n              \"code\": 228,\n              \"formatted\": \"Slippers\"\n            },\n            {\n              \"code\": 144,\n              \"formatted\": \"Soundproofed room\"\n            },\n            {\n              \"code\": 123,\n              \"formatted\": \"Wireless internet connection\"\n            },\n            {\n              \"code\": 85,\n              \"formatted\": \"Private bathroom\"\n            },\n            {\n              \"code\": 69,\n              \"formatted\": \"Minibar\"\n            },\n            {\n              \"code\": 50,\n              \"formatted\": \"Hairdryer\"\n            },\n            {\n              \"code\": 28,\n              \"formatted\": \"Desk\"\n            },\n            {\n              \"code\": 15,\n              \"formatted\": \"Bath or Shower\"\n            },\n            {\n              \"code\": 11,\n              \"formatted\": \"Bathroom amenities (free toiletries)\"\n            }\n          ],\n          \"description\": \"This is a fictional example room type that you can use to test all the features you might encounter on any hotel available on the Impala platform on the Impala platform (https://impala.travel). Testing with this room type means your app or site will be able to handle any values that you might find on Impala.\",\n          \"images\": [\n            {\n              \"altText\": null,\n              \"height\": 4480,\n              \"url\": \"https://cdn.impala.travel/area-types/ckiub3dw100073e6alkifv3ok.jpg\",\n              \"width\": 6720\n            }\n          ],\n          \"maxOccupancy\": 4,\n          \"name\": \"Presidential Suite\",\n          \"rates\": [\n            {\n              \"cancellationPolicies\": [\n                {\n                  \"end\": \"2021-06-28 23:59:59.999\",\n                  \"fee\": {\n                    \"price\": {\n                      \"amount\": 0,\n                      \"currency\": {\n                        \"code\": \"EUR\"\n                      }\n                    },\n                    \"type\": \"NONE\"\n                  },\n                  \"formatted\": \"Fully refundable until June 28, 2021 23:59\",\n                  \"start\": \"2021-03-11 00:23:35.720\"\n                },\n                {\n                  \"fee\": {\n                    \"count\": 100,\n                    \"price\": {\n                      \"amount\": 47250,\n                      \"currency\": {\n                        \"code\": \"EUR\"\n                      }\n                    },\n                    \"type\": \"PERCENTAGE\"\n                  },\n                  \"formatted\": \"Non-refundable after June 29, 2021 00:00\",\n                  \"start\": \"2021-06-29 00:00:00.000\"\n                }\n              ],\n              \"components\": [],\n              \"end\": \"2021-07-02\",\n              \"hotelAgreement\": null,\n              \"maxOccupancy\": 2,\n              \"rateId\": \"42efaad56d0f614f5cc65e0c5c30669f:1866b6b4e0b2ca054a68ee58565fc6e9\",\n              \"ratePlanId\": 3,\n              \"retailRate\": {\n                \"taxesAndFees\": {\n                  \"includedInRate\": [],\n                  \"payAtHotel\": []\n                },\n                \"total\": {\n                  \"amount\": 47250,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                }\n              },\n              \"sellerCommissionPercentage\": 10,\n              \"start\": \"2021-07-01\"\n            },\n            {\n              \"cancellationPolicies\": [\n                {\n                  \"fee\": {\n                    \"count\": 100,\n                    \"price\": {\n                      \"amount\": 42000,\n                      \"currency\": {\n                        \"code\": \"EUR\"\n                      }\n                    },\n                    \"type\": \"PERCENTAGE\"\n                  },\n                  \"formatted\": \"Non-refundable after March 11, 2021 00:23\",\n                  \"start\": \"2021-03-11 00:23:35.720\"\n                }\n              ],\n              \"components\": [],\n              \"end\": \"2021-07-02\",\n              \"hotelAgreement\": null,\n              \"maxOccupancy\": 2,\n              \"rateId\": \"2fb14f477f41541d5598b61aab21f1b4:afc6e4cfb689d05fd17e9780be16af9d\",\n              \"ratePlanId\": 2,\n              \"retailRate\": {\n                \"taxesAndFees\": {\n                  \"includedInRate\": [],\n                  \"payAtHotel\": []\n                },\n                \"total\": {\n                  \"amount\": 42000,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                }\n              },\n              \"sellerCommissionPercentage\": 10,\n              \"start\": \"2021-07-01\"\n            },\n            {\n              \"cancellationPolicies\": [\n                {\n                  \"end\": \"2021-06-28 23:59:59.999\",\n                  \"fee\": {\n                    \"price\": {\n                      \"amount\": 0,\n                      \"currency\": {\n                        \"code\": \"EUR\"\n                      }\n                    },\n                    \"type\": \"NONE\"\n                  },\n                  \"formatted\": \"Fully refundable until June 28, 2021 23:59\",\n                  \"start\": \"2021-03-11 00:23:35.720\"\n                },\n                {\n                  \"fee\": {\n                    \"count\": 100,\n                    \"price\": {\n                      \"amount\": 44625,\n                      \"currency\": {\n                        \"code\": \"EUR\"\n                      }\n                    },\n                    \"type\": \"PERCENTAGE\"\n                  },\n                  \"formatted\": \"Non-refundable after June 29, 2021 00:00\",\n                  \"start\": \"2021-06-29 00:00:00.000\"\n                }\n              ],\n              \"components\": [],\n              \"end\": \"2021-07-02\",\n              \"hotelAgreement\": null,\n              \"maxOccupancy\": 1,\n              \"rateId\": \"896624e8d1733cf9f533d58080b0f217:f77b2b8805413ec948c3f609eb241c33\",\n              \"ratePlanId\": 4,\n              \"retailRate\": {\n                \"taxesAndFees\": {\n                  \"includedInRate\": [],\n                  \"payAtHotel\": []\n                },\n                \"total\": {\n                  \"amount\": 44625,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                }\n              },\n              \"sellerCommissionPercentage\": 10,\n              \"start\": \"2021-07-01\"\n            },\n            {\n              \"cancellationPolicies\": [\n                {\n                  \"fee\": {\n                    \"count\": 100,\n                    \"price\": {\n                      \"amount\": 39900,\n                      \"currency\": {\n                        \"code\": \"EUR\"\n                      }\n                    },\n                    \"type\": \"PERCENTAGE\"\n                  },\n                  \"formatted\": \"Non-refundable after March 11, 2021 00:23\",\n                  \"start\": \"2021-03-11 00:23:35.720\"\n                }\n              ],\n              \"components\": [],\n              \"end\": \"2021-07-02\",\n              \"hotelAgreement\": null,\n              \"maxOccupancy\": 1,\n              \"rateId\": \"0fc4232f1726473c3f12c99849262e84:3fca5c554e779783c73a5ea293da831f\",\n              \"ratePlanId\": 5,\n              \"retailRate\": {\n                \"taxesAndFees\": {\n                  \"includedInRate\": [],\n                  \"payAtHotel\": []\n                },\n                \"total\": {\n                  \"amount\": 39900,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                }\n              },\n              \"sellerCommissionPercentage\": 10,\n              \"start\": \"2021-07-01\"\n            },\n            {\n              \"cancellationPolicies\": [\n                {\n                  \"end\": \"2021-06-28 23:59:59.999\",\n                  \"fee\": {\n                    \"price\": {\n                      \"amount\": 0,\n                      \"currency\": {\n                        \"code\": \"EUR\"\n                      }\n                    },\n                    \"type\": \"NONE\"\n                  },\n                  \"formatted\": \"Fully refundable until June 28, 2021 23:59\",\n                  \"start\": \"2021-03-11 00:23:35.720\"\n                },\n                {\n                  \"fee\": {\n                    \"count\": 100,\n                    \"price\": {\n                      \"amount\": 44887,\n                      \"currency\": {\n                        \"code\": \"EUR\"\n                      }\n                    },\n                    \"type\": \"PERCENTAGE\"\n                  },\n                  \"formatted\": \"Non-refundable after June 29, 2021 00:00\",\n                  \"start\": \"2021-06-29 00:00:00.000\"\n                }\n              ],\n              \"components\": [],\n              \"end\": \"2021-07-02\",\n              \"hotelAgreement\": null,\n              \"maxOccupancy\": 2,\n              \"rateId\": \"1471020e7f634138b7088a081e45231a:15006e156c471ef4a22d38fee7f84c68\",\n              \"ratePlanId\": 22,\n              \"retailRate\": {\n                \"deal\": {\n                  \"conditions\": [],\n                  \"dealId\": \"D3\",\n                  \"discount\": {\n                    \"count\": 5,\n                    \"type\": \"PERCENTAGE\"\n                  }\n                },\n                \"taxesAndFees\": {\n                  \"includedInRate\": [],\n                  \"payAtHotel\": []\n                },\n                \"total\": {\n                  \"amount\": 44887,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                }\n              },\n              \"sellerCommissionPercentage\": 15,\n              \"start\": \"2021-07-01\"\n            },\n            {\n              \"cancellationPolicies\": [\n                {\n                  \"fee\": {\n                    \"count\": 100,\n                    \"price\": {\n                      \"amount\": 39900,\n                      \"currency\": {\n                        \"code\": \"EUR\"\n                      }\n                    },\n                    \"type\": \"PERCENTAGE\"\n                  },\n                  \"formatted\": \"Non-refundable after March 11, 2021 00:23\",\n                  \"start\": \"2021-03-11 00:23:35.720\"\n                }\n              ],\n              \"components\": [],\n              \"end\": \"2021-07-02\",\n              \"hotelAgreement\": null,\n              \"maxOccupancy\": 2,\n              \"rateId\": \"23888f2637881fed0fb1253d2ebeace6:a844bb82cab7f71f0514a7d458dfec99\",\n              \"ratePlanId\": 7,\n              \"retailRate\": {\n                \"deal\": {\n                  \"conditions\": [],\n                  \"dealId\": \"D3\",\n                  \"discount\": {\n                    \"count\": 5,\n                    \"type\": \"PERCENTAGE\"\n                  }\n                },\n                \"taxesAndFees\": {\n                  \"includedInRate\": [],\n                  \"payAtHotel\": []\n                },\n                \"total\": {\n                  \"amount\": 39900,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                }\n              },\n              \"sellerCommissionPercentage\": 15,\n              \"start\": \"2021-07-01\"\n            },\n            {\n              \"cancellationPolicies\": [\n                {\n                  \"end\": \"2021-06-28 23:59:59.999\",\n                  \"fee\": {\n                    \"price\": {\n                      \"amount\": 0,\n                      \"currency\": {\n                        \"code\": \"EUR\"\n                      }\n                    },\n                    \"type\": \"NONE\"\n                  },\n                  \"formatted\": \"Fully refundable until June 28, 2021 23:59\",\n                  \"start\": \"2021-03-11 00:23:35.720\"\n                },\n                {\n                  \"fee\": {\n                    \"count\": 100,\n                    \"price\": {\n                      \"amount\": 42393,\n                      \"currency\": {\n                        \"code\": \"EUR\"\n                      }\n                    },\n                    \"type\": \"PERCENTAGE\"\n                  },\n                  \"formatted\": \"Non-refundable after June 29, 2021 00:00\",\n                  \"start\": \"2021-06-29 00:00:00.000\"\n                }\n              ],\n              \"components\": [],\n              \"end\": \"2021-07-02\",\n              \"hotelAgreement\": null,\n              \"maxOccupancy\": 1,\n              \"rateId\": \"bacf1877347d8936da6ea4b9609f2e06:3b8938ba186b5788dae45a868d1a5228\",\n              \"ratePlanId\": 9,\n              \"retailRate\": {\n                \"deal\": {\n                  \"conditions\": [],\n                  \"dealId\": \"D3\",\n                  \"discount\": {\n                    \"count\": 5,\n                    \"type\": \"PERCENTAGE\"\n                  }\n                },\n                \"taxesAndFees\": {\n                  \"includedInRate\": [],\n                  \"payAtHotel\": []\n                },\n                \"total\": {\n                  \"amount\": 42393,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                }\n              },\n              \"sellerCommissionPercentage\": 15,\n              \"start\": \"2021-07-01\"\n            },\n            {\n              \"cancellationPolicies\": [\n                {\n                  \"fee\": {\n                    \"count\": 100,\n                    \"price\": {\n                      \"amount\": 37905,\n                      \"currency\": {\n                        \"code\": \"EUR\"\n                      }\n                    },\n                    \"type\": \"PERCENTAGE\"\n                  },\n                  \"formatted\": \"Non-refundable after March 11, 2021 00:23\",\n                  \"start\": \"2021-03-11 00:23:35.720\"\n                }\n              ],\n              \"components\": [],\n              \"end\": \"2021-07-02\",\n              \"hotelAgreement\": null,\n              \"maxOccupancy\": 1,\n              \"rateId\": \"7f1f053b76157a70e19cade3e38fd763:8f82c19071c9f4d12f5bdf92e181c140\",\n              \"ratePlanId\": 8,\n              \"retailRate\": {\n                \"taxesAndFees\": {\n                  \"includedInRate\": [],\n                  \"payAtHotel\": []\n                },\n                \"total\": {\n                  \"amount\": 37905,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                }\n              },\n              \"sellerCommissionPercentage\": 15,\n              \"start\": \"2021-07-01\"\n            }\n          ],\n          \"roomTypeId\": \"1bd16eed-e10f-47f6-8f28-67c40deb4f3b\"\n        }\n      ],\n      \"starRating\": 5,\n      \"termsAndConditions\": \"\",\n      \"updatedAt\": \"2021-02-17T09:07:41.615Z\",\n      \"websiteUrl\": \"https://impala-all-avaialable-resort.hotel/\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ffeae084-66b9-4e19-892e-3a44fc4c6375",
+              "name": "Your request wasn't formatted correctly and therefore couldn't be processed. This most frequently happens when query parameters or request body values are missing, incorrectly formatted or added where they don't exist (e.g. due to typos). We're including a list of `validations` to point out where things are going wrong and should be fixed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "name[eq]",
+                      "value": "Minimalist Palace"
+                    },
+                    {
+                      "key": "name[like]",
+                      "value": "palace"
+                    },
+                    {
+                      "key": "starRating[eq]",
+                      "value": "4"
+                    },
+                    {
+                      "key": "starRating[gt]",
+                      "value": "3"
+                    },
+                    {
+                      "key": "starRating[gte]",
+                      "value": "4"
+                    },
+                    {
+                      "key": "starRating[lt]",
+                      "value": "4"
+                    },
+                    {
+                      "key": "starRating[lte]",
+                      "value": "3"
+                    },
+                    {
+                      "key": "country[eq]",
+                      "value": "GBR"
+                    },
+                    {
+                      "key": "start",
+                      "value": "2021-05-20"
+                    },
+                    {
+                      "key": "end",
+                      "value": "2021-05-22"
+                    },
+                    {
+                      "key": "latitude",
+                      "value": "58.386186"
+                    },
+                    {
+                      "key": "longitude",
+                      "value": "-9.952549"
+                    },
+                    {
+                      "key": "radius",
+                      "value": "25000"
+                    },
+                    {
+                      "key": "hotelIds",
+                      "value": "0e25533a-2db2-4894-9db1-4c1ff92d798c,77c272b6-18e6-4036-b9c3-7fc5454e3f6a"
+                    },
+                    {
+                      "key": "created[eq]",
+                      "value": "2020-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "created[gt]",
+                      "value": "2020-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "created[gte]",
+                      "value": "2020-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "created[lt]",
+                      "value": "2020-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "created[lte]",
+                      "value": "2020-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updated[eq]",
+                      "value": "2020-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updated[gt]",
+                      "value": "2020-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updated[gte]",
+                      "value": "2020-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updated[lt]",
+                      "value": "2020-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updated[lte]",
+                      "value": "2020-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "size",
+                      "value": "40"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "25"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "name:asc,distance_m:desc"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"VALIDATION_ERROR\",\n  \"message\": \"\\\"start\\\" must be in YYYY-MM-DD format. \\\"foo\\\" is not allowed. \\\"lorem\\\" missing required peer \\\"ipsum\\\"\",\n  \"validations\": [\n    {\n      \"code\": \"DATE_FORMAT\",\n      \"message\": \"\\\"start\\\" must be in YYYY-MM-DD format\",\n      \"property\": \"start\"\n    },\n    {\n      \"code\": \"OBJECT_UNKNOWN\",\n      \"message\": \"\\\"foo\\\" is not allowed\",\n      \"property\": \"foo\"\n    },\n    {\n      \"code\": \"OBJECT_WITH\",\n      \"message\": \"\\\"lorem\\\" missing required peer \\\"ipsum\\\"\",\n      \"property\": \"lorem\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1716b814-649c-4d60-a423-7a0852d5be7a",
+              "name": "Your request was sent without or with an incorrect API key. This most frequently happens when the `x-api-key` header wasn't added or contains an incorrect value. This might also happen if you're trying to access the production API endpoints with a sandbox API key or vice versa.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "name[eq]",
+                      "value": "Minimalist Palace"
+                    },
+                    {
+                      "key": "name[like]",
+                      "value": "palace"
+                    },
+                    {
+                      "key": "starRating[eq]",
+                      "value": "4"
+                    },
+                    {
+                      "key": "starRating[gt]",
+                      "value": "3"
+                    },
+                    {
+                      "key": "starRating[gte]",
+                      "value": "4"
+                    },
+                    {
+                      "key": "starRating[lt]",
+                      "value": "4"
+                    },
+                    {
+                      "key": "starRating[lte]",
+                      "value": "3"
+                    },
+                    {
+                      "key": "country[eq]",
+                      "value": "GBR"
+                    },
+                    {
+                      "key": "start",
+                      "value": "2021-05-20"
+                    },
+                    {
+                      "key": "end",
+                      "value": "2021-05-22"
+                    },
+                    {
+                      "key": "latitude",
+                      "value": "58.386186"
+                    },
+                    {
+                      "key": "longitude",
+                      "value": "-9.952549"
+                    },
+                    {
+                      "key": "radius",
+                      "value": "25000"
+                    },
+                    {
+                      "key": "hotelIds",
+                      "value": "0e25533a-2db2-4894-9db1-4c1ff92d798c,77c272b6-18e6-4036-b9c3-7fc5454e3f6a"
+                    },
+                    {
+                      "key": "created[eq]",
+                      "value": "2020-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "created[gt]",
+                      "value": "2020-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "created[gte]",
+                      "value": "2020-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "created[lt]",
+                      "value": "2020-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "created[lte]",
+                      "value": "2020-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updated[eq]",
+                      "value": "2020-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updated[gt]",
+                      "value": "2020-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updated[gte]",
+                      "value": "2020-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updated[lt]",
+                      "value": "2020-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updated[lte]",
+                      "value": "2020-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "size",
+                      "value": "40"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "25"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "name:asc,distance_m:desc"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Invalid authentication credentials\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3e60f11c-191a-49cc-a30f-a2865aac6ba6",
+              "name": "An internal server error within the Impala platform has occurred. Our team will investigate the error.\nWe recommend that you contact us at support@impala.travel with the x-correlation-id value contained\nwithin the response headers. Sending us this value will allow us to identify the precise error you encountered.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "name[eq]",
+                      "value": "Minimalist Palace"
+                    },
+                    {
+                      "key": "name[like]",
+                      "value": "palace"
+                    },
+                    {
+                      "key": "starRating[eq]",
+                      "value": "4"
+                    },
+                    {
+                      "key": "starRating[gt]",
+                      "value": "3"
+                    },
+                    {
+                      "key": "starRating[gte]",
+                      "value": "4"
+                    },
+                    {
+                      "key": "starRating[lt]",
+                      "value": "4"
+                    },
+                    {
+                      "key": "starRating[lte]",
+                      "value": "3"
+                    },
+                    {
+                      "key": "country[eq]",
+                      "value": "GBR"
+                    },
+                    {
+                      "key": "start",
+                      "value": "2021-05-20"
+                    },
+                    {
+                      "key": "end",
+                      "value": "2021-05-22"
+                    },
+                    {
+                      "key": "latitude",
+                      "value": "58.386186"
+                    },
+                    {
+                      "key": "longitude",
+                      "value": "-9.952549"
+                    },
+                    {
+                      "key": "radius",
+                      "value": "25000"
+                    },
+                    {
+                      "key": "hotelIds",
+                      "value": "0e25533a-2db2-4894-9db1-4c1ff92d798c,77c272b6-18e6-4036-b9c3-7fc5454e3f6a"
+                    },
+                    {
+                      "key": "created[eq]",
+                      "value": "2020-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "created[gt]",
+                      "value": "2020-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "created[gte]",
+                      "value": "2020-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "created[lt]",
+                      "value": "2020-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "created[lte]",
+                      "value": "2020-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updated[eq]",
+                      "value": "2020-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updated[gt]",
+                      "value": "2020-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updated[gte]",
+                      "value": "2020-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updated[lt]",
+                      "value": "2020-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updated[lte]",
+                      "value": "2020-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "size",
+                      "value": "40"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "25"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "name:asc,distance_m:desc"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"InternalServerError\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "77974672-0206-44bf-90d4-4d63c87f6857",
+          "name": "Retrieve a hotel",
+          "request": {
+            "name": "Retrieve a hotel",
+            "description": {
+              "content": "Returns the full content, room types and rates for the specified hotel.\n\nWhen querying the hotels API you can query with or without dates. Where querying with dates requires providing valid values for the `start` and `end` parameters. Requests without these values will be considered a query without dates.\n\n**Querying without dates:**\n\nWhen you query without dates, the search result will include all properties that match your request. Including all content that is associated with those properties. However you will find that the `rates` attribute for each room will always be empty.\n\n**Querying with dates:**\n\nWhen you query with dates, the search result will include all properties that match your request, including all content that is associated with those properties. Rooms which do not have available prices for the provided dates will appear with an empty `rates` array.\n\nFor rooms where there are available prices the `rates` array will include both the public rates of the hotel, along with prices that come from deals in which you are participating. This would include private deals which you have negotiated with a hotel, along with Impala deals which you have been verified for.\n\nUsing the `rateId` of any of those rates, you can use the [Create a booking](https://docs.impala.travel/docs/booking-api/spec/openapi.seller.yaml/paths/~1bookings/post) endpoint to make a booking.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "hotels",
+                ":hotelId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "start",
+                  "value": "<string>",
+                  "description": "The arrival day of the desired stay range in ISO 8601 format (`YYYY-MM-DD`)."
+                },
+                {
+                  "disabled": false,
+                  "key": "end",
+                  "value": "<string>",
+                  "description": "The departure day of the desired stay range in ISO 8601 format (`YYYY-MM-DD`)."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "hotelId",
+                  "description": "(Required) The unique identifier of this hotel on the Impala platform."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "67237236-2879-40a8-883d-d18c615ec1a0",
+              "name": "Returns the requested hotel.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    ":hotelId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start",
+                      "value": "2021-05-20"
+                    },
+                    {
+                      "key": "end",
+                      "value": "2021-05-22"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "hotelId",
+                      "description": "(Required) The unique identifier of this hotel on the Impala platform."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"address\": {\n    \"city\": \"Impalaland\",\n    \"country\": \"GBR\",\n    \"countryName\": \"United Kingdom of Great Britain and Northern Ireland\",\n    \"line1\": \"456 Impala Street\",\n    \"line2\": null,\n    \"postalCode\": \"0987-654\",\n    \"region\": \"Impalaland Beach\"\n  },\n  \"amenities\": [\n    {\n      \"code\": 5,\n      \"formatted\": \"Air conditioning\"\n    },\n    {\n      \"code\": 7,\n      \"formatted\": \"ATM/Cash machine\"\n    },\n    {\n      \"code\": 8,\n      \"formatted\": \"Baby sitting\"\n    },\n    {\n      \"code\": 9,\n      \"formatted\": \"BBQ/Picnic area\"\n    },\n    {\n      \"code\": 14,\n      \"formatted\": \"Business library\"\n    },\n    {\n      \"code\": 16,\n      \"formatted\": \"Casino\"\n    },\n    {\n      \"code\": 22,\n      \"formatted\": \"Concierge desk\"\n    }\n  ],\n  \"checkIn\": {\n    \"from\": \"15:00\"\n  },\n  \"checkOut\": {\n    \"to\": \"12:00\"\n  },\n  \"contractable\": true,\n  \"createdAt\": \"2020-12-18T13:29:22.865Z\",\n  \"currency\": \"GBP\",\n  \"description\": {\n    \"short\": \"This fictional example hotel allows you to experience all the content, rates and features the Impala platform (https://impala.travel) has to offer. Testing with this hotel allows you to experience the full breadth of functionality and rate options hotels might offer on Impala – and to ensure your app displays everything correctly.\"\n  },\n  \"emails\": [\n    \"mail@impala-all-avaialable-resort.hotel\"\n  ],\n  \"externalUrls\": [\n    {\n      \"name\": \"BOOKING.COM\",\n      \"url\": \"https://www.booking.com/hotel/im/impala\"\n    },\n    {\n      \"name\": \"HOTELS.COM\",\n      \"url\": \"https://uk.hotels.com/imp123456/\"\n    }\n  ],\n  \"hotelId\": \"0e25533a-2db2-4894-9db1-4c1ff92d798c\",\n  \"images\": [\n    {\n      \"altText\": null,\n      \"height\": 1536,\n      \"isHeroImage\": true,\n      \"url\": \"https://cdn.impala.travel/properties/ckiuattho00013e6ar0tiilgt.jpg\",\n      \"width\": 2884\n    },\n    {\n      \"altText\": null,\n      \"height\": 2461,\n      \"isHeroImage\": false,\n      \"url\": \"https://cdn.impala.travel/properties/ckiuavcvm00023e6aordygdiy.jpg\",\n      \"width\": 3072\n    },\n    {\n      \"altText\": null,\n      \"height\": 3640,\n      \"isHeroImage\": false,\n      \"url\": \"https://cdn.impala.travel/properties/ckiuavvr100033e6ajep6w5dl.jpg\",\n      \"width\": 2912\n    },\n    {\n      \"altText\": null,\n      \"height\": 2848,\n      \"isHeroImage\": false,\n      \"url\": \"https://cdn.impala.travel/properties/ckiuawdeo00043e6ajyqc70nm.jpg\",\n      \"width\": 4288\n    },\n    {\n      \"altText\": null,\n      \"height\": 3072,\n      \"isHeroImage\": false,\n      \"url\": \"https://cdn.impala.travel/properties/ckiuawt9y00053e6a76l0qgqe.jpg\",\n      \"width\": 4608\n    }\n  ],\n  \"location\": {\n    \"latitude\": 58.386186,\n    \"longitude\": -9.952549\n  },\n  \"name\": \"Impala All-Inclusive Always Available Resort (Example Hotel)\",\n  \"phoneNumbers\": [\n    \"+48789789789\"\n  ],\n  \"roomCount\": 200,\n  \"roomTypes\": [\n    {\n      \"amenities\": [\n        {\n          \"code\": 11,\n          \"formatted\": \"Bathroom amenities (free toiletries)\"\n        },\n        {\n          \"code\": 15,\n          \"formatted\": \"Bath or Shower\"\n        },\n        {\n          \"code\": 28,\n          \"formatted\": \"Desk\"\n        },\n        {\n          \"code\": 50,\n          \"formatted\": \"Hairdryer\"\n        },\n        {\n          \"code\": 69,\n          \"formatted\": \"Minibar\"\n        },\n        {\n          \"code\": 85,\n          \"formatted\": \"Private bathroom\"\n        },\n        {\n          \"code\": 123,\n          \"formatted\": \"Wireless internet connection\"\n        },\n        {\n          \"code\": 144,\n          \"formatted\": \"Soundproofed room\"\n        },\n        {\n          \"code\": 210,\n          \"formatted\": \"Satellite television\"\n        },\n        {\n          \"code\": 228,\n          \"formatted\": \"Slippers\"\n        }\n      ],\n      \"description\": \"This is a fictional example room type that you can use to test all the features you might encounter on any hotel available on the Impala platform on the Impala platform (https://impala.travel). Testing with this room type means your app or site will be able to handle any values that you might find on Impala.\",\n      \"images\": [\n        {\n          \"altText\": null,\n          \"height\": 3255,\n          \"url\": \"https://cdn.impala.travel/area-types/ckiub6h8c00093e6ag7kufw24.jpg\",\n          \"width\": 4890\n        }\n      ],\n      \"maxOccupancy\": 1,\n      \"name\": \"Single Room\",\n      \"rates\": [\n        {\n          \"cancellationPolicies\": [\n            {\n              \"fee\": {\n                \"count\": 100,\n                \"price\": {\n                  \"amount\": 10500,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                },\n                \"type\": \"PERCENTAGE\"\n              },\n              \"formatted\": \"Non-refundable after March 11, 2021 00:23\",\n              \"start\": \"2021-03-11 00:23:35.718\"\n            }\n          ],\n          \"components\": [],\n          \"end\": \"2021-07-02\",\n          \"hotelAgreement\": null,\n          \"maxOccupancy\": 1,\n          \"notes\": {\n            \"fromGuest\": \"\",\n            \"fromSeller\": \"\"\n          },\n          \"rateId\": \"b0e2ec0fa2ae1b3697f467393558a69a:474f39c17490c46b4e622da1bffbd5c1\",\n          \"ratePlanId\": 7,\n          \"retailRate\": {\n            \"taxesAndFees\": {\n              \"includedInRate\": [],\n              \"payAtHotel\": []\n            },\n            \"total\": {\n              \"amount\": 10500,\n              \"currency\": {\n                \"code\": \"EUR\"\n              }\n            }\n          },\n          \"sellerCommissionPercentage\": 10,\n          \"start\": \"2021-07-01\"\n        },\n        {\n          \"cancellationPolicies\": [\n            {\n              \"end\": \"2021-06-28 23:59:59.999\",\n              \"fee\": {\n                \"price\": {\n                  \"amount\": 0,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                },\n                \"type\": \"NONE\"\n              },\n              \"formatted\": \"Fully refundable until June 28, 2021 23:59\",\n              \"start\": \"2021-03-11 00:23:35.718\"\n            },\n            {\n              \"fee\": {\n                \"count\": 100,\n                \"price\": {\n                  \"amount\": 12600,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                },\n                \"type\": \"PERCENTAGE\"\n              },\n              \"formatted\": \"Non-refundable after June 29, 2021 00:00\",\n              \"start\": \"2021-06-29 00:00:00.000\"\n            }\n          ],\n          \"components\": [],\n          \"end\": \"2021-07-02\",\n          \"hotelAgreement\": null,\n          \"maxOccupancy\": 1,\n          \"rateId\": \"17b005e4c35575b654171d4589191b5d:bd277330e925805cad8686093554efe5\",\n          \"retailRate\": {\n            \"taxesAndFees\": {\n              \"includedInRate\": [],\n              \"payAtHotel\": []\n            },\n            \"total\": {\n              \"amount\": 12600,\n              \"currency\": {\n                \"code\": \"EUR\"\n              }\n            }\n          },\n          \"sellerCommissionPercentage\": 10,\n          \"start\": \"2021-07-01\"\n        },\n        {\n          \"cancellationPolicies\": [\n            {\n              \"fee\": {\n                \"count\": 100,\n                \"price\": {\n                  \"amount\": 9975,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                },\n                \"type\": \"PERCENTAGE\"\n              },\n              \"formatted\": \"Non-refundable after March 11, 2021 00:23\",\n              \"start\": \"2021-03-11 00:23:35.718\"\n            }\n          ],\n          \"components\": [],\n          \"end\": \"2021-07-02\",\n          \"hotelAgreement\": null,\n          \"maxOccupancy\": 1,\n          \"rateId\": \"058e478777fe3b4248670c6d6be3722c:06bbe6754161b5991e02e51849c6ae83\",\n          \"retailRate\": {\n            \"deal\": {\n              \"conditions\": [],\n              \"dealId\": \"D3\",\n              \"discount\": {\n                \"count\": 5,\n                \"type\": \"PERCENTAGE\"\n              }\n            },\n            \"taxesAndFees\": {\n              \"includedInRate\": [],\n              \"payAtHotel\": []\n            },\n            \"total\": {\n              \"amount\": 9975,\n              \"currency\": {\n                \"code\": \"EUR\"\n              }\n            }\n          },\n          \"sellerCommissionPercentage\": 15,\n          \"start\": \"2021-07-01\"\n        },\n        {\n          \"cancellationPolicies\": [\n            {\n              \"end\": \"2021-06-28 23:59:59.999\",\n              \"fee\": {\n                \"price\": {\n                  \"amount\": 0,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                },\n                \"type\": \"NONE\"\n              },\n              \"formatted\": \"Fully refundable until June 28, 2021 23:59\",\n              \"start\": \"2021-03-11 00:23:35.718\"\n            },\n            {\n              \"fee\": {\n                \"count\": 100,\n                \"price\": {\n                  \"amount\": 11970,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                },\n                \"type\": \"PERCENTAGE\"\n              },\n              \"formatted\": \"Non-refundable after June 29, 2021 00:00\",\n              \"start\": \"2021-06-29 00:00:00.000\"\n            }\n          ],\n          \"components\": [],\n          \"end\": \"2021-07-02\",\n          \"hotelAgreement\": null,\n          \"maxOccupancy\": 1,\n          \"rateId\": \"38143de2077774891c4f136d86ce817a:7fa93ac18e3851dec34dead83648148f\",\n          \"retailRate\": {\n            \"deal\": {\n              \"conditions\": [],\n              \"dealId\": \"D3\",\n              \"discount\": {\n                \"count\": 5,\n                \"type\": \"PERCENTAGE\"\n              }\n            },\n            \"taxesAndFees\": {\n              \"includedInRate\": [],\n              \"payAtHotel\": []\n            },\n            \"total\": {\n              \"amount\": 11970,\n              \"currency\": {\n                \"code\": \"EUR\"\n              }\n            }\n          },\n          \"sellerCommissionPercentage\": 15,\n          \"start\": \"2021-07-01\"\n        }\n      ],\n      \"roomTypeId\": \"7b4e914f-0551-4fdc-b349-db3c32c5afed\"\n    },\n    {\n      \"amenities\": [\n        {\n          \"code\": 228,\n          \"formatted\": \"Slippers\"\n        },\n        {\n          \"code\": 144,\n          \"formatted\": \"Soundproofed room\"\n        },\n        {\n          \"code\": 210,\n          \"formatted\": \"Satellite television\"\n        },\n        {\n          \"code\": 11,\n          \"formatted\": \"Bathroom amenities (free toiletries)\"\n        },\n        {\n          \"code\": 15,\n          \"formatted\": \"Bath or Shower\"\n        },\n        {\n          \"code\": 28,\n          \"formatted\": \"Desk\"\n        },\n        {\n          \"code\": 50,\n          \"formatted\": \"Hairdryer\"\n        },\n        {\n          \"code\": 69,\n          \"formatted\": \"Minibar\"\n        },\n        {\n          \"code\": 85,\n          \"formatted\": \"Private bathroom\"\n        },\n        {\n          \"code\": 123,\n          \"formatted\": \"Wireless internet connection\"\n        }\n      ],\n      \"description\": \"This is a fictional example room type that you can use to test all the features you might encounter on any hotel available on the Impala platform on the Impala platform (https://impala.travel). Testing with this room type means your app or site will be able to handle any values that you might find on Impala.\",\n      \"images\": [\n        {\n          \"altText\": null,\n          \"height\": 3024,\n          \"url\": \"https://cdn.impala.travel/area-types/ckiub0igb00063e6am6q2b0w3.jpg\",\n          \"width\": 4032\n        }\n      ],\n      \"maxOccupancy\": 2,\n      \"name\": \"Junior Suite\",\n      \"rates\": [\n        {\n          \"cancellationPolicies\": [\n            {\n              \"end\": \"2021-06-28 23:59:59.999\",\n              \"fee\": {\n                \"price\": {\n                  \"amount\": 0,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                },\n                \"type\": \"NONE\"\n              },\n              \"formatted\": \"Fully refundable until June 28, 2021 23:59\",\n              \"start\": \"2021-03-11 00:23:35.719\"\n            },\n            {\n              \"fee\": {\n                \"count\": 100,\n                \"price\": {\n                  \"amount\": 31500,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                },\n                \"type\": \"PERCENTAGE\"\n              },\n              \"formatted\": \"Non-refundable after June 29, 2021 00:00\",\n              \"start\": \"2021-06-29 00:00:00.000\"\n            }\n          ],\n          \"components\": [],\n          \"end\": \"2021-07-02\",\n          \"hotelAgreement\": null,\n          \"maxOccupancy\": 2,\n          \"rateId\": \"b815b95a5b6a847b7b0c09c1a9ea5827:77a228b50273fad2c224468c91739c3c\",\n          \"ratePlanId\": 5,\n          \"retailRate\": {\n            \"taxesAndFees\": {\n              \"includedInRate\": [],\n              \"payAtHotel\": []\n            },\n            \"total\": {\n              \"amount\": 31500,\n              \"currency\": {\n                \"code\": \"EUR\"\n              }\n            }\n          },\n          \"sellerCommissionPercentage\": 10,\n          \"start\": \"2021-07-01\"\n        },\n        {\n          \"cancellationPolicies\": [\n            {\n              \"end\": \"2021-06-28 23:59:59.999\",\n              \"fee\": {\n                \"price\": {\n                  \"amount\": 0,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                },\n                \"type\": \"NONE\"\n              },\n              \"formatted\": \"Fully refundable until June 28, 2021 23:59\",\n              \"start\": \"2021-03-11 00:23:35.719\"\n            },\n            {\n              \"fee\": {\n                \"count\": 100,\n                \"price\": {\n                  \"amount\": 28875,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                },\n                \"type\": \"PERCENTAGE\"\n              },\n              \"formatted\": \"Non-refundable after June 29, 2021 00:00\",\n              \"start\": \"2021-06-29 00:00:00.000\"\n            }\n          ],\n          \"components\": [],\n          \"end\": \"2021-07-02\",\n          \"hotelAgreement\": null,\n          \"maxOccupancy\": 1,\n          \"rateId\": \"bcd9e5f11c6e747374d63d635b6f2d07:f5d244b004c18e3fef40606f83b72e76\",\n          \"ratePlanId\": 1,\n          \"retailRate\": {\n            \"taxesAndFees\": {\n              \"includedInRate\": [],\n              \"payAtHotel\": []\n            },\n            \"total\": {\n              \"amount\": 28875,\n              \"currency\": {\n                \"code\": \"EUR\"\n              }\n            }\n          },\n          \"sellerCommissionPercentage\": 10,\n          \"start\": \"2021-07-01\"\n        },\n        {\n          \"cancellationPolicies\": [\n            {\n              \"end\": \"2021-06-28 23:59:59.999\",\n              \"fee\": {\n                \"price\": {\n                  \"amount\": 0,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                },\n                \"type\": \"NONE\"\n              },\n              \"formatted\": \"Fully refundable until June 28, 2021 23:59\",\n              \"start\": \"2021-03-11 00:23:35.719\"\n            },\n            {\n              \"fee\": {\n                \"count\": 100,\n                \"price\": {\n                  \"amount\": 29925,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                },\n                \"type\": \"PERCENTAGE\"\n              },\n              \"formatted\": \"Non-refundable after June 29, 2021 00:00\",\n              \"start\": \"2021-06-29 00:00:00.000\"\n            }\n          ],\n          \"components\": [],\n          \"end\": \"2021-07-02\",\n          \"hotelAgreement\": null,\n          \"maxOccupancy\": 2,\n          \"rateId\": \"e3d5af44011974bf705e792735778b44:88853f3b36a97a6adf8009d97102ad79\",\n          \"ratePlanId\": 1,\n          \"retailRate\": {\n            \"deal\": {\n              \"conditions\": [],\n              \"dealId\": \"D3\",\n              \"discount\": {\n                \"count\": 5,\n                \"type\": \"PERCENTAGE\"\n              }\n            },\n            \"taxesAndFees\": {\n              \"includedInRate\": [],\n              \"payAtHotel\": []\n            },\n            \"total\": {\n              \"amount\": 29925,\n              \"currency\": {\n                \"code\": \"EUR\"\n              }\n            }\n          },\n          \"sellerCommissionPercentage\": 15,\n          \"start\": \"2021-07-01\"\n        },\n        {\n          \"cancellationPolicies\": [\n            {\n              \"end\": \"2021-06-28 23:59:59.999\",\n              \"fee\": {\n                \"price\": {\n                  \"amount\": 0,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                },\n                \"type\": \"NONE\"\n              },\n              \"formatted\": \"Fully refundable until June 28, 2021 23:59\",\n              \"start\": \"2021-03-11 00:23:35.719\"\n            },\n            {\n              \"fee\": {\n                \"count\": 100,\n                \"price\": {\n                  \"amount\": 27431,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                },\n                \"type\": \"PERCENTAGE\"\n              },\n              \"formatted\": \"Non-refundable after June 29, 2021 00:00\",\n              \"start\": \"2021-06-29 00:00:00.000\"\n            }\n          ],\n          \"components\": [],\n          \"end\": \"2021-07-02\",\n          \"hotelAgreement\": null,\n          \"maxOccupancy\": 1,\n          \"rateId\": \"5c0db8cb17c9e5316b2a62bda48f1dd4:39b27339fc838dfbfc48216e22a8ce44\",\n          \"ratePlanId\": 1,\n          \"retailRate\": {\n            \"deal\": {\n              \"conditions\": [],\n              \"dealId\": \"D3\",\n              \"discount\": {\n                \"count\": 5,\n                \"type\": \"PERCENTAGE\"\n              }\n            },\n            \"taxesAndFees\": {\n              \"includedInRate\": [],\n              \"payAtHotel\": []\n            },\n            \"total\": {\n              \"amount\": 27431,\n              \"currency\": {\n                \"code\": \"EUR\"\n              }\n            }\n          },\n          \"sellerCommissionPercentage\": 15,\n          \"start\": \"2021-07-01\"\n        }\n      ],\n      \"roomTypeId\": \"280b6f5a-c645-44c0-a63d-03f1d7bc3d55\"\n    },\n    {\n      \"amenities\": [\n        {\n          \"code\": 2,\n          \"formatted\": \"Air conditioning\"\n        },\n        {\n          \"code\": 228,\n          \"formatted\": \"Slippers\"\n        },\n        {\n          \"code\": 210,\n          \"formatted\": \"Satellite television\"\n        },\n        {\n          \"code\": 144,\n          \"formatted\": \"Soundproofed room\"\n        },\n        {\n          \"code\": 123,\n          \"formatted\": \"Wireless internet connection\"\n        },\n        {\n          \"code\": 85,\n          \"formatted\": \"Private bathroom\"\n        },\n        {\n          \"code\": 69,\n          \"formatted\": \"Minibar\"\n        },\n        {\n          \"code\": 50,\n          \"formatted\": \"Hairdryer\"\n        },\n        {\n          \"code\": 28,\n          \"formatted\": \"Desk\"\n        },\n        {\n          \"code\": 15,\n          \"formatted\": \"Bath or Shower\"\n        },\n        {\n          \"code\": 11,\n          \"formatted\": \"Bathroom amenities (free toiletries)\"\n        }\n      ],\n      \"description\": \"This is a fictional example room type that you can use to test all the features you might encounter on any hotel available on the Impala platform on the Impala platform (https://impala.travel). Testing with this room type means your app or site will be able to handle any values that you might find on Impala.\",\n      \"images\": [\n        {\n          \"altText\": null,\n          \"height\": 6000,\n          \"url\": \"https://cdn.impala.travel/area-types/ckiub4vym00083e6amqnt3a6u.jpg\",\n          \"width\": 4000\n        }\n      ],\n      \"maxOccupancy\": 2,\n      \"name\": \"Double Room\",\n      \"rates\": [\n        {\n          \"cancellationPolicies\": [\n            {\n              \"fee\": {\n                \"count\": 100,\n                \"price\": {\n                  \"amount\": 14700,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                },\n                \"type\": \"PERCENTAGE\"\n              },\n              \"formatted\": \"Non-refundable after March 11, 2021 00:23\",\n              \"start\": \"2021-03-11 00:23:35.719\"\n            }\n          ],\n          \"components\": [],\n          \"end\": \"2021-07-02\",\n          \"hotelAgreement\": null,\n          \"maxOccupancy\": 2,\n          \"rateId\": \"470a4b225742d213e9182a8ca650fe61:7b5f9d774a96e402438537b1e73fcfe5\",\n          \"ratePlanId\": 1,\n          \"retailRate\": {\n            \"taxesAndFees\": {\n              \"includedInRate\": [],\n              \"payAtHotel\": []\n            },\n            \"total\": {\n              \"amount\": 14700,\n              \"currency\": {\n                \"code\": \"EUR\"\n              }\n            }\n          },\n          \"sellerCommissionPercentage\": 10,\n          \"start\": \"2021-07-01\"\n        },\n        {\n          \"cancellationPolicies\": [\n            {\n              \"end\": \"2021-06-28 23:59:59.999\",\n              \"fee\": {\n                \"price\": {\n                  \"amount\": 0,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                },\n                \"type\": \"NONE\"\n              },\n              \"formatted\": \"Fully refundable until June 28, 2021 23:59\",\n              \"start\": \"2021-03-11 00:23:35.719\"\n            },\n            {\n              \"fee\": {\n                \"count\": 100,\n                \"price\": {\n                  \"amount\": 15750,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                },\n                \"type\": \"PERCENTAGE\"\n              },\n              \"formatted\": \"Non-refundable after June 29, 2021 00:00\",\n              \"start\": \"2021-06-29 00:00:00.000\"\n            }\n          ],\n          \"components\": [],\n          \"end\": \"2021-07-02\",\n          \"hotelAgreement\": null,\n          \"maxOccupancy\": 1,\n          \"rateId\": \"19ba73ba97cda6d3febfe533acc25ba1:338e5ff8073767a23fdf0edc4cec1892\",\n          \"ratePlanId\": 3,\n          \"retailRate\": {\n            \"taxesAndFees\": {\n              \"includedInRate\": [],\n              \"payAtHotel\": []\n            },\n            \"total\": {\n              \"amount\": 15750,\n              \"currency\": {\n                \"code\": \"EUR\"\n              }\n            }\n          },\n          \"sellerCommissionPercentage\": 10,\n          \"start\": \"2021-07-01\"\n        },\n        {\n          \"cancellationPolicies\": [\n            {\n              \"end\": \"2021-06-28 23:59:59.999\",\n              \"fee\": {\n                \"price\": {\n                  \"amount\": 0,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                },\n                \"type\": \"NONE\"\n              },\n              \"formatted\": \"Fully refundable until June 28, 2021 23:59\",\n              \"start\": \"2021-03-11 00:23:35.719\"\n            },\n            {\n              \"fee\": {\n                \"count\": 100,\n                \"price\": {\n                  \"amount\": 16800,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                },\n                \"type\": \"PERCENTAGE\"\n              },\n              \"formatted\": \"Non-refundable after June 29, 2021 00:00\",\n              \"start\": \"2021-06-29 00:00:00.000\"\n            }\n          ],\n          \"components\": [],\n          \"end\": \"2021-07-02\",\n          \"hotelAgreement\": null,\n          \"maxOccupancy\": 2,\n          \"rateId\": \"e7df0bcb2d335124b609ad188b1c364d:7bee69f1eafb714cadcbd90bd06cf66d\",\n          \"ratePlanId\": 5,\n          \"retailRate\": {\n            \"taxesAndFees\": {\n              \"includedInRate\": [],\n              \"payAtHotel\": []\n            },\n            \"total\": {\n              \"amount\": 16800,\n              \"currency\": {\n                \"code\": \"EUR\"\n              }\n            }\n          },\n          \"sellerCommissionPercentage\": 10,\n          \"start\": \"2021-07-01\"\n        },\n        {\n          \"cancellationPolicies\": [\n            {\n              \"fee\": {\n                \"count\": 100,\n                \"price\": {\n                  \"amount\": 13650,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                },\n                \"type\": \"PERCENTAGE\"\n              },\n              \"formatted\": \"Non-refundable after March 11, 2021 00:23\",\n              \"start\": \"2021-03-11 00:23:35.719\"\n            }\n          ],\n          \"components\": [],\n          \"end\": \"2021-07-02\",\n          \"hotelAgreement\": null,\n          \"maxOccupancy\": 1,\n          \"rateId\": \"2463f0474c058652951adbefd3bc8ff2:f2873919bedce820524ded4e2947e9b5\",\n          \"ratePlanId\": 6,\n          \"retailRate\": {\n            \"taxesAndFees\": {\n              \"includedInRate\": [],\n              \"payAtHotel\": []\n            },\n            \"total\": {\n              \"amount\": 13650,\n              \"currency\": {\n                \"code\": \"EUR\"\n              }\n            }\n          },\n          \"sellerCommissionPercentage\": 10,\n          \"start\": \"2021-07-01\"\n        },\n        {\n          \"cancellationPolicies\": [\n            {\n              \"fee\": {\n                \"count\": 100,\n                \"price\": {\n                  \"amount\": 13965,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                },\n                \"type\": \"PERCENTAGE\"\n              },\n              \"formatted\": \"Non-refundable after March 11, 2021 00:23\",\n              \"start\": \"2021-03-11 00:23:35.719\"\n            }\n          ],\n          \"components\": [],\n          \"end\": \"2021-07-02\",\n          \"hotelAgreement\": null,\n          \"maxOccupancy\": 2,\n          \"rateId\": \"022166b0c439dc27b83a96be5e561d97:fc7b648edf136c63b7114a2d13bfc02d\",\n          \"ratePlanId\": 7,\n          \"retailRate\": {\n            \"deal\": {\n              \"conditions\": [],\n              \"dealId\": \"D3\",\n              \"discount\": {\n                \"count\": 5,\n                \"type\": \"PERCENTAGE\"\n              }\n            },\n            \"taxesAndFees\": {\n              \"includedInRate\": [],\n              \"payAtHotel\": []\n            },\n            \"total\": {\n              \"amount\": 13965,\n              \"currency\": {\n                \"code\": \"EUR\"\n              }\n            }\n          },\n          \"sellerCommissionPercentage\": 15,\n          \"start\": \"2021-07-01\"\n        },\n        {\n          \"cancellationPolicies\": [\n            {\n              \"end\": \"2021-06-28 23:59:59.999\",\n              \"fee\": {\n                \"price\": {\n                  \"amount\": 0,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                },\n                \"type\": \"NONE\"\n              },\n              \"formatted\": \"Fully refundable until June 28, 2021 23:59\",\n              \"start\": \"2021-03-11 00:23:35.720\"\n            },\n            {\n              \"fee\": {\n                \"count\": 100,\n                \"price\": {\n                  \"amount\": 14962,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                },\n                \"type\": \"PERCENTAGE\"\n              },\n              \"formatted\": \"Non-refundable after June 29, 2021 00:00\",\n              \"start\": \"2021-06-29 00:00:00.000\"\n            }\n          ],\n          \"components\": [],\n          \"end\": \"2021-07-02\",\n          \"hotelAgreement\": null,\n          \"maxOccupancy\": 1,\n          \"rateId\": \"35a9baa5068ba59163e930b14af4949b:bf061e368daac6ac9d57172d91f01f1b\",\n          \"ratePlanId\": 1,\n          \"retailRate\": {\n            \"deal\": {\n              \"conditions\": [],\n              \"dealId\": \"D3\",\n              \"discount\": {\n                \"count\": 5,\n                \"type\": \"PERCENTAGE\"\n              }\n            },\n            \"taxesAndFees\": {\n              \"includedInRate\": [],\n              \"payAtHotel\": []\n            },\n            \"total\": {\n              \"amount\": 14962,\n              \"currency\": {\n                \"code\": \"EUR\"\n              }\n            }\n          },\n          \"sellerCommissionPercentage\": 15,\n          \"start\": \"2021-07-01\"\n        },\n        {\n          \"cancellationPolicies\": [\n            {\n              \"end\": \"2021-06-28 23:59:59.999\",\n              \"fee\": {\n                \"price\": {\n                  \"amount\": 0,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                },\n                \"type\": \"NONE\"\n              },\n              \"formatted\": \"Fully refundable until June 28, 2021 23:59\",\n              \"start\": \"2021-03-11 00:23:35.720\"\n            },\n            {\n              \"fee\": {\n                \"count\": 100,\n                \"price\": {\n                  \"amount\": 15960,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                },\n                \"type\": \"PERCENTAGE\"\n              },\n              \"formatted\": \"Non-refundable after June 29, 2021 00:00\",\n              \"start\": \"2021-06-29 00:00:00.000\"\n            }\n          ],\n          \"components\": [],\n          \"end\": \"2021-07-02\",\n          \"hotelAgreement\": null,\n          \"maxOccupancy\": 2,\n          \"rateId\": \"caf9b66563911b0e1525debcd9cf0ada:6fa29977e8403d97cfca5f6dcd6da6eb\",\n          \"ratePlanId\": 3,\n          \"retailRate\": {\n            \"deal\": {\n              \"conditions\": [],\n              \"dealId\": \"D3\",\n              \"discount\": {\n                \"count\": 5,\n                \"type\": \"PERCENTAGE\"\n              }\n            },\n            \"taxesAndFees\": {\n              \"includedInRate\": [],\n              \"payAtHotel\": []\n            },\n            \"total\": {\n              \"amount\": 15960,\n              \"currency\": {\n                \"code\": \"EUR\"\n              }\n            }\n          },\n          \"sellerCommissionPercentage\": 15,\n          \"start\": \"2021-07-01\"\n        },\n        {\n          \"cancellationPolicies\": [\n            {\n              \"fee\": {\n                \"count\": 100,\n                \"price\": {\n                  \"amount\": 12967,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                },\n                \"type\": \"PERCENTAGE\"\n              },\n              \"formatted\": \"Non-refundable after March 11, 2021 00:23\",\n              \"start\": \"2021-03-11 00:23:35.720\"\n            }\n          ],\n          \"components\": [],\n          \"end\": \"2021-07-02\",\n          \"hotelAgreement\": null,\n          \"maxOccupancy\": 1,\n          \"rateId\": \"891394f48e8ab2f406f4a9087c840768:933a218d184e74c5a67a59a649f4285f\",\n          \"ratePlanId\": 3,\n          \"retailRate\": {\n            \"deal\": {\n              \"conditions\": [],\n              \"dealId\": \"D3\",\n              \"discount\": {\n                \"count\": 5,\n                \"type\": \"PERCENTAGE\"\n              }\n            },\n            \"taxesAndFees\": {\n              \"includedInRate\": [],\n              \"payAtHotel\": []\n            },\n            \"total\": {\n              \"amount\": 12967,\n              \"currency\": {\n                \"code\": \"EUR\"\n              }\n            }\n          },\n          \"sellerCommissionPercentage\": 15,\n          \"start\": \"2021-07-01\"\n        }\n      ],\n      \"roomTypeId\": \"8cb8ce9e-221a-4220-a358-35b6852fb359\"\n    },\n    {\n      \"amenities\": [\n        {\n          \"code\": 228,\n          \"formatted\": \"Slippers\"\n        },\n        {\n          \"code\": 144,\n          \"formatted\": \"Soundproofed room\"\n        },\n        {\n          \"code\": 123,\n          \"formatted\": \"Wireless internet connection\"\n        },\n        {\n          \"code\": 85,\n          \"formatted\": \"Private bathroom\"\n        },\n        {\n          \"code\": 69,\n          \"formatted\": \"Minibar\"\n        },\n        {\n          \"code\": 50,\n          \"formatted\": \"Hairdryer\"\n        },\n        {\n          \"code\": 28,\n          \"formatted\": \"Desk\"\n        },\n        {\n          \"code\": 15,\n          \"formatted\": \"Bath or Shower\"\n        },\n        {\n          \"code\": 11,\n          \"formatted\": \"Bathroom amenities (free toiletries)\"\n        }\n      ],\n      \"description\": \"This is a fictional example room type that you can use to test all the features you might encounter on any hotel available on the Impala platform on the Impala platform (https://impala.travel). Testing with this room type means your app or site will be able to handle any values that you might find on Impala.\",\n      \"images\": [\n        {\n          \"altText\": null,\n          \"height\": 4480,\n          \"url\": \"https://cdn.impala.travel/area-types/ckiub3dw100073e6alkifv3ok.jpg\",\n          \"width\": 6720\n        }\n      ],\n      \"maxOccupancy\": 4,\n      \"name\": \"Presidential Suite\",\n      \"rates\": [\n        {\n          \"cancellationPolicies\": [\n            {\n              \"end\": \"2021-06-28 23:59:59.999\",\n              \"fee\": {\n                \"price\": {\n                  \"amount\": 0,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                },\n                \"type\": \"NONE\"\n              },\n              \"formatted\": \"Fully refundable until June 28, 2021 23:59\",\n              \"start\": \"2021-03-11 00:23:35.720\"\n            },\n            {\n              \"fee\": {\n                \"count\": 100,\n                \"price\": {\n                  \"amount\": 47250,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                },\n                \"type\": \"PERCENTAGE\"\n              },\n              \"formatted\": \"Non-refundable after June 29, 2021 00:00\",\n              \"start\": \"2021-06-29 00:00:00.000\"\n            }\n          ],\n          \"components\": [],\n          \"end\": \"2021-07-02\",\n          \"hotelAgreement\": null,\n          \"maxOccupancy\": 2,\n          \"rateId\": \"42efaad56d0f614f5cc65e0c5c30669f:1866b6b4e0b2ca054a68ee58565fc6e9\",\n          \"ratePlanId\": 1,\n          \"retailRate\": {\n            \"taxesAndFees\": {\n              \"includedInRate\": [],\n              \"payAtHotel\": []\n            },\n            \"total\": {\n              \"amount\": 47250,\n              \"currency\": {\n                \"code\": \"EUR\"\n              }\n            }\n          },\n          \"sellerCommissionPercentage\": 10,\n          \"start\": \"2021-07-01\"\n        },\n        {\n          \"cancellationPolicies\": [\n            {\n              \"fee\": {\n                \"count\": 100,\n                \"price\": {\n                  \"amount\": 42000,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                },\n                \"type\": \"PERCENTAGE\"\n              },\n              \"formatted\": \"Non-refundable after March 11, 2021 00:23\",\n              \"start\": \"2021-03-11 00:23:35.720\"\n            }\n          ],\n          \"components\": [],\n          \"end\": \"2021-07-02\",\n          \"hotelAgreement\": null,\n          \"maxOccupancy\": 2,\n          \"rateId\": \"2fb14f477f41541d5598b61aab21f1b4:afc6e4cfb689d05fd17e9780be16af9d\",\n          \"ratePlanId\": 2,\n          \"retailRate\": {\n            \"taxesAndFees\": {\n              \"includedInRate\": [],\n              \"payAtHotel\": []\n            },\n            \"total\": {\n              \"amount\": 42000,\n              \"currency\": {\n                \"code\": \"EUR\"\n              }\n            }\n          },\n          \"sellerCommissionPercentage\": 10,\n          \"start\": \"2021-07-01\"\n        },\n        {\n          \"cancellationPolicies\": [\n            {\n              \"end\": \"2021-06-28 23:59:59.999\",\n              \"fee\": {\n                \"price\": {\n                  \"amount\": 0,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                },\n                \"type\": \"NONE\"\n              },\n              \"formatted\": \"Fully refundable until June 28, 2021 23:59\",\n              \"start\": \"2021-03-11 00:23:35.720\"\n            },\n            {\n              \"fee\": {\n                \"count\": 100,\n                \"price\": {\n                  \"amount\": 44625,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                },\n                \"type\": \"PERCENTAGE\"\n              },\n              \"formatted\": \"Non-refundable after June 29, 2021 00:00\",\n              \"start\": \"2021-06-29 00:00:00.000\"\n            }\n          ],\n          \"components\": [],\n          \"end\": \"2021-07-02\",\n          \"hotelAgreement\": null,\n          \"maxOccupancy\": 1,\n          \"rateId\": \"896624e8d1733cf9f533d58080b0f217:f77b2b8805413ec948c3f609eb241c33\",\n          \"ratePlanId\": 3,\n          \"retailRate\": {\n            \"taxesAndFees\": {\n              \"includedInRate\": [],\n              \"payAtHotel\": []\n            },\n            \"total\": {\n              \"amount\": 44625,\n              \"currency\": {\n                \"code\": \"EUR\"\n              }\n            }\n          },\n          \"sellerCommissionPercentage\": 10,\n          \"start\": \"2021-07-01\"\n        },\n        {\n          \"cancellationPolicies\": [\n            {\n              \"fee\": {\n                \"count\": 100,\n                \"price\": {\n                  \"amount\": 39900,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                },\n                \"type\": \"PERCENTAGE\"\n              },\n              \"formatted\": \"Non-refundable after March 11, 2021 00:23\",\n              \"start\": \"2021-03-11 00:23:35.720\"\n            }\n          ],\n          \"components\": [],\n          \"end\": \"2021-07-02\",\n          \"hotelAgreement\": null,\n          \"maxOccupancy\": 1,\n          \"rateId\": \"0fc4232f1726473c3f12c99849262e84:3fca5c554e779783c73a5ea293da831f\",\n          \"ratePlanId\": 7,\n          \"retailRate\": {\n            \"taxesAndFees\": {\n              \"includedInRate\": [],\n              \"payAtHotel\": []\n            },\n            \"total\": {\n              \"amount\": 39900,\n              \"currency\": {\n                \"code\": \"EUR\"\n              }\n            }\n          },\n          \"sellerCommissionPercentage\": 10,\n          \"start\": \"2021-07-01\"\n        },\n        {\n          \"cancellationPolicies\": [\n            {\n              \"end\": \"2021-06-28 23:59:59.999\",\n              \"fee\": {\n                \"price\": {\n                  \"amount\": 0,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                },\n                \"type\": \"NONE\"\n              },\n              \"formatted\": \"Fully refundable until June 28, 2021 23:59\",\n              \"start\": \"2021-03-11 00:23:35.720\"\n            },\n            {\n              \"fee\": {\n                \"count\": 100,\n                \"price\": {\n                  \"amount\": 44887,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                },\n                \"type\": \"PERCENTAGE\"\n              },\n              \"formatted\": \"Non-refundable after June 29, 2021 00:00\",\n              \"start\": \"2021-06-29 00:00:00.000\"\n            }\n          ],\n          \"components\": [],\n          \"end\": \"2021-07-02\",\n          \"hotelAgreement\": null,\n          \"maxOccupancy\": 2,\n          \"rateId\": \"1471020e7f634138b7088a081e45231a:15006e156c471ef4a22d38fee7f84c68\",\n          \"ratePlanId\": 8,\n          \"retailRate\": {\n            \"deal\": {\n              \"conditions\": [],\n              \"dealId\": \"D3\",\n              \"discount\": {\n                \"count\": 5,\n                \"type\": \"PERCENTAGE\"\n              }\n            },\n            \"taxesAndFees\": {\n              \"includedInRate\": [],\n              \"payAtHotel\": []\n            },\n            \"total\": {\n              \"amount\": 44887,\n              \"currency\": {\n                \"code\": \"EUR\"\n              }\n            }\n          },\n          \"sellerCommissionPercentage\": 15,\n          \"start\": \"2021-07-01\"\n        },\n        {\n          \"cancellationPolicies\": [\n            {\n              \"fee\": {\n                \"count\": 100,\n                \"price\": {\n                  \"amount\": 39900,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                },\n                \"type\": \"PERCENTAGE\"\n              },\n              \"formatted\": \"Non-refundable after March 11, 2021 00:23\",\n              \"start\": \"2021-03-11 00:23:35.720\"\n            }\n          ],\n          \"components\": [],\n          \"end\": \"2021-07-02\",\n          \"hotelAgreement\": null,\n          \"maxOccupancy\": 2,\n          \"rateId\": \"23888f2637881fed0fb1253d2ebeace6:a844bb82cab7f71f0514a7d458dfec99\",\n          \"ratePlanId\": 22,\n          \"retailRate\": {\n            \"deal\": {\n              \"conditions\": [],\n              \"dealId\": \"D3\",\n              \"discount\": {\n                \"count\": 5,\n                \"type\": \"PERCENTAGE\"\n              }\n            },\n            \"taxesAndFees\": {\n              \"includedInRate\": [],\n              \"payAtHotel\": []\n            },\n            \"total\": {\n              \"amount\": 39900,\n              \"currency\": {\n                \"code\": \"EUR\"\n              }\n            }\n          },\n          \"sellerCommissionPercentage\": 15,\n          \"start\": \"2021-07-01\"\n        },\n        {\n          \"cancellationPolicies\": [\n            {\n              \"end\": \"2021-06-28 23:59:59.999\",\n              \"fee\": {\n                \"price\": {\n                  \"amount\": 0,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                },\n                \"type\": \"NONE\"\n              },\n              \"formatted\": \"Fully refundable until June 28, 2021 23:59\",\n              \"start\": \"2021-03-11 00:23:35.720\"\n            },\n            {\n              \"fee\": {\n                \"count\": 100,\n                \"price\": {\n                  \"amount\": 42393,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                },\n                \"type\": \"PERCENTAGE\"\n              },\n              \"formatted\": \"Non-refundable after June 29, 2021 00:00\",\n              \"start\": \"2021-06-29 00:00:00.000\"\n            }\n          ],\n          \"components\": [],\n          \"end\": \"2021-07-02\",\n          \"hotelAgreement\": null,\n          \"maxOccupancy\": 1,\n          \"rateId\": \"bacf1877347d8936da6ea4b9609f2e06:3b8938ba186b5788dae45a868d1a5228\",\n          \"ratePlanId\": 19,\n          \"retailRate\": {\n            \"deal\": {\n              \"conditions\": [],\n              \"dealId\": \"D3\",\n              \"discount\": {\n                \"count\": 5,\n                \"type\": \"PERCENTAGE\"\n              }\n            },\n            \"taxesAndFees\": {\n              \"includedInRate\": [],\n              \"payAtHotel\": []\n            },\n            \"total\": {\n              \"amount\": 42393,\n              \"currency\": {\n                \"code\": \"EUR\"\n              }\n            }\n          },\n          \"sellerCommissionPercentage\": 15,\n          \"start\": \"2021-07-01\"\n        },\n        {\n          \"cancellationPolicies\": [\n            {\n              \"fee\": {\n                \"count\": 100,\n                \"price\": {\n                  \"amount\": 37905,\n                  \"currency\": {\n                    \"code\": \"EUR\"\n                  }\n                },\n                \"type\": \"PERCENTAGE\"\n              },\n              \"formatted\": \"Non-refundable after March 11, 2021 00:23\",\n              \"start\": \"2021-03-11 00:23:35.720\"\n            }\n          ],\n          \"components\": [],\n          \"end\": \"2021-07-02\",\n          \"hotelAgreement\": null,\n          \"maxOccupancy\": 1,\n          \"rateId\": \"7f1f053b76157a70e19cade3e38fd763:8f82c19071c9f4d12f5bdf92e181c140\",\n          \"ratePlanId\": 7,\n          \"retailRate\": {\n            \"taxesAndFees\": {\n              \"includedInRate\": [],\n              \"payAtHotel\": []\n            },\n            \"total\": {\n              \"amount\": 37905,\n              \"currency\": {\n                \"code\": \"EUR\"\n              }\n            }\n          },\n          \"sellerCommissionPercentage\": 15,\n          \"start\": \"2021-07-01\"\n        }\n      ],\n      \"roomTypeId\": \"1bd16eed-e10f-47f6-8f28-67c40deb4f3b\"\n    }\n  ],\n  \"starRating\": 5,\n  \"termsAndConditions\": \"\",\n  \"updatedAt\": \"2021-02-17T09:07:41.615Z\",\n  \"websiteUrl\": \"https://impala-all-avaialable-resort.hotel/\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a1e010ab-f99f-4782-bfc8-dc79f72c5eb4",
+              "name": "Your request wasn't formatted correctly and therefore couldn't be processed. This most frequently happens when query parameters or request body values are missing, incorrectly formatted or added where they don't exist (e.g. due to typos). We're including a list of `validations` to point out where things are going wrong and should be fixed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    ":hotelId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start",
+                      "value": "2021-05-20"
+                    },
+                    {
+                      "key": "end",
+                      "value": "2021-05-22"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "hotelId",
+                      "description": "(Required) The unique identifier of this hotel on the Impala platform."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"VALIDATION_ERROR\",\n  \"message\": \"\\\"start\\\" must be in YYYY-MM-DD format. \\\"foo\\\" is not allowed. \\\"lorem\\\" missing required peer \\\"ipsum\\\"\",\n  \"validations\": [\n    {\n      \"code\": \"DATE_FORMAT\",\n      \"message\": \"\\\"start\\\" must be in YYYY-MM-DD format\",\n      \"property\": \"start\"\n    },\n    {\n      \"code\": \"OBJECT_UNKNOWN\",\n      \"message\": \"\\\"foo\\\" is not allowed\",\n      \"property\": \"foo\"\n    },\n    {\n      \"code\": \"OBJECT_WITH\",\n      \"message\": \"\\\"lorem\\\" missing required peer \\\"ipsum\\\"\",\n      \"property\": \"lorem\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "511f3e0a-dac9-4709-8623-8e32a998a70f",
+              "name": "Your request was sent without or with an incorrect API key. This most frequently happens when the `x-api-key` header wasn't added or contains an incorrect value. This might also happen if you're trying to access the production API endpoints with a sandbox API key or vice versa.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    ":hotelId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start",
+                      "value": "2021-05-20"
+                    },
+                    {
+                      "key": "end",
+                      "value": "2021-05-22"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "hotelId",
+                      "description": "(Required) The unique identifier of this hotel on the Impala platform."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Invalid authentication credentials\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f24e4c20-04ad-4cfc-adb9-fd4f5728a6a5",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    ":hotelId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start",
+                      "value": "2021-05-20"
+                    },
+                    {
+                      "key": "end",
+                      "value": "2021-05-22"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "hotelId",
+                      "description": "(Required) The unique identifier of this hotel on the Impala platform."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Forbidden resource\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0aff1638-4f44-460d-9fa4-2e3f51a43efa",
+              "name": "An internal server error within the Impala platform has occurred. Our team will investigate the error.\nWe recommend that you contact us at support@impala.travel with the x-correlation-id value contained\nwithin the response headers. Sending us this value will allow us to identify the precise error you encountered.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    ":hotelId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start",
+                      "value": "2021-05-20"
+                    },
+                    {
+                      "key": "end",
+                      "value": "2021-05-22"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "hotelId",
+                      "description": "(Required) The unique identifier of this hotel on the Impala platform."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Internal Server Error\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://sandbox.impala.travel/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "x-api-key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "3d2dd50c-df14-4fee-bf08-5626a41b84e5",
+    "name": "Impala Hotel Booking Bookings Hotels API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Add room selling to your app with ease, or expand your existing hotel portfolio. Access all the marketing material you need to sell a room, from hotel amenities to images. Constantly updated, ever expanding and always correct. Impala allows you to start selling hotel rooms and earn a commission with every booking in hours.\n\nGetting started is easy:\n\n> **1. Sign-up within seconds**: Head to the [Impala website](https://impala.travel), enter your details and receive your sandbox API key immediately (no credit card needed).\n\n> **2. Start building within minutes**: Build against a sandbox API with realistic test data. Use a [step-by-step walkthrough](https://impala.travel) to see what's possible. Check for available hotels and their rates. Make and manage fake bookings without any risk. Add room booking to your existing website or app, or start an online travel agency from scratch. [![Run in Postman](https://run.pstmn.io/button.svg)](https://god.gw.postman.com/run-collection/11303451-9b241872-9961-424d-9ef4-9d949534567d?action=collection%2Ffork&collection-url=entityId%3D11303451-9b241872-9961-424d-9ef4-9d949534567d%26entityType%3Dcollection%26workspaceId%3D5ae55f12-332c-4e7d-8acc-3e75df3b2ee2)\n\n> **3. Go live within hours**: Once your app or integration is ready for prime time, move to production within your Impala dashboard and start making real hotel bookings for your customers right away.\n\nWant to see how it all works? Watch [a 5-minute walkthrough](https://www.youtube.com/watch?v=7B3evCL3nrY) of the two API requests you need to make a booking, and a demo of one of our customer's apps.\n\nContact Support:\n Name: Impala Developer Support\n Email: support@impala.travel",
+      "type": "text/plain"
+    }
+  }
+}

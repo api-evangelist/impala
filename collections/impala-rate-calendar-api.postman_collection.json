@@ -1,0 +1,795 @@
+{
+  "item": [
+    {
+      "id": "572de353-6f64-4235-bb31-2458cd33c5cf",
+      "name": "Rate Calendar",
+      "description": {
+        "content": "Getting rates for future dates.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "64d70ba9-9f5b-44f6-b970-76353e4607f3",
+          "name": "List all rate plans (rate calendar) for a hotel (Beta endpoint)",
+          "request": {
+            "name": "List all rate plans (rate calendar) for a hotel (Beta endpoint)",
+            "description": {
+              "content": "Returns a list of all rate plans available for you for a hotel.\n\nRate plans are products the hotel is offering. They typically consist of a combination of restrictiveness in case of cancellations or changes, the time they're bookable, minimum or maximum length of stay restrictions (e.g. week-long bookings), included components like breakfast or dinner and/or the conditions under which the room can be sold (e.g. private rates that can only be offered and sold to a closed user group behind login).\n\nExamples of rate plans:\n\n* Non-refundable room rate that includes breakfast\n* Room-only rate with free cancellation up to 14 days before arrival\n\nFor each such rate plan this endpoint returns the room types it's available for, alongside prices for each date and occupancy that can be sold – or the information that the room isn't available (closed) for a certain date.\n\nFor the vast majority of our customers, availability searches using the [List all hotels](https://docs.impala.travel/docs/booking-api/spec/openapi.seller.yaml/paths/~1hotels/get) endpoint are the best choice. It accepts the dates your guest is looking for and provides the rates to display.\n\nThis endpoint can help augment this for two additional use cases:\n\nThis endpoint allows you to query rate prices for all future dates in one go, making it a great choice to feed availability information and prices into your own system or displaying a rate calender to guide your guests to gain an overview of future availability and prices.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "hotels",
+                ":hotelId",
+                "rate-plans"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "25",
+                  "description": "Number of rate plans returned on a given page (pagination)."
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "0",
+                  "description": "Offset from the first rate plan in the result (for pagination)."
+                },
+                {
+                  "disabled": false,
+                  "key": "start",
+                  "value": "<string>",
+                  "description": "Start date of the considered time window for the returned rate plan."
+                },
+                {
+                  "disabled": false,
+                  "key": "end",
+                  "value": "<string>",
+                  "description": "Start date of the considered time window for the returned rate plan."
+                },
+                {
+                  "disabled": false,
+                  "key": "roomId",
+                  "value": "<uuid>",
+                  "description": "The UUID of room for which rate plans are being fetched."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "hotelId",
+                  "description": "(Required) The uuid of hotel for which rate plans are being fetched."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "fef29af7-d6ba-4402-8bef-015acf656778",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    ":hotelId",
+                    "rate-plans"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "updatedAt[eq]",
+                      "value": "2022-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updatedAt[gt]",
+                      "value": "2022-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updatedAt[gte]",
+                      "value": "2022-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updatedAt[lt]",
+                      "value": "2022-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updatedAt[lte]",
+                      "value": "2022-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "size",
+                      "value": "40"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "25"
+                    },
+                    {
+                      "key": "start",
+                      "value": "2022-05-12"
+                    },
+                    {
+                      "key": "end",
+                      "value": "2022-05-12"
+                    },
+                    {
+                      "key": "roomId",
+                      "value": "6d3a255d-3b22-48a4-8076-3ae3d0ade3d7"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "hotelId",
+                      "description": "(Required) The uuid of hotel for which rate plans are being fetched."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"components\": [\n        {\n          \"formatted\": \"breakfast\",\n          \"includedInRate\": true,\n          \"type\": \"BREAKFAST\"\n        },\n        {\n          \"formatted\": \"lunch\",\n          \"includedInRate\": false,\n          \"type\": \"LUNCH\"\n        },\n        {\n          \"formatted\": \"dinner\",\n          \"includedInRate\": false,\n          \"type\": \"DINNER\"\n        },\n        {\n          \"formatted\": \"allInclusive\",\n          \"includedInRate\": false,\n          \"type\": \"ALL_INCLUSIVE\"\n        }\n      ],\n      \"conditions\": {\n        \"cancellationDeadline\": null,\n        \"cancellationPolicy\": \"NON_REFUNDABLE\"\n      },\n      \"description\": \"BREAKFAST,NON_REFUNDABLE\",\n      \"hotelId\": \"55b6ae0d-2de3-4ec4-b8b5-042a7003cd87\",\n      \"ratePlanId\": 6,\n      \"restrictions\": {\n        \"lengthOfStay\": {\n          \"min\": 1\n        }\n      },\n      \"roomTypes\": [\n        {\n          \"dates\": [\n            {\n              \"closed\": false,\n              \"date\": \"2021-05-21\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-05-22\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-05-23\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-05-24\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-05-25\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-05-26\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-05-27\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-05-28\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-05-29\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-05-30\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-05-31\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-06-01\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-06-02\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-06-03\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-06-04\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-06-05\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-06-06\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-06-07\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-06-08\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-06-09\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-06-10\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-06-11\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-06-12\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-06-13\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-06-14\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-06-15\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-06-16\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-06-17\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-06-18\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-06-19\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-06-20\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-06-21\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-06-22\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-06-23\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-06-24\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-06-25\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-06-26\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-06-27\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-06-28\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-06-29\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-06-30\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-07-01\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-07-02\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-07-03\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-07-04\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-07-05\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-07-06\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-07-07\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-07-08\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-07-09\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-07-10\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-07-11\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-07-12\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-07-13\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-07-14\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-07-15\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-07-16\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-07-17\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-07-18\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-07-19\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-07-20\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-07-21\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-07-22\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-07-23\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-07-24\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-07-25\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-07-26\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-07-27\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-07-28\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-07-29\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-07-30\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-07-31\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-08-01\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-08-02\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-08-03\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-08-04\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-08-05\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-08-06\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-08-07\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-08-08\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-08-09\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-08-10\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-08-11\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-08-12\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-08-13\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-08-14\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-08-15\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-08-16\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-08-17\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-08-18\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-08-19\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-08-20\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-08-21\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-08-22\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-08-23\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-08-24\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-08-25\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-08-26\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-08-27\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-08-28\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-08-29\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-08-30\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-08-31\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-09-01\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-09-02\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-09-03\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-09-04\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-09-05\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-09-06\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-09-07\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-09-08\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-09-09\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-09-10\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-09-11\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-09-12\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-09-13\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-09-14\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-09-15\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-09-16\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-09-17\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-09-18\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-09-19\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-09-20\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-09-21\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-09-22\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-09-23\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-09-24\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-09-25\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-09-26\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-09-27\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-09-28\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-09-29\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-09-30\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-10-01\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-10-02\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-10-03\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-10-04\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-10-05\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-10-06\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-10-07\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-10-08\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-10-09\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-10-10\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-10-11\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-10-12\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-10-13\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-10-14\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-10-15\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-10-16\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-10-17\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-10-18\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-10-19\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-10-20\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-10-21\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-10-22\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-10-23\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-10-24\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-10-25\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-10-26\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-10-27\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-10-28\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-10-29\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-10-30\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-10-31\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-11-01\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-11-02\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-11-03\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-11-04\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-11-05\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-11-06\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-11-07\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-11-08\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-11-09\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-11-10\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-11-11\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-11-12\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-11-13\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-11-14\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-11-15\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-11-16\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-11-17\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-11-18\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-11-19\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-11-20\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-11-21\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-11-22\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-11-23\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-11-24\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-11-25\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-11-26\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-11-27\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-11-28\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-11-29\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-11-30\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-12-01\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-12-02\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-12-03\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-12-04\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-12-05\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            },\n            {\n              \"closed\": false,\n              \"date\": \"2021-12-06\",\n              \"rates\": [\n                {\n                  \"adults\": 1,\n                  \"retailRate\": {\n                    \"amount\": 70000,\n                    \"currency\": {\n                      \"code\": \"EUR\"\n                    }\n                  },\n                  \"roomsSellable\": 100\n                }\n              ]\n            }\n          ],\n          \"maxOccupancy\": 2,\n          \"name\": \"Double Room\",\n          \"roomTypeId\": \"b301f494-d11d-4f9e-9425-c3883f082078\"\n        }\n      ]\n    }\n  ],\n  \"pagination\": {\n    \"count\": 1,\n    \"next\": \"https://api.impala.travel/v1/085c034a-955c-42b7-81a9-a5ec445b18c6/rate-plans?size=1&offset=1\",\n    \"prev\": null,\n    \"total\": 2\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2416c7f2-5d01-4c49-8119-9ef8fb43d921",
+              "name": "Your request wasn't formatted correctly and therefore couldn't be processed. This most frequently happens when query parameters or request body values are missing, incorrectly formatted or added where they don't exist (e.g. due to typos). We're including a list of `validations` to point out where things are going wrong and should be fixed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    ":hotelId",
+                    "rate-plans"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "updatedAt[eq]",
+                      "value": "2022-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updatedAt[gt]",
+                      "value": "2022-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updatedAt[gte]",
+                      "value": "2022-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updatedAt[lt]",
+                      "value": "2022-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updatedAt[lte]",
+                      "value": "2022-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "size",
+                      "value": "40"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "25"
+                    },
+                    {
+                      "key": "start",
+                      "value": "2022-05-12"
+                    },
+                    {
+                      "key": "end",
+                      "value": "2022-05-12"
+                    },
+                    {
+                      "key": "roomId",
+                      "value": "6d3a255d-3b22-48a4-8076-3ae3d0ade3d7"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "hotelId",
+                      "description": "(Required) The uuid of hotel for which rate plans are being fetched."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"VALIDATION_ERROR\",\n  \"message\": \"\\\"start\\\" must be in YYYY-MM-DD format. \\\"foo\\\" is not allowed. \\\"lorem\\\" missing required peer \\\"ipsum\\\"\",\n  \"validations\": [\n    {\n      \"code\": \"DATE_FORMAT\",\n      \"message\": \"\\\"start\\\" must be in YYYY-MM-DD format\",\n      \"property\": \"start\"\n    },\n    {\n      \"code\": \"OBJECT_WITH\",\n      \"message\": \"\\\"lorem\\\" missing required peer \\\"ipsum\\\"\",\n      \"property\": \"lorem\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2dfe187f-2088-4bb1-a8a8-a00372d5d860",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    ":hotelId",
+                    "rate-plans"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "updatedAt[eq]",
+                      "value": "2022-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updatedAt[gt]",
+                      "value": "2022-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updatedAt[gte]",
+                      "value": "2022-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updatedAt[lt]",
+                      "value": "2022-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updatedAt[lte]",
+                      "value": "2022-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "size",
+                      "value": "40"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "25"
+                    },
+                    {
+                      "key": "start",
+                      "value": "2022-05-12"
+                    },
+                    {
+                      "key": "end",
+                      "value": "2022-05-12"
+                    },
+                    {
+                      "key": "roomId",
+                      "value": "6d3a255d-3b22-48a4-8076-3ae3d0ade3d7"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "hotelId",
+                      "description": "(Required) The uuid of hotel for which rate plans are being fetched."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"NOT_FOUND\",\n  \"message\": \"Cannot find property with id 6f86fd08-5378-4ac4-a6e0-ae099d5ce512\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4d2bd37f-0bfe-4206-9d60-6ea23bd42dd6",
+          "name": "List a rate plan (rate calendar) for a hotel (Beta endpoint).",
+          "request": {
+            "name": "List a rate plan (rate calendar) for a hotel (Beta endpoint).",
+            "description": {
+              "content": "Returns a single rate plan available for you for a hotel.\n\nRate plans are products the hotel is offering. They typically consist of a combination of restrictiveness in case of cancellations or changes, the time they're bookable, minimum or maximum length of stay restrictions (e.g. week-long bookings), included components like breakfast or dinner and/or the conditions under which the room can be sold (e.g. private rates that can only be offered and sold to a closed user group behind login).\n\nExamples of rate plans:\n\n* Non-refundable room rate that includes breakfast\n* Room-only rate with free cancellation up to 14 days before arrival\n\nThis endpoint returns a singular available rate plan.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "hotels",
+                ":hotelId",
+                "rate-plans",
+                ":ratePlanId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "25",
+                  "description": "Number of rate plans returned on a given page (pagination)."
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "0",
+                  "description": "Offset from the first rate plan in the result (for pagination)."
+                },
+                {
+                  "disabled": false,
+                  "key": "start",
+                  "value": "<string>",
+                  "description": "Start date of the considered time window for the returned rate plan."
+                },
+                {
+                  "disabled": false,
+                  "key": "end",
+                  "value": "<string>",
+                  "description": "Start date of the considered time window for the returned rate plan."
+                },
+                {
+                  "disabled": false,
+                  "key": "roomTypeId",
+                  "value": "<uuid>",
+                  "description": "The uuid of room for which rate plans are being fetched."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "hotelId",
+                  "description": "(Required) The uuid of hotel for which rate plans are being fetched."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "ratePlanId",
+                  "description": "(Required) The id of requested rateplan"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "814b1d1a-8a87-4577-9d38-3b3be79edd48",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    ":hotelId",
+                    "rate-plans",
+                    ":ratePlanId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "updatedAt[eq]",
+                      "value": "2022-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updatedAt[gt]",
+                      "value": "2022-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updatedAt[gte]",
+                      "value": "2022-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updatedAt[lt]",
+                      "value": "2022-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updatedAt[lte]",
+                      "value": "2022-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "size",
+                      "value": "40"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "25"
+                    },
+                    {
+                      "key": "start",
+                      "value": "2022-05-12"
+                    },
+                    {
+                      "key": "end",
+                      "value": "2022-05-12"
+                    },
+                    {
+                      "key": "roomTypeId",
+                      "value": "6d3a255d-3b22-48a4-8076-3ae3d0ade3d7"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "hotelId",
+                      "description": "(Required) The uuid of hotel for which rate plans are being fetched."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "ratePlanId",
+                      "description": "(Required) The id of requested rateplan"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ratePlanId\": 5408.978585027487,\n  \"hotelId\": \"f65715c0-c828-a631-04d5-c393c8454aaf\",\n  \"description\": \"NON_REFUNDABLE,DINNER\",\n  \"conditions\": {\n    \"cancellationPolicy\": \"FREE_CANCELLATION_24\",\n    \"cancellationDeadline\": 3734.4615743355635\n  },\n  \"restrictions\": {\n    \"lengthOfStay\": {\n      \"min\": 3492.3339795305765,\n      \"max\": 9746.142054498878\n    }\n  },\n  \"roomTypes\": [\n    {\n      \"roomTypeId\": \"97137430-d7ec-04d2-e007-f5b42893953e\",\n      \"name\": \"Junior Suite\",\n      \"maxOccupancy\": 6687.1756459193975,\n      \"dates\": [\n        {\n          \"date\": \"string\",\n          \"rates\": [\n            {\n              \"adults\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"roomsSellable\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"retailRate\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"closed\": true,\n          \"closedToArrival\": true,\n          \"closedToDeparture\": true,\n          \"staythrough\": {\n            \"min\": 3864.7257577528317\n          }\n        }\n      ]\n    }\n  ],\n  \"adjustments\": [\n    {\n      \"amount\": 5,\n      \"type\": \"PERCENTAGE\",\n      \"conditions\": [\n        {\n          \"type\": \"LENGTH_OF_STAY\",\n          \"rules\": {\n            \"bookableDateRange\": {\n              \"start\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"end\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"nightsRange\": {\n              \"min\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"max\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          }\n        }\n      ],\n      \"adjustmentId\": \"3fc56b6e-388a-0d81-bc65-c420e6c4d353\"\n    },\n    {\n      \"amount\": 5,\n      \"type\": \"PERCENTAGE\",\n      \"conditions\": [\n        {\n          \"type\": \"LENGTH_OF_STAY\",\n          \"rules\": {\n            \"bookableDateRange\": {\n              \"start\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"end\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"nightsRange\": {\n              \"min\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"max\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          }\n        }\n      ],\n      \"adjustmentId\": \"7bf4cb78-57fd-d299-5628-f2f3371497b5\"\n    }\n  ],\n  \"components\": [\n    {\n      \"formatted\": \"breakfast\",\n      \"type\": \"BREAKFAST\",\n      \"includedInRate\": true\n    },\n    {\n      \"formatted\": \"breakfast\",\n      \"type\": \"BREAKFAST\",\n      \"includedInRate\": true\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5831b2d6-b0b1-49ea-b120-7b4107f76db2",
+              "name": "Your request wasn't formatted correctly and therefore couldn't be processed. This most frequently happens when query parameters or request body values are missing, incorrectly formatted or added where they don't exist (e.g. due to typos). We're including a list of `validations` to point out where things are going wrong and should be fixed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    ":hotelId",
+                    "rate-plans",
+                    ":ratePlanId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "updatedAt[eq]",
+                      "value": "2022-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updatedAt[gt]",
+                      "value": "2022-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updatedAt[gte]",
+                      "value": "2022-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updatedAt[lt]",
+                      "value": "2022-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updatedAt[lte]",
+                      "value": "2022-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "size",
+                      "value": "40"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "25"
+                    },
+                    {
+                      "key": "start",
+                      "value": "2022-05-12"
+                    },
+                    {
+                      "key": "end",
+                      "value": "2022-05-12"
+                    },
+                    {
+                      "key": "roomTypeId",
+                      "value": "6d3a255d-3b22-48a4-8076-3ae3d0ade3d7"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "hotelId",
+                      "description": "(Required) The uuid of hotel for which rate plans are being fetched."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "ratePlanId",
+                      "description": "(Required) The id of requested rateplan"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"VALIDATION_ERROR\",\n  \"message\": \"\\\"start\\\" must be in YYYY-MM-DD format. \\\"foo\\\" is not allowed. \\\"lorem\\\" missing required peer \\\"ipsum\\\"\",\n  \"validations\": [\n    {\n      \"code\": \"DATE_FORMAT\",\n      \"message\": \"\\\"start\\\" must be in YYYY-MM-DD format\",\n      \"property\": \"start\"\n    },\n    {\n      \"code\": \"OBJECT_WITH\",\n      \"message\": \"\\\"lorem\\\" missing required peer \\\"ipsum\\\"\",\n      \"property\": \"lorem\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3c8087e5-93f0-4b2b-bf89-4e17475aff13",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    ":hotelId",
+                    "rate-plans",
+                    ":ratePlanId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "updatedAt[eq]",
+                      "value": "2022-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updatedAt[gt]",
+                      "value": "2022-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updatedAt[gte]",
+                      "value": "2022-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updatedAt[lt]",
+                      "value": "2022-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "updatedAt[lte]",
+                      "value": "2022-11-04T15:56:37.000Z"
+                    },
+                    {
+                      "key": "size",
+                      "value": "40"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "25"
+                    },
+                    {
+                      "key": "start",
+                      "value": "2022-05-12"
+                    },
+                    {
+                      "key": "end",
+                      "value": "2022-05-12"
+                    },
+                    {
+                      "key": "roomTypeId",
+                      "value": "6d3a255d-3b22-48a4-8076-3ae3d0ade3d7"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "hotelId",
+                      "description": "(Required) The uuid of hotel for which rate plans are being fetched."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "ratePlanId",
+                      "description": "(Required) The id of requested rateplan"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"NOT_FOUND\",\n  \"message\": \"Cannot find property with id 6f86fd08-5378-4ac4-a6e0-ae099d5ce512\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://sandbox.impala.travel/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "x-api-key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "0ea7b0d1-3d3f-43d0-a1bb-009602c5810b",
+    "name": "Impala Hotel Booking Bookings Rate Calendar API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Add room selling to your app with ease, or expand your existing hotel portfolio. Access all the marketing material you need to sell a room, from hotel amenities to images. Constantly updated, ever expanding and always correct. Impala allows you to start selling hotel rooms and earn a commission with every booking in hours.\n\nGetting started is easy:\n\n> **1. Sign-up within seconds**: Head to the [Impala website](https://impala.travel), enter your details and receive your sandbox API key immediately (no credit card needed).\n\n> **2. Start building within minutes**: Build against a sandbox API with realistic test data. Use a [step-by-step walkthrough](https://impala.travel) to see what's possible. Check for available hotels and their rates. Make and manage fake bookings without any risk. Add room booking to your existing website or app, or start an online travel agency from scratch. [![Run in Postman](https://run.pstmn.io/button.svg)](https://god.gw.postman.com/run-collection/11303451-9b241872-9961-424d-9ef4-9d949534567d?action=collection%2Ffork&collection-url=entityId%3D11303451-9b241872-9961-424d-9ef4-9d949534567d%26entityType%3Dcollection%26workspaceId%3D5ae55f12-332c-4e7d-8acc-3e75df3b2ee2)\n\n> **3. Go live within hours**: Once your app or integration is ready for prime time, move to production within your Impala dashboard and start making real hotel bookings for your customers right away.\n\nWant to see how it all works? Watch [a 5-minute walkthrough](https://www.youtube.com/watch?v=7B3evCL3nrY) of the two API requests you need to make a booking, and a demo of one of our customer's apps.\n\nContact Support:\n Name: Impala Developer Support\n Email: support@impala.travel",
+      "type": "text/plain"
+    }
+  }
+}

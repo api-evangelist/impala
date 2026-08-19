@@ -1,0 +1,142 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Impala Hotel Booking Bookings Rate Calendar API",
+    "version": "3.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-api-key",
+      "value": "{{x-api-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Rate Calendar",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List all rate plans (rate calendar) for a hotel (Beta endpoint)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.impala.travel/v1/hotels/:hotelId/rate-plans",
+            "params": [
+              {
+                "name": "hotelId",
+                "value": "40c0b330-186a-40bf-ae36-2c61fb322db0",
+                "type": "path",
+                "description": "The uuid of hotel for which rate plans are being fetched."
+              },
+              {
+                "name": "updatedAt",
+                "value": "[object Object]",
+                "type": "query",
+                "description": "Returns rate plans changed after the supplied date."
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Number of rate plans returned on a given page (pagination)."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Offset from the first rate plan in the result (for pagination)."
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Start date of the considered time window for the returned rate plan."
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "Start date of the considered time window for the returned rate plan."
+              },
+              {
+                "name": "roomId",
+                "value": "",
+                "type": "query",
+                "description": "The UUID of room for which rate plans are being fetched."
+              }
+            ]
+          },
+          "docs": "Returns a list of all rate plans available for you for a hotel.\n\nRate plans are products the hotel is offering. They typically consist of a combination of restrictiveness in case of cancellations or changes, the time they're bookable, minimum or maximum length of stay restrictions (e.g. week-long bookings), included components like breakfast or dinner and/or the conditions under which the room can be sold (e.g. private rates that can only be offered and sold to a closed user group behind login)."
+        },
+        {
+          "info": {
+            "name": "List a rate plan (rate calendar) for a hotel (Beta endpoint).",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.impala.travel/v1/hotels/:hotelId/rate-plans/:ratePlanId",
+            "params": [
+              {
+                "name": "hotelId",
+                "value": "40c0b330-186a-40bf-ae36-2c61fb322db0",
+                "type": "path",
+                "description": "The uuid of hotel for which rate plans are being fetched."
+              },
+              {
+                "name": "ratePlanId",
+                "value": "112",
+                "type": "path",
+                "description": "The id of requested rateplan"
+              },
+              {
+                "name": "updatedAt",
+                "value": "[object Object]",
+                "type": "query",
+                "description": "Returns rate plans changed after the supplied date."
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Number of rate plans returned on a given page (pagination)."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Offset from the first rate plan in the result (for pagination)."
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Start date of the considered time window for the returned rate plan."
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "Start date of the considered time window for the returned rate plan."
+              },
+              {
+                "name": "roomTypeId",
+                "value": "",
+                "type": "query",
+                "description": "The uuid of room for which rate plans are being fetched."
+              }
+            ]
+          },
+          "docs": "Returns a single rate plan available for you for a hotel.\n\nRate plans are products the hotel is offering. They typically consist of a combination of restrictiveness in case of cancellations or changes, the time they're bookable, minimum or maximum length of stay restrictions (e.g. week-long bookings), included components like breakfast or dinner and/or the conditions under which the room can be sold (e.g. private rates that can only be offered and sold to a closed user group behind login).\n\nExam"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
