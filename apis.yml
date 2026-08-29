@@ -94,6 +94,9 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: CapabilityMap
+  url: capabilities/impala-capability-edges.yml
+  name: Impala Business Capability Map
 - type: Overlay
   url: overlays/impala-hotels-overlay.yaml
 - type: Authentication
