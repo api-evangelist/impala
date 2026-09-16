@@ -25,17 +25,14 @@ accessModel:
   method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/impala.png
 name: Impala
-description: >-
-  Impala built a single, standardized REST API for the hotel industry — one
-  integration to search availability, read rate plans, and create, amend, and
-  cancel bookings across many property management systems (PMS), so any app could
-  sell hotel rooms and earn commission per booking. Founded in London in 2016 and
-  backed by Speedinvest, Lakestar, and Kima Ventures, Impala shipped a sandbox
-  (with a demo hotel, "The Charleston"), a Postman collection, and PHP/JavaScript
-  wrappers. The company is now defunct: getimpala.com / impala.travel and the API
-  and docs hosts no longer resolve, and the primary domain is held by an unrelated
-  party. This profile preserves the historical OpenAPI (apis.guru
-  impala.travel:hotels 1.003) and pipeline-derived artifacts for the record.
+description: 'Impala built a single, standardized REST API for the hotel industry — one integration to
+  search availability, read rate plans, and create, amend, and cancel bookings across many property management
+  systems (PMS), so any app could sell hotel rooms and earn commission per booking. Founded in London
+  in 2016 and backed by Speedinvest, Lakestar, and Kima Ventures, Impala shipped a sandbox (with a demo
+  hotel, "The Charleston"), a Postman collection, and PHP/JavaScript wrappers. The company is now defunct:
+  getimpala.com / impala.travel and the API and docs hosts no longer resolve, and the primary domain is
+  held by an unrelated party. This profile preserves the historical OpenAPI (apis.guru impala.travel:hotels
+  1.003) and pipeline-derived artifacts for the record.'
 url: https://raw.githubusercontent.com/api-evangelist/impala/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -46,7 +43,7 @@ x-tier-reason: portfolio-lead
 x-status: defunct
 specificationVersion: '0.23'
 created: '2026-07-17'
-modified: '2026-07-19'
+modified: '2026-09-16'
 tags:
 - Company
 - Hotels
@@ -59,8 +56,7 @@ apis:
 - aid: impala:impala-bookings-api
   name: Impala Bookings API
   description: Making and managing bookings.
-  humanURL: >-
-    https://www.postman.com/getimpala/impala-hotel-booking-api/documentation/fdkbiih/impala-hotel-booking-api
+  humanURL: https://www.postman.com/getimpala/impala-hotel-booking-api/documentation/fdkbiih/impala-hotel-booking-api
   baseURL: https://api.impala.travel/v1
   tags:
   - Bookings
@@ -70,8 +66,7 @@ apis:
 - aid: impala:impala-hotels-api
   name: Impala Hotels API
   description: Accessing hotel content, available rooms and rates.
-  humanURL: >-
-    https://www.postman.com/getimpala/impala-hotel-booking-api/documentation/fdkbiih/impala-hotel-booking-api
+  humanURL: https://www.postman.com/getimpala/impala-hotel-booking-api/documentation/fdkbiih/impala-hotel-booking-api
   baseURL: https://api.impala.travel/v1
   tags:
   - Hotels
@@ -81,8 +76,7 @@ apis:
 - aid: impala:impala-rate-calendar-api
   name: Impala Rate Calendar API
   description: Getting rates for future dates.
-  humanURL: >-
-    https://www.postman.com/getimpala/impala-hotel-booking-api/documentation/fdkbiih/impala-hotel-booking-api
+  humanURL: https://www.postman.com/getimpala/impala-hotel-booking-api/documentation/fdkbiih/impala-hotel-booking-api
   baseURL: https://api.impala.travel/v1
   tags:
   - Rate Calendar
@@ -95,6 +89,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Website
+  url: https://impala.travel
 - type: CapabilityMap
   url: capabilities/impala-capability-edges.yml
   name: Impala Business Capability Map
@@ -108,7 +104,10 @@ common:
   url: packages/impala-packages.yml
 - type: X-MCPServerCandidate
   url: mcp/impala-mcp.yml
-  note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate — a tool list derived from the published API contracts, not an existing server. The scorer already read the manifest and reported mcp_server correctly; the MCPServer type was crediting the artifact-type surfaces with a server that does not exist.'
+  note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate
+    — a tool list derived from the published API contracts, not an existing server. The scorer already
+    read the manifest and reported mcp_server correctly; the MCPServer type was crediting the artifact-type
+    surfaces with a server that does not exist.'
 - type: LLMsTxt
   url: llms/impala-llms.txt
 - type: Conventions
