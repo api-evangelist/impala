@@ -59,6 +59,8 @@ apis:
   humanURL: https://www.postman.com/getimpala/impala-hotel-booking-api/documentation/fdkbiih/impala-hotel-booking-api
   baseURL: https://api.impala.travel/v1
   tags:
+  - Booking
+  tags_raw:
   - Bookings
   properties:
   - type: OpenAPI
