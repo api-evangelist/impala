@@ -1,9 +1,7 @@
 {
   "provider": "impala",
   "sources": [
-    "impala-bookings-api-openapi.yml",
-    "impala-hotels-api-openapi.yml",
-    "impala-rate-calendar-api-openapi.yml"
+    "_original/impala-hotels-openapi-original.json"
   ],
   "outputs": [
     "impala-bookings-api-openapi.yml",
@@ -13,6 +11,14 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "impala-hotels-openapi-original.json: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "impala-bookings-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "impala-hotels-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "impala-rate-calendar-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

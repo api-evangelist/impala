@@ -1,28 +1,13 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
   contact:
     email: support@impala.travel
     name: Impala Developer Support
     url: https://docs.impala.travel/
-  description: 'Add room selling to your app with ease, or expand your existing hotel portfolio. Access all the marketing material you need to sell a room, from hotel amenities to images. Constantly updated, ever expanding and always correct. Impala allows you to start selling hotel rooms and earn a commission with every booking in hours.
-
-
-    Getting started is easy:
-
-
-    > **1. Sign-up within seconds**: Head to the [Impala website](https://impala.travel), enter your details and receive your sandbox API key immediately (no credit card needed).
-
-
-    > **2. Start building within minutes**: Build against a sandbox API with realistic test data. Use a [step-by-step walkthrough](https://impala.travel) to see what''s possible. Check for available hotels and their rates. Make and manage fake bookings without any risk. Add room booking to your existing website or app, or start an online travel agency from scratch. [![Run in Postman](https://run.pstmn.io/button.svg)](https://god.gw.postman.com/run-collection/11303451-9b241872-9961-424d-9ef4-9d949534567d?action=collection%2Ffork&collection-url=entityId%3D11303451-9b241872-9961-424d-9ef4-9d949534567d%26entityType%3Dcollection%26workspaceId%3D5ae55f12-332c-4e7d-8acc-3e75df3b2ee2)
-
-
-    > **3. Go live within hours**: Once your app or integration is ready for prime time, move to production within your Impala dashboard and start making real hotel bookings for your customers right away.
-
-
-    Want to see how it all works? Watch [a 5-minute walkthrough](https://www.youtube.com/watch?v=7B3evCL3nrY) of the two API requests you need to make a booking, and a demo of one of our customer''s apps.'
+  description: Add room selling to your app with ease, or expand your existing hotel portfolio.
   termsOfService: https://impala.travel/terms-and-conditions/
-  title: Impala Hotel Booking Bookings Hotels API
-  version: '3.0'
+  title: Impala Hotel Booking Hotels API
+  version: '1.003'
   x-apisguru-categories:
   - ecommerce
   x-logo:
@@ -30,6 +15,7 @@ info:
   x-origin:
   - format: openapi
     url: https://docs.impala.travel/api/v1/projects/impala/booking-api/nodes/spec/openapi.seller.yaml?branch=v1.003
+    version: '3.0'
   x-providerName: impala.travel
   x-serviceName: hotels
 servers:
@@ -60,7 +46,7 @@ paths:
         * Adding `hotelIds` allows you to limit the results to include only hotels with the ids listed. Its value should be a comma-separated list of hotel ids (e.g. `?hotelIds[]=hotelIdA,hotelIdB`)
 
 
-        * Adding `contractable` allows you to filter to hotels that you can directly negotiate with through our [deals feature](https://docs.impala.travel/docs/booking-api/ZG9jOjcyNjgzMTA-contracting-with-hotels). (e.g `?contractable=true` or `?contractable=false`)
+        * Adding `contractable` allows you to filter to hotels that you can directly negotiate with through our deals feature. (e.g `?contractable=true` or `?contractable=false`)
 
 
         You can specify the **sorting order** in which hotels are returned:
@@ -303,7 +289,7 @@ paths:
         For rooms where there are available prices the `rates` array will include both the public rates of the hotel, along with prices that come from deals in which you are participating. This would include private deals which you have negotiated with a hotel, along with Impala deals which you have been verified for.
 
 
-        Using the `rateId` of any of those rates, you can use the [Create a booking](https://docs.impala.travel/docs/booking-api/spec/openapi.seller.yaml/paths/~1bookings/post) endpoint to make a booking.'
+        Using the `rateId` of any of those rates, you can use the Create a booking endpoint to make a booking.'
       operationId: retrieveHotel
       parameters:
       - description: The unique identifier of this hotel on the Impala platform.
@@ -400,675 +386,6 @@ paths:
       tags:
       - Hotels
 components:
-  schemas:
-    money:
-      description: An amount of money in the specified currency (used in the context of prices, fees, refunds etc.)
-      properties:
-        amount:
-          description: Amount in the smallest unit of the currency. E.g. 234.56 € is expressed as 23456 (in Euro cents to avoid rounding errors in calculations).
-          example: 9500
-          type: integer
-        currency:
-          description: Details of the currency.
-          properties:
-            code:
-              description: Three-character currency code in ISO 4217 notation.
-              example: EUR
-              type: string
-          required:
-          - code
-          title: CurrencyDetails
-          type: object
-      required:
-      - amount
-      - currency
-      title: Money
-      type: object
-      x-examples:
-        Double-decimal currency (EUR):
-          amount: 9500
-          currency:
-            code: EUR
-        Zero-decimal currency (JPY):
-          amount: 37747
-          currency:
-            code: JPY
-    rate:
-      description: Information on the price of the room, other components of the room (such as breakfast, lunch or a welcome drink) and the cancellation policies that apply.
-      properties:
-        cancellationPolicies:
-          items:
-            $ref: '#/components/schemas/cancellationPolicy'
-          minItems: 1
-          type: array
-          uniqueItems: true
-        components:
-          items:
-            $ref: '#/components/schemas/rateComponent'
-          minItems: 0
-          type: array
-          uniqueItems: true
-        end:
-          example: '2021-11-23'
-          format: date
-          minLength: 1
-          type: string
-        hotelAgreement:
-          $ref: '#/components/schemas/hotelAgreementStub'
-        maxOccupancy:
-          description: Maximum number of adults included in the rate.
-          example: 2
-          type: integer
-        rateId:
-          example: 3rX3IaqkpJaPlttxoFoM3uDcHJEZCAuByqfBSLUPMvkBGyu7IAlhbxl3rZ7cVmVj6TbXL4EfiHlTA
-          minLength: 1
-          type: string
-        ratePlanId:
-          description: The rate plan ID that is attached to this rate. Each rate plan ID can specify a unique combination of a cancellation policy and a meal plan.
-          example: 1
-          type: integer
-        retailRate:
-          description: The public retail rate you should quote and charge your guest. You're not allowed to quote or charge an amount lower than this if your website or app is publicly accessible.
-          properties:
-            taxesAndFees:
-              description: Breakdown of taxes (e.g. VAT, city tax) and fees (e.g. cleaning or resort fees).
-              properties:
-                includedInRate:
-                  description: Taxes and fees that are included in the `retailRate.total` price paid at the time of booking.
-                  items:
-                    $ref: '#/components/schemas/taxOrFee'
-                  minItems: 0
-                  type: array
-                payAtHotel:
-                  description: Taxes and fees that need to be payed at the hotel (often upon arrival or departure). This frequently happens for fees that only need to be collected based on certain conditions (e.g. a guest coming from abroad or being older than a certain age).
-                  items:
-                    $ref: '#/components/schemas/taxOrFee'
-                  minItems: 0
-                  type: array
-              type: object
-            total:
-              $ref: '#/components/schemas/money'
-          required:
-          - total
-          - taxesAndFees
-          type: object
-        roomsSellable:
-          description: Amount of rooms which can be sold for this occupancy level and room type at this rate price.
-          type: number
-        sellerCommissionPercentage:
-          description: The commission percentage you as a seller will earn from this booking, based on `retailRate.total`.
-          example: 9.5
-          format: float
-          type: number
-        sellerToImpalaPayment:
-          allOf:
-          - $ref: '#/components/schemas/money'
-          description: This is the amount payable to the hotel, which Impala will collect from you on the hotel's behalf. The Impala fee will be requested in addition to this, and also documented in a VAT invoice.
-        start:
-          example: '2021-11-20'
-          format: date
-          minLength: 1
-          type: string
-      required:
-      - rateId
-      - start
-      - end
-      - hotelAgreement
-      - maxOccupancy
-      - retailRate
-      - sellerCommissionPercentage
-      - components
-      - cancellationPolicies
-      title: Room rate
-      type: object
-      x-examples:
-        Example:
-          cancellationPolicies:
-          - end: '2020-12-17 23:59:59.999'
-            fee:
-              count: 100
-              price:
-                amount: 9500
-                currency:
-                  code: EUR
-              type: PERCENTAGE
-            formatted: Non-refundable after October 19, 2021 00:00
-            start: '2020-12-15 23:59:59.999'
-          components:
-          - formatted: Breakfast
-            includedInRate: true
-            type: BREAKFAST
-          end: '2021-11-23'
-          rateId: dBFo
-          ratePlanId: 1
-          retailRate:
-            total:
-              amount: 9500
-              currency:
-                code: EUR
-          roomsSellable: 100
-          sellerCommissionPercentage: 9.5
-          sellerToImpalaPayment:
-            amount: 8598
-            currency:
-              code: EUR
-          start: '2021-11-20'
-    roomType:
-      description: Bookable category of bookable rooms within a hotel
-      properties:
-        amenities:
-          items:
-            $ref: '#/components/schemas/amenity'
-          type: array
-        description:
-          description: Description
-          example: Modern room with plenty of natural light and modern furniture.
-          type: string
-        images:
-          description: Lists photos of this room type
-          items:
-            $ref: '#/components/schemas/image'
-          type: array
-        maxOccupancy:
-          description: Maximum number of adults that can occupy the room.
-          example: 4
-          type: integer
-        name:
-          description: Name
-          example: Standard Room
-          type: string
-        rates:
-          description: Bookable rates for this room type and the start and end dates of your availability search.
-          items:
-            $ref: '#/components/schemas/rate'
-          type: array
-        roomTypeId:
-          description: Unique identifier of the room type within the Impala platform.
-          example: d5b192ce-c45f-46da-abf5-3880b429b7cc
-          format: uuid
-          type: string
-      required:
-      - roomTypeId
-      - name
-      - description
-      - maxOccupancy
-      - amenities
-      - images
-      title: Room type
-      type: object
-    address:
-      description: Physical address
-      properties:
-        city:
-          example: Impalaland
-          type: string
-        country:
-          description: Three-character country code in ISO alpha-3 format.
-          example: GBR
-          type: string
-        countryName:
-          description: English name of the country.
-          example: United Kingdom
-          type: string
-        line1:
-          description: First line of the address.
-          example: 12 Sample Avenue
-          type: string
-        line2:
-          description: Second line of the address.
-          nullable: true
-          type: string
-        postalCode:
-          example: '12345'
-          type: string
-        region:
-          nullable: true
-          type: string
-      required:
-      - line1
-      - city
-      - country
-      - countryName
-      - postalCode
-      title: Address
-      type: object
-    amenity:
-      description: "<!--\ntype: tab\ntitle: Description\n-->\nFeature or facility available in the hotel or room type. For the full list of property and room amenity codes, you can click on the \"Room Amenities\" and \"Property Amenities\" tab.\n\n<!--\ntype: tab\ntitle: Room Amenities\n-->\nBelow you will find a list of all room amenities in JSON format.\n```json\n{\n  \"2\": \"Air conditioning\",\n  \"3\": \"Alarm clock\",\n  \"5\": \"AM/FM radio\",\n  \"8\": \"Barbeque grills\",\n  \"9\": \"Bath tub with spray jets\",\n  \"10\": \"Bathrobe\",\n  \"11\": \"Bathroom amenities (free toiletries)\",\n  \"13\": \"Bathtub\",\n  \"14\": \"Bathtub only\",\n  \"15\": \"Bath or Shower\",\n  \"16\": \"Bidet\",\n  \"18\": \"Cable television\",\n  \"19\": \"Coffee/Tea maker\",\n  \"20\": \"Color television\",\n  \"21\": \"Computer\",\n  \"22\": \"Connecting rooms\",\n  \"25\": \"Cordless phone\",\n  \"28\": \"Desk\",\n  \"29\": \"Desk with lamp\",\n  \"32\": \"Dishwasher\",\n  \"38\": \"Fax machine\",\n  \"41\": \"Fireplace\",\n  \"46\": \"Free movies/video\",\n  \"47\": \"Full kitchen\",\n  \"49\": \"Grecian tub\",\n  \"50\": \"Hairdryer\",\n  \"54\": \"Internet access\",\n  \"55\": \"Iron (ironing facilities)\",\n  \"56\": \"Ironing board\",\n  \"57\": \"Whirpool\",\n  \"59\": \"Kitchen\",\n  \"60\": \"Kitchen supplies\",\n  \"61\": \"Kitchenette\",\n  \"63\": \"Laptop\",\n  \"64\": \"Large desk\",\n  \"68\": \"Microwave\",\n  \"69\": \"Minibar\",\n  \"72\": \"Multi-line phone\",\n  \"77\": \"Oven\",\n  \"78\": \"Pay per view movies on TV\",\n  \"80\": \"Phone in bathroom\",\n  \"81\": \"Plates and bowls\",\n  \"85\": \"Private bathroom\",\n  \"88\": \"Refrigerator\",\n  \"89\": \"Refrigerator with ice maker\",\n  \"92\": \"Safe\",\n  \"94\": \"Separate closet\",\n  \"97\": \"Shower only\",\n  \"98\": \"Silverware/utensils\",\n  \"99\": \"Sitting area\",\n  \"103\": \"Speaker phone\",\n  \"105\": \"Stove\",\n  \"108\": \"Telephone for hearing impaired\",\n  \"115\": \"VCR movies\",\n  \"117\": \"Video games\",\n  \"119\": \"Wake-up calls\",\n  \"123\": \"Wireless internet connection\",\n  \"126\": \"Air conditioning individually controlled in room\",\n  \"127\": \"Bathtub & whirlpool separate\",\n  \"129\": \"CD  player\",\n  \"133\": \"Desk with electrical outlet\",\n  \"138\": \"Marble bathroom\",\n  \"139\": \"List of movie channels available\",\n  \"141\": \"Oversized bathtub\",\n  \"142\": \"Shower\",\n  \"144\": \"Soundproofed room\",\n  \"146\": \"Tables and chairs\",\n  \"147\": \"Two-line phone\",\n  \"149\": \"Washer/dryer\",\n  \"155\": \"Separate tub and shower\",\n  \"157\": \"Ceiling fan\",\n  \"158\": \"CNN available\",\n  \"162\": \"Closets in room\",\n  \"163\": \"DVD player\",\n  \"164\": \"Mini-refrigerator\",\n  \"166\": \"Self-controlled heating/cooling system\",\n  \"167\": \"Toaster\",\n  \"193\": \"Shared bathroom\",\n  \"194\": \"Telephone TDD/Textphone\",\n  \"210\": \"Satellite television\",\n  \"214\": \"iPod docking station\",\n  \"217\": \"Satellite radio\",\n  \"218\": \"Video on demand\",\n  \"220\": \"Gulf view\",\n  \"223\": \"Mountain view\",\n  \"224\": \"Ocean view\",\n  \"228\": \"Slippers\",\n  \"230\": \"Chair provided with desk\",\n  \"234\": \"Luxury linen type\",\n  \"245\": \"Private pool\",\n  \"246\": \"High Definition (HD) Flat Panel Television  - 32 inches or greater\",\n  \"251\": \"TV\",\n  \"254\": \"Video game player:\",\n  \"256\": \"Dining room seats\",\n  \"258\": \"Mobile/cellular phones\",\n  \"259\": \"Movies\",\n  \"260\": \"Multiple closets\",\n  \"262\": \"Safe large enough to accommodate a laptop\",\n  \"265\": \"Bluray player\",\n  \"268\": \"Non-allergenic room\",\n  \"270\": \"Seating area with sofa/chair\",\n  \"271\": \"Separate toilet area\",\n  \"273\": \"Widescreen TV\",\n  \"276\": \"Separate tub or shower\",\n  \"249\": \"Double (Bed)\",\n  \"200\": \"Futon Mat\",\n  \"58\": \"Extra large Double\",\n  \"86\": \"Large Double\",\n  \"102\": \"Sofa Bed\",\n  \"113\": \"Twin (bed)\",\n  \"203\": \"Single (bed)\",\n  \"4001\": \"Bunk bed\",\n  \"5001\": \"Coffee/Tea maker\",\n  \"5002\": \"Internet facilities\",\n  \"5003\": \"Mini-bar\",\n  \"5004\": \"Shower\",\n  \"5005\": \"Bath\",\n  \"5006\": \"Safe Deposit Box\",\n  \"5007\": \"Pay-per-view Channels\",\n  \"5008\": \"TV\",\n  \"5009\": \"Telephone\",\n  \"5010\": \"Fax\",\n  \"5011\": \"Airconditioning\",\n  \"5012\": \"Hair Dryer\",\n  \"5013\": \"Wake Up Service/Alarm-clock\",\n  \"5014\": \"Hot Tub\",\n  \"5015\": \"Clothing Iron\",\n  \"5016\": \"Kitchenette\",\n  \"5017\": \"Balcony\",\n  \"5018\": \"Trouser Press\",\n  \"5019\": \"Bath-robe\",\n  \"5020\": \"Spa Bath\",\n  \"5021\": \"Radio\",\n  \"5022\": \"Refrigerator\",\n  \"5023\": \"Desk\",\n  \"5024\": \"Shared Bathroom\",\n  \"5025\": \"Ironing facilities\",\n  \"5026\": \"Seating area\",\n  \"5027\": \"Free Toiletries\",\n  \"5028\": \"DVD-Player\",\n  \"5029\": \"CD-Player\",\n  \"5030\": \"Fan\",\n  \"5031\": \"Toilet\",\n  \"5032\": \"Microwave\",\n  \"5033\": \"Dishwasher\",\n  \"5034\": \"Washing machine\",\n  \"5035\": \"Video\",\n  \"5036\": \"Video Games\",\n  \"5037\": \"Patio\",\n  \"5038\": \"Bathroom\",\n  \"5039\": \"Extra long beds (> 2 meter)\",\n  \"5040\": \"Heating\",\n  \"5041\": \"Dressing room\",\n  \"5042\": \"Guest toilet\",\n  \"5043\": \"Slippers\",\n  \"5044\": \"Satellite Channels\",\n  \"5045\": \"Kitchen\",\n  \"5046\": \"Wireless internet\",\n  \"5068\": \"Cable channels\",\n  \"5069\": \"Bath or Shower\",\n  \"5070\": \"Carpeted Floor\",\n  \"5071\": \"Fireplace\",\n  \"5072\": \"Additional Toilet\",\n  \"5073\": \"Interconnecting Room(s) available\",\n  \"5074\": \"Laptop Safe Box\",\n  \"5075\": \"Flat-screen TV\",\n  \"5076\": \"Private Entrance\",\n  \"5077\": \"Sofa\",\n  \"5079\": \"Soundproofing\",\n  \"5080\": \"Tiled / Marble floor\",\n  \"5081\": \"View\",\n  \"5082\": \"Wooden / Parquet floor\",\n  \"5083\": \"Wake Up Service\",\n  \"5084\": \"Alarm Clock\",\n  \"5085\": \"Dining Area\",\n  \"5086\": \"Electric Kettle\",\n  \"5087\": \"Executive Lounge Access\",\n  \"5088\": \"iPod Docking Station\",\n  \"5089\": \"Kitchenware\",\n  \"5090\": \"Mosquito Net\",\n  \"5091\": \"Towels/Linens at surcharge\",\n  \"5092\": \"Sauna\",\n  \"5093\": \"Private Pool\",\n  \"5094\": \"Tumble dryer (machine)\",\n  \"5095\": \"Wardrobe/Closet\",\n  \"5096\": \"Oven\",\n  \"5097\": \"Stove\",\n  \"5098\": \"Toaster\",\n  \"5099\": \"Barbecue\",\n  \"5100\": \"Bidet\",\n  \"5101\": \"Computer\",\n  \"5102\": \"iPad\",\n  \"5103\": \"Game Console\",\n  \"5104\": \"Game Console - Xbox 360\",\n  \"5105\": \"Game Console - PS2\",\n  \"5106\": \"Game Console - PS3\",\n  \"5107\": \"Game Console - Nintendo Wii\",\n  \"5108\": \"Sea View\",\n  \"5109\": \"Lake View\",\n  \"5110\": \"Garden View\",\n  \"5111\": \"Pool View\",\n  \"5112\": \"Mountain View\",\n  \"5113\": \"Landmark View\",\n  \"5114\": \"Laptop\",\n  \"5115\": \"Allergy-Free\",\n  \"5116\": \"Cleaning products\",\n  \"5117\": \"Electric blankets\",\n  \"5118\": \"Additional Bathroom\",\n  \"5119\": \"Blu-ray player\",\n  \"5120\": \"Coffee Machine\",\n  \"5121\": \"City View\",\n  \"5122\": \"River View\",\n  \"5123\": \"Terrace\",\n  \"5124\": \"Towels\",\n  \"5125\": \"Linen\",\n  \"5126\": \"Dining table\",\n  \"5127\": \"Children highchair\",\n  \"5129\": \"Outdoor furniture\",\n  \"5130\": \"Outdoor dining area\",\n  \"5131\": \"Entire property on ground floor\",\n  \"5132\": \"Upper floor reachable by lift\",\n  \"5133\": \"Upper floor reachable by stairs only\",\n  \"5134\": \"Entire unit wheelchair accessible\",\n  \"5135\": \"Detached\",\n  \"5136\": \"Semi-detached\",\n  \"5137\": \"Private flat in block of flats\",\n  \"5138\": \"Clothes Rack\",\n  \"5139\": \"Rollaway bed\",\n  \"5140\": \"Clothes drying rack\",\n  \"5141\": \"Toilet paper\",\n  \"5142\": \"Child safety socket covers\",\n  \"5143\": \"Board games/puzzles\",\n  \"5144\": \"Book/DVD/Music library for children\",\n  \"5145\": \"Baby safety gates\",\n  \"5146\": \"Sofa bed\",\n  \"5147\": \"toilet with grab rails\",\n  \"5148\": \"adapted bath\",\n  \"5149\": \"roll in shower\",\n  \"5150\": \"walk in shower\",\n  \"5151\": \"higher level toilet\",\n  \"5152\": \"low bathroom sink\",\n  \"5153\": \"bathroom emergency pull cord\",\n  \"5154\": \"shower chair\",\n  \"5157\": \"rooftop pool\",\n  \"5158\": \"infinity pool\",\n  \"5159\": \"pool with view\",\n  \"5160\": \"heated pool\",\n  \"5161\": \"salt-water pool\",\n  \"5162\": \"plunge pool\",\n  \"5163\": \"pool towels\",\n  \"5164\": \"shallow end\",\n  \"5165\": \"pool cover\",\n  \"5166\": \"wine/champagne\",\n  \"5167\": \"bottle of water\",\n  \"5168\": \"fruits\",\n  \"5169\": \"chocolate/cookies\",\n  \"5170\": \"Trash cans\",\n  \"5171\": \"Wine glasses\",\n  \"5172\": \"Game console - Xbox One\",\n  \"5173\": \"Game console - Wii U\",\n  \"5174\": \"Game console - PS4\",\n  \"5175\": \"Children crib/cots\",\n  \"5176\": \"toothbrush\",\n  \"5177\": \"shampoo\",\n  \"5178\": \"conditioner\",\n  \"5179\": \"body soap\",\n  \"5180\": \"shower cap\",\n  \"5181\": \"pajamas\",\n  \"5182\": \"yukata\",\n  \"5184\": \"socket near the bed\",\n  \"5185\": \"adapter\",\n  \"5186\": \"feather pillow\",\n  \"5187\": \"non-feather pillow\",\n  \"5188\": \"hypoallergenic pillow\",\n  \"5189\": \"Accessible by Lift\",\n  \"5190\": \"Inner courtyard view\",\n  \"5191\": \"Quiet street view\",\n  \"5196\": \"Portable Wifi\",\n  \"5198\": \"Smartphone\",\n  \"5199\": \"Streaming service (such as Netflix)\",\n  \"5200\": \"Lockers\",\n  \"5201\": \"Fire alarms or smoke detectors\",\n  \"5202\": \"Fire extinguishers\",\n  \"5203\": \"Metal keys access\",\n  \"5204\": \"Electronic key card access\",\n  \"5205\": \"Reading light\",\n  \"5206\": \"Earplugs\",\n  \"5207\": \"Private curtain\",\n  \"5211\": \"Carbon monoxide detector\",\n  \"5212\": \"Carbon monoxide source\"\n}\n\n```\n\n\n<!--\ntype: tab\ntitle: Property Amenities\n-->\nBelow you will find a list of all property amenities in JSON format.\n```JSON\n{\n  \"1\": \"24-hour front desk\",\n  \"5\": \"Air conditioning\",\n  \"7\": \"ATM on site\",\n  \"8\": \"Baby sitting\",\n  \"9\": \"BBQ/Picnic area\",\n  \"14\": \"Library\",\n  \"15\": \"Car rental\",\n  \"16\": \"Casino\",\n  \"22\": \"Concierge desk\",\n  \"26\": \"Currency exchange\",\n  \"33\": \"Elevators\",\n  \"35\": \"Fitness Center\",\n  \"36\": \"Express Check-in/Check-out\",\n  \"41\": \"Airport shuttle (free)\",\n  \"44\": \"Game room\",\n  \"45\": \"Souvenir/Gift Shop\",\n  \"49\": \"Heated pool\",\n  \"50\": \"Housekeeping - daily\",\n  \"53\": \"Indoor parking\",\n  \"54\": \"Indoor pool\",\n  \"55\": \"Jacuzzi (Hot Tub)\",\n  \"60\": \"Evening Entertainment\",\n  \"61\": \"Massage\",\n  \"62\": \"Nightclub/DJ\",\n  \"66\": \"Outdoor pool\",\n  \"76\": \"Restaurant\",\n  \"77\": \"Room service\",\n  \"78\": \"Safe\",\n  \"79\": \"Sauna\",\n  \"81\": \"Shoeshine\",\n  \"83\": \"Solarium\",\n  \"86\": \"Turkish/ Steam Bath\",\n  \"91\": \"Tour Desk\",\n  \"96\": \"Dry cleaning\",\n  \"97\": \"Valet parking\",\n  \"98\": \"Vending Machine(snacks)\",\n  \"116\": \"Accessible parking\",\n  \"122\": \"Shops (on site)\",\n  \"149\": \"Grocery shopping service available\",\n  \"165\": \"Bar\",\n  \"168\": \"Laundry\",\n  \"173\": \"Breakfast\",\n  \"186\": \"Street parking\",\n  \"193\": \"Playground\",\n  \"197\": \"Lockers\",\n  \"198\": \"Non-smoking rooms\",\n  \"202\": \"Bicycle rentals\",\n  \"228\": \"Business center\",\n  \"230\": \"Secured parking\",\n  \"233\": \"Tennis court\",\n  \"234\": \"Water Sport Facilities (on site)\",\n  \"236\": \"Golf Course (within 2 miles)\",\n  \"237\": \"Horseback riding\",\n  \"239\": \"Beachfront\",\n  \"242\": \"Heating\",\n  \"262\": \"Shared Kitchen\",\n  \"269\": \"Meeting/Banquet Facilities\",\n  \"272\": \"Skiing\",\n  \"282\": \"Airport shuttle service (surcharge)\",\n  \"283\": \"Baggage Storage\",\n  \"292\": \"Newspaper\",\n  \"310\": \"Hypoallergenic room available\",\n  \"312\": \"All Spaces Non-Smoking (public and private)\",\n  \"316\": \"Electric vehicle charging station\",\n  \"327\": \"Events ticket service\",\n  \"342\": \"Snack bar\",\n  \"5154\": \"Swimming pool\",\n  \"5044\": \"Spa and wellness centre\",\n  \"5041\": \"Family Rooms\",\n  \"5123\": \"Airport shuttle with surcharge\",\n  \"5086\": \"Fitness centre\",\n  \"5006\": \"Terrace\",\n  \"5005\": \"Garden\",\n  \"5056\": \"Water park\",\n  \"5054\": \"Kids' club\",\n  \"5000\": \"Breakfast in the room\",\n  \"5001\": \"Public transport tickets\",\n  \"5002\": \"Bikes available (free)\",\n  \"5003\": \"Outdoor furniture\",\n  \"5004\": \"Outdoor fireplace\",\n  \"5007\": \"Sun terrace\",\n  \"5008\": \"Chapel/shrine\",\n  \"5009\": \"Shared lounge/TV area\",\n  \"5010\": \"Ironing service\",\n  \"5011\": \"Trouser press\",\n  \"5012\": \"Designated smoking area\",\n  \"5013\": \"Pet basket\",\n  \"5014\": \"Pet bowls\",\n  \"5015\": \"Beach\",\n  \"5016\": \"Bowling\",\n  \"5017\": \"Darts\",\n  \"5018\": \"Fishing\",\n  \"5020\": \"Hiking\",\n  \"5021\": \"Minigolf\",\n  \"5022\": \"Snorkeling\",\n  \"5023\": \"Squash\",\n  \"5024\": \"Windsurfing\",\n  \"5025\": \"Billiard\",\n  \"5026\": \"Table tennis\",\n  \"5027\": \"Canoeing\",\n  \"5028\": \"Ski-to-door access\",\n  \"5029\": \"Diving\",\n  \"5030\": \"Tennis equipment\",\n  \"5031\": \"Badminton equipment\",\n  \"5032\": \"Cycling\",\n  \"5033\": \"Ski storage\",\n  \"5034\": \"Ski school\",\n  \"5035\": \"Ski equipment hire (on site)\",\n  \"5036\": \"Ski pass vendor\",\n  \"5037\": \"Private beach area\",\n  \"5039\": \"Rooms/Facilities for Disabled\",\n  \"5040\": \"Hair dresser-beautician\",\n  \"5042\": \"Viproom facilities\",\n  \"5043\": \"Bridal Suite\",\n  \"5045\": \"Karaoke\",\n  \"5046\": \"Soundproof-rooms\",\n  \"5047\": \"Packed Lunches\",\n  \"5048\": \"Ticket service\",\n  \"5049\": \"Entertainment Staff\",\n  \"5050\": \"Private Check-in/Check-out\",\n  \"5051\": \"Special Diet Menus (on request)\",\n  \"5052\": \"Vending Machine (drinks)\",\n  \"5053\": \"Hot Spring Bath\",\n  \"5055\": \"Minimarket on site\",\n  \"5057\": \"Adult only\",\n  \"5058\": \"Open-air bath\",\n  \"5059\": \"Public bath\",\n  \"5060\": \"Water slide\",\n  \"5061\": \"Board games/puzzles\",\n  \"5062\": \"Book/DVD/Music library for children\",\n  \"5063\": \"Indoor play area\",\n  \"5064\": \"Kids' outdoor play equipment\",\n  \"5065\": \"Baby safety gates\",\n  \"5066\": \"Children television networks\",\n  \"5067\": \"Kid meals\",\n  \"5068\": \"Kid-friendly buffet\",\n  \"5069\": \"Pool towels\",\n  \"5070\": \"Wine/Champagne\",\n  \"5071\": \"Bottle of water\",\n  \"5072\": \"Fruits\",\n  \"5073\": \"Chocolate/Cookies\",\n  \"5074\": \"Strollers\",\n  \"5075\": \"On-site coffee house\",\n  \"5076\": \"Sun loungers or beach chairs\",\n  \"5077\": \"Sun umbrellas\",\n  \"5078\": \"Picnic area\",\n  \"5079\": \"Beauty Services\",\n  \"5080\": \"Spa Facilities\",\n  \"5081\": \"Steam room\",\n  \"5082\": \"Spa lounge/relaxation area\",\n  \"5083\": \"Foot bath\",\n  \"5084\": \"Spa/wellness packages\",\n  \"5085\": \"Massage chair\",\n  \"5087\": \"Yoga classes\",\n  \"5088\": \"Fitness classes\",\n  \"5089\": \"Personal trainer\",\n  \"5090\": \"Fitness/spa locker rooms\",\n  \"5091\": \"Kids pool\",\n  \"5092\": \"Shuttle Service\",\n  \"5093\": \"Temporary art galleries\",\n  \"5094\": \"Pub crawls\",\n  \"5095\": \"Stand-up comedy\",\n  \"5096\": \"Movie nights\",\n  \"5097\": \"Walking tours\",\n  \"5098\": \"Bike tours\",\n  \"5099\": \"Themed dinner nights\",\n  \"5100\": \"Happy hour\",\n  \"5101\": \"Tour or class about local culture\",\n  \"5102\": \"Cooking class\",\n  \"5103\": \"Live music/performance\",\n  \"5104\": \"Live sports events (broadcast)\",\n  \"5105\": \"Archery\",\n  \"5106\": \"Aerobics\",\n  \"5107\": \"Bingo\",\n  \"5108\": \"Ski Shuttle\",\n  \"5109\": \"Outdoor Swimming Pool (all year)\",\n  \"5110\": \"Outdoor Swimming Pool (seasonal)\",\n  \"5111\": \"Indoor Swimming Pool (all year)\",\n  \"5112\": \"Indoor Swimming Pool (seasonal)\",\n  \"5113\": \"Swimming pool toys\",\n  \"5114\": \"Rooftop pool\",\n  \"5115\": \"Infinity pool\",\n  \"5116\": \"Pool with view\",\n  \"5117\": \"Salt-water pool\",\n  \"5118\": \"Plunge pool\",\n  \"5119\": \"Pool bar\",\n  \"5120\": \"Shallow end pool\",\n  \"5121\": \"Pool cover\",\n  \"5122\": \"Fence around pool\",\n  \"5124\": \"Property is wheel chair accessible\",\n  \"5125\": \"Toilet with grab rails\",\n  \"5126\": \"Higher level toilet\",\n  \"5127\": \"Low bathroom sink\",\n  \"5128\": \"Bathroom emergency pull cord\",\n  \"5129\": \"Visual aids: Braille\",\n  \"5130\": \"Visual aids: Tactile Signs\",\n  \"5131\": \"Auditory Guidance\",\n  \"5132\": \"Back massage\",\n  \"5133\": \"Neck massage\",\n  \"5134\": \"Foot massage\",\n  \"5135\": \"Couples massage\",\n  \"5136\": \"Head massage\",\n  \"5137\": \"Hand massage\",\n  \"5138\": \"Full body massage\",\n  \"5139\": \"Facial treatments\",\n  \"5140\": \"Waxing services\",\n  \"5141\": \"Make up services\",\n  \"5142\": \"Hair treatments\",\n  \"5143\": \"Manicure\",\n  \"5144\": \"Pedicure\",\n  \"5145\": \"Hair cut\",\n  \"5146\": \"Hair colouring\",\n  \"5147\": \"Hair styling\",\n  \"5148\": \"Body Treatments\",\n  \"5149\": \"Body scrub\",\n  \"5150\": \"Body wrap\",\n  \"5151\": \"Light therapy\",\n  \"5152\": \"Shuttle Service (free)\",\n  \"5153\": \"Shuttle Service (surcharge)\",\n  \"5156\": \"No Single-Use Toiletries\",\n  \"5157\": \"Towels Changed Upon Request\",\n  \"5158\": \"24-hour security\",\n  \"5159\": \"Security alarm\",\n  \"5160\": \"Smoke alarms\",\n  \"5161\": \"CCTV in common areas\",\n  \"5162\": \"CCTV outside property\",\n  \"5163\": \"Fire extinguishers\",\n  \"5164\": \"Key access\",\n  \"5165\": \"Key card access\",\n  \"5166\": \"Carbon monoxide detector\",\n  \"5167\": \"Carbon monoxide source\",\n  \"5168\": \"No plastic stirrers\",\n  \"5169\": \"No plastic straws\",\n  \"5170\": \"No plastic cups\",\n  \"5171\": \"No plastic bottles for water\",\n  \"5172\": \"No plastic bottles for non-water\",\n  \"5173\": \"No plastic cutlery\",\n  \"5174\": \"Keycard for room electricity\",\n  \"5175\": \"Opt-out from daily room cleaning\",\n  \"5176\": \"Refillable water stations\",\n  \"5177\": \"Bike rental\",\n  \"5178\": \"Bike parking\",\n  \"6000\": \"Lunch\",\n  \"6001\": \"Dinner\"\n}\n```\n\n<!-- type: tab-end -->"
-      properties:
-        code:
-          description: Unique identifier of this amenity according to the Open Travel Alliance HAC (Hotel Amenity Code) standard for hotels and RAC (Room Amenity Code) standard for rooms.
-          example: 1234
-          type: number
-        formatted:
-          description: A human-readable English description of the amenity.
-          example: WiFi
-          type: string
-      required:
-      - code
-      - formatted
-      title: Amenity
-      type: object
-      x-examples: {}
-      x-internal: false
-    hotelFullDetail:
-      description: Full details on a hotel, including its room types and available rates
-      properties:
-        address:
-          $ref: '#/components/schemas/address'
-        amenities:
-          items:
-            $ref: '#/components/schemas/amenity'
-          type: array
-        checkIn:
-          $ref: '#/components/schemas/timeRange'
-        checkOut:
-          $ref: '#/components/schemas/timeRange'
-        contractable:
-          description: 'This determines if you can negotiate directly with the hotel. '
-          example: true
-          type: boolean
-        createdAt:
-          description: Date and time (in UTC and ISO 8601 format) when the hotel's stable content (i.e. all the details of the hotel excluding its rates) was created.
-          example: '2020-01-01T10:36:25.267Z'
-          format: date-time
-          type: string
-        currency:
-          description: The standard currency code used by the hotel.
-          example: USD
-          type: string
-        description:
-          properties:
-            short:
-              description: A short description that helps highlight what's special about this hotel.
-              example: Don't expect anything fancy. This fictional example hotel has the bare minimum content, rate availability and features you can expect from any hotel on the Impala platform (https://impala.travel). It contains minimum photography at the minimum resolution, only the fields that you can expect to see on every hotel on the platform, and only one room type and rate. Testing with this hotel means your app works well in the rare cases where a hotel has only minimum content available.
-              type: string
-          type: object
-        emails:
-          items:
-            type: string
-          type: array
-        externalUrls:
-          items:
-            $ref: '#/components/schemas/externalUrl'
-          type: array
-        hotelId:
-          description: Unique identifier for this hotel within the Impala platform.
-          example: 60a06628-2c71-44bf-9685-efbd2df4179e
-          format: uuid
-          type: string
-        images:
-          description: Photos of the hotel, sorted in the recommended display order (e.g. for photo galleries) starting with the recommended hero image.
-          items:
-            $ref: '#/components/schemas/image'
-          type: array
-        location:
-          $ref: '#/components/schemas/location'
-        name:
-          description: Name of the hotel.
-          example: Impala Minimalist Palace
-          type: string
-        phoneNumbers:
-          description: The hotel's phone number(s)
-          items:
-            type: string
-          type: array
-        roomCount:
-          description: The number of rooms at the hotel.
-          example: 30
-          type: number
-        roomTypes:
-          description: List of room types available at this hotel.
-          items:
-            $ref: '#/components/schemas/roomType'
-          type: array
-        starRating:
-          description: The star rating (or star-equivalent rating)
-          example: 2.5
-          format: double
-          nullable: true
-          type: number
-        termsAndConditions:
-          description: Rules and terms that apply to this hotel and have to be shown to your guest before the make their booking.
-          example: Please note that passport details will be collected at check-in.
-          type: string
-        timezone:
-          description: The timezone the hotel is in - e.g AST
-          example: ATC
-          type: string
-        updatedAt:
-          description: Date and time (in UTC and ISO 8601 format) when the hotel's stable content (i.e. all the details of the hotel excluding its rates)  was last updated.
-          example: '2020-11-27T10:46:35.569Z'
-          format: date-time
-          type: string
-        websiteUrl:
-          description: The URL to the hotel's website.
-          nullable: true
-          type: string
-      required:
-      - hotelId
-      - name
-      - starRating
-      - currency
-      - websiteUrl
-      - externalUrls
-      - phoneNumbers
-      - emails
-      - images
-      - address
-      - location
-      - amenities
-      - roomTypes
-      - roomCount
-      - checkIn
-      - checkOut
-      - contractable
-      - termsAndConditions
-      title: Hotel information (full)
-      type: object
-      x-examples: {}
-    validationError:
-      allOf:
-      - $ref: '#/components/schemas/genericError'
-      - properties:
-          validations:
-            items:
-              $ref: '#/components/schemas/validationResult'
-            type: array
-        type: object
-      title: Validation error response
-      x-examples: {}
-    rateComponent:
-      description: Product or service offered as part of a rate in addition to accommodation in the room.
-      properties:
-        formatted:
-          description: Human-readable plain English version of the component included in the rate, ready to be shown to your guests.
-          example: breakfast
-          type: string
-        includedInRate:
-          type: boolean
-        type:
-          description: The type of product or service included in the price. We currently support rates including "BREAKFAST", "LUNCH", "DINNER" and "ALL_INCLUSIVE".
-          enum:
-          - BREAKFAST
-          - LUNCH
-          - DINNER
-          - WELCOME_BEVERAGE
-          - ALL_INCLUSIVE
-          example: BREAKFAST
-          type: string
-      required:
-      - formatted
-      - type
-      title: Rate component
-      type: object
-      x-examples: {}
-    cancellationPolicy:
-      description: A rule that applies if the booking is cancelled.
-      properties:
-        end:
-          description: The time (in the hotel's local timezone) at which the policy takes effect, in ISO 8601 format. If omitted, the policy applies open-ended until the guests' stay.
-          example: '2020-12-17 23:59:59.999'
-          type: string
-        fee:
-          $ref: '#/components/schemas/cancellationFee'
-        formatted:
-          description: Human-readable plain English cancellation policy information, ready to be shown to your guests.
-          example: Non-refundable after October 19, 2021 00:00
-          type: string
-        start:
-          description: The time (in the hotel's local timezone) at which the policy takes effect, in ISO 8601 format. If omitted, the policy is already in effect.
-          example: '2020-12-15 23:59:59.999'
-          type: string
-      required:
-      - start
-      - formatted
-      - fee
-      title: Cancellation policy
-      type: object
-    cancellationFee:
-      description: Describes the costs associated with a cancellation and how it is calculated.
-      properties:
-        count:
-          description: The value that is used in calculation of the cost. This could be 50 in case of a 50% fee being charged for a type "PERCENTAGE" or 2 in case of the initial two nights of the stay being charged in full as a fee if the type is "NIGHTS".
-          example: 100
-          type: number
-        price:
-          $ref: '#/components/schemas/money'
-        type:
-          description: The way in which the cancellation fee is calculated. This can be "NONE" in case a full refund is paid out, "NON_REFUNDABLE" if no refund is paid out and the full amount is due, "PERCENTAGE" if a percentage of the total price for the stay is charged as cancellation fee, "NIGHTS" if a defined number of initial nights of the stay are charged in full as cancellation fee or "FLAT" in case a flat cancellation fee is charged.
-          enum:
-          - NON_REFUNDABLE
-          - PERCENTAGE
-          - NONE
-          - NIGHTS
-          - FLAT
-          example: PERCENTAGE
-          type: string
-      required:
-      - type
-      - price
-      title: Cancellation fee
-      type: object
-      x-examples:
-        example-1:
-          count: 100
-          price:
-            amount: 9500
-            currency:
-              code: EUR
-          type: PERCENTAGE
-    hotelAgreementStub:
-      description: Essential information on an agreement with a hotel.
-      nullable: true
-      properties:
-        conditions:
-          description: A deal may have conditions set to it. For example, the deal may only apply for a closed user group (PRIVATE_RATE) or sold along with another component e.g flights (PACKAGED)
-          items:
-            example: PRIVATE_RATE
-            type: string
-          type: array
-        dealId:
-          description: The unique identifier for this deal request.
-          example: D1234
-          type: string
-        dealsSellable:
-          description: 'There is a limit to the number of deals that can be sold. '
-          properties:
-            remaining:
-              description: The amount of deals remaining that can sold.
-              example: 5
-              type: number
-          type: object
-        discount:
-          description: Rather than selling the hotel's generally available public rates, if a discount is agreed on, bookings made with this deal will have a reduced rate.
-          example:
-            count: 10
-            type: PERCENTAGE
-          properties:
-            count:
-              description: This is the amount of discount received.
-              example: 10
-              type: number
-            type:
-              description: 'This is the type of discount which can be: PERCENTAGE or FLAT_FEE.'
-              example: FLATFEE
-              type: string
-          type: object
-        hotelAgreementId:
-          description: Unique identifier for the hotel agreement.
-          example: A82983
-          type: string
-        href:
-          description: URI that allows access to the full deal information.
-          example: v1/deal-requests/D1234/agreements/A76543
-          type: string
-        specialInstructions:
-          description: 'These are conditions set by you the seller or the hotel for which the deal can be sold. For example: this deal can only be sold on mobile. Any specialInstructions will override other variables, for example, if an instruction includes: All bookings are non refundable, this will override any pre-existing cancellationPolicy.'
-          example: This deal can only be sold via desktop (not allowed for mobile apps)
-          nullable: true
-          type: string
-      required:
-      - hotelAgreementId
-      - dealId
-      - specialInstructions
-      title: Hotel Agreement (stub)
-      type: object
-      x-examples: {}
-    taxOrFee:
-      description: Details of a tax or fee (included or excluded in a rate).
-      properties:
-        category:
-          description: Structured information on what type the type of tax or fee.
-          enum:
-          - VAT
-          - CITY_TAX
-          - OTHER
-          minLength: 1
-          type: string
-        charges:
-          $ref: '#/components/schemas/money'
-        formatted:
-          description: Formatted English description of this tax or fee, ready to be shown to your guests.
-          example: 10% VAT
-          minLength: 1
-          type: string
-      title: Tax / fee
-      type: object
-    pagination:
-      description: Information that helps paginate through lists of resources.
-      properties:
-        count:
-          description: The number of items returned on this page.
-          example: 10
-          format: int32
-          type: number
-        next:
-          description: The absolute URL pointing to the next page. Will be null if there are no next pages.
-          example: /v1/sample?size=20&offset=120
-          nullable: true
-          type: string
-        prev:
-          description: The absolute URL pointing to the previous page. Will be null if there are no previous pages.
-          example: /v1/sample?size=20&offset=80
-          nullable: true
-          type: string
-        total:
-          description: The total number of items that exist for your query across all pages.
-          example: 1500
-          format: int32
-          type: number
-      required:
-      - count
-      - total
-      - next
-      - prev
-      title: Pagination information
-      type: object
-    validationResult:
-      description: Describes the validation that failed.
-      properties:
-        code:
-          description: Error code intended for logging and debugging.
-          example: ANY_REQUIRED
-          type: string
-        field:
-          description: Name of the field that has failed to validate. Intended to aid developers in finding and fixing implementation mistakes.
-          example: start
-          type: string
-        message:
-          description: Error message in English intended to aid developers in finding and solving implementation mistakes. Do not display to your guests as it **might contain sensitive implementation information**.
-          example: '"start" is required'
-          type: string
-      required:
-      - message
-      - code
-      title: Validation result
-      type: object
-      x-examples: {}
-    location:
-      description: Precise location on a map (using WGS 84 longitude and latitude notation)
-      properties:
-        latitude:
-          description: WGS 84 latitude.
-          example: 58.386186
-          type: number
-        longitude:
-          description: WGS 84 longitude.
-          example: -9.952549
-          type: number
-      required:
-      - latitude
-      - longitude
-      title: Location
-      type: object
-    timeRange:
-      description: A time range. Open-ended time ranges are indicated by omitting either `start` or `end` in the object.
-      example:
-        from: '12:00'
-        to: '21:00'
-      properties:
-        from:
-          description: Time in ISO 8601 time format.
-          example: '13:00'
-          type: string
-        to:
-          description: Time in ISO 8601 time format.
-          example: '21:00'
-          type: string
-      title: Time range
-      type: object
-    image:
-      properties:
-        altText:
-          description: Alternative text for the image (to be used e.g. to cater to screenreaders).
-          example: A photo of an object
-          nullable: true
-          type: string
-        height:
-          description: Height in pixels.
-          example: 4000
-          type: number
-        url:
-          description: The url of this image. The url of an image might change over time, and we therefore advise not to store or cache image URLs within your app beyond a few minutes.
-          example: https://cdn.impala.travel/ckhlsuxbb000b3b666rr9ussq.jpg
-          format: uri
-          type: string
-        width:
-          description: Width in pixels.
-          example: 4000
-          type: number
-      required:
-      - height
-      - width
-      - url
-      title: Image
-      type: object
-      x-examples: {}
-    genericError:
-      properties:
-        code:
-          description: Error code for you to use programatically, for error logging and debugging.
-          example: ERROR_CODE
-          type: string
-        message:
-          description: Error message intended to aid developers in debugging issues. We strongly advise against displaying this information publicly to your guests as it **might contain sensitive implementation details**.
-          example: Resource not found
-          type: string
-      required:
-      - message
-      title: Error response
-      type: object
-    externalUrl:
-      properties:
-        name:
-          description: Destination of the external url
-          enum:
-          - BOOKING.COM
-          - HOTELS.COM
-        url:
-          description: Value of the external url
-          type: string
-      type: object
   examples:
     ExampleHotel:
       value:
@@ -2090,14 +1407,6 @@ components:
         termsAndConditions: ''
         updatedAt: '2021-02-17T09:07:41.615Z'
         websiteUrl: https://impala-all-avaialable-resort.hotel/
-    NoHotelsAvailable:
-      value:
-        data: []
-        pagination:
-          count: 0
-          next: null
-          prev: null
-          total: 0
     ExampleHotels:
       value:
         data:
@@ -3119,6 +2428,692 @@ components:
           termsAndConditions: ''
           updatedAt: '2021-02-17T09:07:41.615Z'
           websiteUrl: https://impala-all-avaialable-resort.hotel/
+    NoHotelsAvailable:
+      value:
+        data: []
+        pagination:
+          count: 0
+          next: null
+          prev: null
+          total: 0
+  schemas:
+    cancellationFee:
+      description: Describes the costs associated with a cancellation and how it is calculated.
+      properties:
+        count:
+          description: The value that is used in calculation of the cost. This could be 50 in case of a 50% fee being charged for a type "PERCENTAGE" or 2 in case of the initial two nights of the stay being charged in full as a fee if the type is "NIGHTS".
+          example: 100
+          type: number
+        price:
+          $ref: '#/components/schemas/money'
+        type:
+          description: The way in which the cancellation fee is calculated. This can be "NONE" in case a full refund is paid out, "NON_REFUNDABLE" if no refund is paid out and the full amount is due, "PERCENTAGE" if a percentage of the total price for the stay is charged as cancellation fee, "NIGHTS" if a defined number of initial nights of the stay are charged in full as cancellation fee or "FLAT" in case a flat cancellation fee is charged.
+          enum:
+          - NON_REFUNDABLE
+          - PERCENTAGE
+          - NONE
+          - NIGHTS
+          - FLAT
+          example: PERCENTAGE
+          type: string
+      required:
+      - type
+      - price
+      title: Cancellation fee
+      type: object
+      x-examples:
+        example-1:
+          count: 100
+          price:
+            amount: 9500
+            currency:
+              code: EUR
+          type: PERCENTAGE
+    rateComponent:
+      description: Product or service offered as part of a rate in addition to accommodation in the room.
+      properties:
+        formatted:
+          description: Human-readable plain English version of the component included in the rate, ready to be shown to your guests.
+          example: breakfast
+          type: string
+        includedInRate:
+          type: boolean
+        type:
+          description: The type of product or service included in the price. We currently support rates including "BREAKFAST", "LUNCH", "DINNER" and "ALL_INCLUSIVE".
+          enum:
+          - BREAKFAST
+          - LUNCH
+          - DINNER
+          - WELCOME_BEVERAGE
+          - ALL_INCLUSIVE
+          example: BREAKFAST
+          type: string
+      required:
+      - formatted
+      - type
+      title: Rate component
+      type: object
+      x-examples: {}
+    location:
+      description: Precise location on a map (using WGS 84 longitude and latitude notation)
+      properties:
+        latitude:
+          description: WGS 84 latitude.
+          example: 58.386186
+          type: number
+        longitude:
+          description: WGS 84 longitude.
+          example: -9.952549
+          type: number
+      required:
+      - latitude
+      - longitude
+      title: Location
+      type: object
+    genericError:
+      properties:
+        code:
+          description: Error code for you to use programatically, for error logging and debugging.
+          example: ERROR_CODE
+          type: string
+        message:
+          description: Error message intended to aid developers in debugging issues. We strongly advise against displaying this information publicly to your guests as it **might contain sensitive implementation details**.
+          example: Resource not found
+          type: string
+      required:
+      - message
+      title: Error response
+      type: object
+    cancellationPolicy:
+      description: A rule that applies if the booking is cancelled.
+      properties:
+        end:
+          description: The time (in the hotel's local timezone) at which the policy takes effect, in ISO 8601 format. If omitted, the policy applies open-ended until the guests' stay.
+          example: '2020-12-17 23:59:59.999'
+          type: string
+        fee:
+          $ref: '#/components/schemas/cancellationFee'
+        formatted:
+          description: Human-readable plain English cancellation policy information, ready to be shown to your guests.
+          example: Non-refundable after October 19, 2021 00:00
+          type: string
+        start:
+          description: The time (in the hotel's local timezone) at which the policy takes effect, in ISO 8601 format. If omitted, the policy is already in effect.
+          example: '2020-12-15 23:59:59.999'
+          type: string
+      required:
+      - start
+      - formatted
+      - fee
+      title: Cancellation policy
+      type: object
+    address:
+      description: Physical address
+      properties:
+        city:
+          example: Impalaland
+          type: string
+        country:
+          description: Three-character country code in ISO alpha-3 format.
+          example: GBR
+          type: string
+        countryName:
+          description: English name of the country.
+          example: United Kingdom
+          type: string
+        line1:
+          description: First line of the address.
+          example: 12 Sample Avenue
+          type: string
+        line2:
+          description: Second line of the address.
+          type:
+          - string
+          - 'null'
+        postalCode:
+          example: '12345'
+          type: string
+        region:
+          type:
+          - string
+          - 'null'
+      required:
+      - line1
+      - city
+      - country
+      - countryName
+      - postalCode
+      title: Address
+      type: object
+    taxOrFee:
+      description: Details of a tax or fee (included or excluded in a rate).
+      properties:
+        category:
+          description: Structured information on what type the type of tax or fee.
+          enum:
+          - VAT
+          - CITY_TAX
+          - OTHER
+          minLength: 1
+          type: string
+        charges:
+          $ref: '#/components/schemas/money'
+        formatted:
+          description: Formatted English description of this tax or fee, ready to be shown to your guests.
+          example: 10% VAT
+          minLength: 1
+          type: string
+      title: Tax / fee
+      type: object
+    validationError:
+      allOf:
+      - $ref: '#/components/schemas/genericError'
+      - properties:
+          validations:
+            items:
+              $ref: '#/components/schemas/validationResult'
+            type: array
+        type: object
+      title: Validation error response
+      x-examples: {}
+    pagination:
+      description: Information that helps paginate through lists of resources.
+      properties:
+        count:
+          description: The number of items returned on this page.
+          example: 10
+          format: int32
+          type: number
+        next:
+          description: The absolute URL pointing to the next page. Will be null if there are no next pages.
+          example: /v1/sample?size=20&offset=120
+          type:
+          - string
+          - 'null'
+        prev:
+          description: The absolute URL pointing to the previous page. Will be null if there are no previous pages.
+          example: /v1/sample?size=20&offset=80
+          type:
+          - string
+          - 'null'
+        total:
+          description: The total number of items that exist for your query across all pages.
+          example: 1500
+          format: int32
+          type: number
+      required:
+      - count
+      - total
+      - next
+      - prev
+      title: Pagination information
+      type: object
+    roomType:
+      description: Bookable category of bookable rooms within a hotel
+      properties:
+        amenities:
+          items:
+            $ref: '#/components/schemas/amenity'
+          type: array
+        description:
+          description: Description
+          example: Modern room with plenty of natural light and modern furniture.
+          type: string
+        images:
+          description: Lists photos of this room type
+          items:
+            $ref: '#/components/schemas/image'
+          type: array
+        maxOccupancy:
+          description: Maximum number of adults that can occupy the room.
+          example: 4
+          type: integer
+        name:
+          description: Name
+          example: Standard Room
+          type: string
+        rates:
+          description: Bookable rates for this room type and the start and end dates of your availability search.
+          items:
+            $ref: '#/components/schemas/rate'
+          type: array
+        roomTypeId:
+          description: Unique identifier of the room type within the Impala platform.
+          example: d5b192ce-c45f-46da-abf5-3880b429b7cc
+          format: uuid
+          type: string
+      required:
+      - roomTypeId
+      - name
+      - description
+      - maxOccupancy
+      - amenities
+      - images
+      title: Room type
+      type: object
+    validationResult:
+      description: Describes the validation that failed.
+      properties:
+        code:
+          description: Error code intended for logging and debugging.
+          example: ANY_REQUIRED
+          type: string
+        field:
+          description: Name of the field that has failed to validate. Intended to aid developers in finding and fixing implementation mistakes.
+          example: start
+          type: string
+        message:
+          description: Error message in English intended to aid developers in finding and solving implementation mistakes. Do not display to your guests as it **might contain sensitive implementation information**.
+          example: '"start" is required'
+          type: string
+      required:
+      - message
+      - code
+      title: Validation result
+      type: object
+      x-examples: {}
+    rate:
+      description: Information on the price of the room, other components of the room (such as breakfast, lunch or a welcome drink) and the cancellation policies that apply.
+      properties:
+        cancellationPolicies:
+          items:
+            $ref: '#/components/schemas/cancellationPolicy'
+          minItems: 1
+          type: array
+          uniqueItems: true
+        components:
+          items:
+            $ref: '#/components/schemas/rateComponent'
+          minItems: 0
+          type: array
+          uniqueItems: true
+        end:
+          example: '2021-11-23'
+          format: date
+          minLength: 1
+          type: string
+        hotelAgreement:
+          $ref: '#/components/schemas/hotelAgreementStub'
+        maxOccupancy:
+          description: Maximum number of adults included in the rate.
+          example: 2
+          type: integer
+        rateId:
+          example: 3rX3IaqkpJaPlttxoFoM3uDcHJEZCAuByqfBSLUPMvkBGyu7IAlhbxl3rZ7cVmVj6TbXL4EfiHlTA
+          minLength: 1
+          type: string
+        ratePlanId:
+          description: The rate plan ID that is attached to this rate. Each rate plan ID can specify a unique combination of a cancellation policy and a meal plan.
+          example: 1
+          type: integer
+        retailRate:
+          description: The public retail rate you should quote and charge your guest. You're not allowed to quote or charge an amount lower than this if your website or app is publicly accessible.
+          properties:
+            taxesAndFees:
+              description: Breakdown of taxes (e.g. VAT, city tax) and fees (e.g. cleaning or resort fees).
+              properties:
+                includedInRate:
+                  description: Taxes and fees that are included in the `retailRate.total` price paid at the time of booking.
+                  items:
+                    $ref: '#/components/schemas/taxOrFee'
+                  minItems: 0
+                  type: array
+                payAtHotel:
+                  description: Taxes and fees that need to be payed at the hotel (often upon arrival or departure). This frequently happens for fees that only need to be collected based on certain conditions (e.g. a guest coming from abroad or being older than a certain age).
+                  items:
+                    $ref: '#/components/schemas/taxOrFee'
+                  minItems: 0
+                  type: array
+              type: object
+            total:
+              $ref: '#/components/schemas/money'
+          required:
+          - total
+          - taxesAndFees
+          type: object
+        roomsSellable:
+          description: Amount of rooms which can be sold for this occupancy level and room type at this rate price.
+          type: number
+        sellerCommissionPercentage:
+          description: The commission percentage you as a seller will earn from this booking, based on `retailRate.total`.
+          example: 9.5
+          format: float
+          type: number
+        sellerToImpalaPayment:
+          allOf:
+          - $ref: '#/components/schemas/money'
+          description: This is the amount payable to the hotel, which Impala will collect from you on the hotel's behalf. The Impala fee will be requested in addition to this, and also documented in a VAT invoice.
+        start:
+          example: '2021-11-20'
+          format: date
+          minLength: 1
+          type: string
+      required:
+      - rateId
+      - start
+      - end
+      - hotelAgreement
+      - maxOccupancy
+      - retailRate
+      - sellerCommissionPercentage
+      - components
+      - cancellationPolicies
+      title: Room rate
+      type: object
+      x-examples:
+        Example:
+          cancellationPolicies:
+          - end: '2020-12-17 23:59:59.999'
+            fee:
+              count: 100
+              price:
+                amount: 9500
+                currency:
+                  code: EUR
+              type: PERCENTAGE
+            formatted: Non-refundable after October 19, 2021 00:00
+            start: '2020-12-15 23:59:59.999'
+          components:
+          - formatted: Breakfast
+            includedInRate: true
+            type: BREAKFAST
+          end: '2021-11-23'
+          rateId: dBFo
+          ratePlanId: 1
+          retailRate:
+            total:
+              amount: 9500
+              currency:
+                code: EUR
+          roomsSellable: 100
+          sellerCommissionPercentage: 9.5
+          sellerToImpalaPayment:
+            amount: 8598
+            currency:
+              code: EUR
+          start: '2021-11-20'
+    hotelAgreementStub:
+      description: Essential information on an agreement with a hotel.
+      properties:
+        conditions:
+          description: A deal may have conditions set to it. For example, the deal may only apply for a closed user group (PRIVATE_RATE) or sold along with another component e.g flights (PACKAGED)
+          items:
+            example: PRIVATE_RATE
+            type: string
+          type: array
+        dealId:
+          description: The unique identifier for this deal request.
+          example: D1234
+          type: string
+        dealsSellable:
+          description: 'There is a limit to the number of deals that can be sold. '
+          properties:
+            remaining:
+              description: The amount of deals remaining that can sold.
+              example: 5
+              type: number
+          type: object
+        discount:
+          description: Rather than selling the hotel's generally available public rates, if a discount is agreed on, bookings made with this deal will have a reduced rate.
+          example:
+            count: 10
+            type: PERCENTAGE
+          properties:
+            count:
+              description: This is the amount of discount received.
+              example: 10
+              type: number
+            type:
+              description: 'This is the type of discount which can be: PERCENTAGE or FLAT_FEE.'
+              example: FLATFEE
+              type: string
+          type: object
+        hotelAgreementId:
+          description: Unique identifier for the hotel agreement.
+          example: A82983
+          type: string
+        href:
+          description: URI that allows access to the full deal information.
+          example: v1/deal-requests/D1234/agreements/A76543
+          type: string
+        specialInstructions:
+          description: 'These are conditions set by you the seller or the hotel for which the deal can be sold. For example: this deal can only be sold on mobile. Any specialInstructions will override other variables, for example, if an instruction includes: All bookings are non refundable, this will override any pre-existing cancellationPolicy.'
+          example: This deal can only be sold via desktop (not allowed for mobile apps)
+          type:
+          - string
+          - 'null'
+      required:
+      - hotelAgreementId
+      - dealId
+      - specialInstructions
+      title: Hotel Agreement (stub)
+      type:
+      - object
+      - 'null'
+      x-examples: {}
+    image:
+      properties:
+        altText:
+          description: Alternative text for the image (to be used e.g. to cater to screenreaders).
+          example: A photo of an object
+          type:
+          - string
+          - 'null'
+        height:
+          description: Height in pixels.
+          example: 4000
+          type: number
+        url:
+          description: The url of this image. The url of an image might change over time, and we therefore advise not to store or cache image URLs within your app beyond a few minutes.
+          example: https://cdn.impala.travel/ckhlsuxbb000b3b666rr9ussq.jpg
+          format: uri
+          type: string
+        width:
+          description: Width in pixels.
+          example: 4000
+          type: number
+      required:
+      - height
+      - width
+      - url
+      title: Image
+      type: object
+      x-examples: {}
+    hotelFullDetail:
+      description: Full details on a hotel, including its room types and available rates
+      properties:
+        address:
+          $ref: '#/components/schemas/address'
+        amenities:
+          items:
+            $ref: '#/components/schemas/amenity'
+          type: array
+        checkIn:
+          $ref: '#/components/schemas/timeRange'
+        checkOut:
+          $ref: '#/components/schemas/timeRange'
+        contractable:
+          description: 'This determines if you can negotiate directly with the hotel. '
+          example: true
+          type: boolean
+        createdAt:
+          description: Date and time (in UTC and ISO 8601 format) when the hotel's stable content (i.e. all the details of the hotel excluding its rates) was created.
+          example: '2020-01-01T10:36:25.267Z'
+          format: date-time
+          type: string
+        currency:
+          description: The standard currency code used by the hotel.
+          example: USD
+          type: string
+        description:
+          properties:
+            short:
+              description: A short description that helps highlight what's special about this hotel.
+              example: Don't expect anything fancy. This fictional example hotel has the bare minimum content, rate availability and features you can expect from any hotel on the Impala platform (https://impala.travel). It contains minimum photography at the minimum resolution, only the fields that you can expect to see on every hotel on the platform, and only one room type and rate. Testing with this hotel means your app works well in the rare cases where a hotel has only minimum content available.
+              type: string
+          type: object
+        emails:
+          items:
+            type: string
+          type: array
+        externalUrls:
+          items:
+            $ref: '#/components/schemas/externalUrl'
+          type: array
+        hotelId:
+          description: Unique identifier for this hotel within the Impala platform.
+          example: 60a06628-2c71-44bf-9685-efbd2df4179e
+          format: uuid
+          type: string
+        images:
+          description: Photos of the hotel, sorted in the recommended display order (e.g. for photo galleries) starting with the recommended hero image.
+          items:
+            $ref: '#/components/schemas/image'
+          type: array
+        location:
+          $ref: '#/components/schemas/location'
+        name:
+          description: Name of the hotel.
+          example: Impala Minimalist Palace
+          type: string
+        phoneNumbers:
+          description: The hotel's phone number(s)
+          items:
+            type: string
+          type: array
+        roomCount:
+          description: The number of rooms at the hotel.
+          example: 30
+          type: number
+        roomTypes:
+          description: List of room types available at this hotel.
+          items:
+            $ref: '#/components/schemas/roomType'
+          type: array
+        starRating:
+          description: The star rating (or star-equivalent rating)
+          example: 2.5
+          format: double
+          type:
+          - number
+          - 'null'
+        termsAndConditions:
+          description: Rules and terms that apply to this hotel and have to be shown to your guest before the make their booking.
+          example: Please note that passport details will be collected at check-in.
+          type: string
+        timezone:
+          description: The timezone the hotel is in - e.g AST
+          example: ATC
+          type: string
+        updatedAt:
+          description: Date and time (in UTC and ISO 8601 format) when the hotel's stable content (i.e. all the details of the hotel excluding its rates)  was last updated.
+          example: '2020-11-27T10:46:35.569Z'
+          format: date-time
+          type: string
+        websiteUrl:
+          description: The URL to the hotel's website.
+          type:
+          - string
+          - 'null'
+      required:
+      - hotelId
+      - name
+      - starRating
+      - currency
+      - websiteUrl
+      - externalUrls
+      - phoneNumbers
+      - emails
+      - images
+      - address
+      - location
+      - amenities
+      - roomTypes
+      - roomCount
+      - checkIn
+      - checkOut
+      - contractable
+      - termsAndConditions
+      title: Hotel information (full)
+      type: object
+      x-examples: {}
+    amenity:
+      description: "<!--\ntype: tab\ntitle: Description\n-->\nFeature or facility available in the hotel or room type. For the full list of property and room amenity codes, you can click on the \"Room Amenities\" and \"Property Amenities\" tab.\n\n<!--\ntype: tab\ntitle: Room Amenities\n-->\nBelow you will find a list of all room amenities in JSON format.\n```json\n{\n  \"2\": \"Air conditioning\",\n  \"3\": \"Alarm clock\",\n  \"5\": \"AM/FM radio\",\n  \"8\": \"Barbeque grills\",\n  \"9\": \"Bath tub with spray jets\",\n  \"10\": \"Bathrobe\",\n  \"11\": \"Bathroom amenities (free toiletries)\",\n  \"13\": \"Bathtub\",\n  \"14\": \"Bathtub only\",\n  \"15\": \"Bath or Shower\",\n  \"16\": \"Bidet\",\n  \"18\": \"Cable television\",\n  \"19\": \"Coffee/Tea maker\",\n  \"20\": \"Color television\",\n  \"21\": \"Computer\",\n  \"22\": \"Connecting rooms\",\n  \"25\": \"Cordless phone\",\n  \"28\": \"Desk\",\n  \"29\": \"Desk with lamp\",\n  \"32\": \"Dishwasher\",\n  \"38\": \"Fax machine\",\n  \"41\": \"Fireplace\",\n  \"46\": \"Free movies/video\",\n  \"47\": \"Full kitchen\",\n  \"49\": \"Grecian tub\",\n  \"50\": \"Hairdryer\",\n  \"54\": \"Internet access\",\n  \"55\": \"Iron (ironing facilities)\",\n  \"56\": \"Ironing board\",\n  \"57\": \"Whirpool\",\n  \"59\": \"Kitchen\",\n  \"60\": \"Kitchen supplies\",\n  \"61\": \"Kitchenette\",\n  \"63\": \"Laptop\",\n  \"64\": \"Large desk\",\n  \"68\": \"Microwave\",\n  \"69\": \"Minibar\",\n  \"72\": \"Multi-line phone\",\n  \"77\": \"Oven\",\n  \"78\": \"Pay per view movies on TV\",\n  \"80\": \"Phone in bathroom\",\n  \"81\": \"Plates and bowls\",\n  \"85\": \"Private bathroom\",\n  \"88\": \"Refrigerator\",\n  \"89\": \"Refrigerator with ice maker\",\n  \"92\": \"Safe\",\n  \"94\": \"Separate closet\",\n  \"97\": \"Shower only\",\n  \"98\": \"Silverware/utensils\",\n  \"99\": \"Sitting area\",\n  \"103\": \"Speaker phone\",\n  \"105\": \"Stove\",\n  \"108\": \"Telephone for hearing impaired\",\n  \"115\": \"VCR movies\",\n  \"117\": \"Video games\",\n  \"119\": \"Wake-up calls\",\n  \"123\": \"Wireless internet connection\",\n  \"126\": \"Air conditioning individually controlled in room\",\n  \"127\": \"Bathtub & whirlpool separate\",\n  \"129\": \"CD  player\",\n  \"133\": \"Desk with electrical outlet\",\n  \"138\": \"Marble bathroom\",\n  \"139\": \"List of movie channels available\",\n  \"141\": \"Oversized bathtub\",\n  \"142\": \"Shower\",\n  \"144\": \"Soundproofed room\",\n  \"146\": \"Tables and chairs\",\n  \"147\": \"Two-line phone\",\n  \"149\": \"Washer/dryer\",\n  \"155\": \"Separate tub and shower\",\n  \"157\": \"Ceiling fan\",\n  \"158\": \"CNN available\",\n  \"162\": \"Closets in room\",\n  \"163\": \"DVD player\",\n  \"164\": \"Mini-refrigerator\",\n  \"166\": \"Self-controlled heating/cooling system\",\n  \"167\": \"Toaster\",\n  \"193\": \"Shared bathroom\",\n  \"194\": \"Telephone TDD/Textphone\",\n  \"210\": \"Satellite television\",\n  \"214\": \"iPod docking station\",\n  \"217\": \"Satellite radio\",\n  \"218\": \"Video on demand\",\n  \"220\": \"Gulf view\",\n  \"223\": \"Mountain view\",\n  \"224\": \"Ocean view\",\n  \"228\": \"Slippers\",\n  \"230\": \"Chair provided with desk\",\n  \"234\": \"Luxury linen type\",\n  \"245\": \"Private pool\",\n  \"246\": \"High Definition (HD) Flat Panel Television  - 32 inches or greater\",\n  \"251\": \"TV\",\n  \"254\": \"Video game player:\",\n  \"256\": \"Dining room seats\",\n  \"258\": \"Mobile/cellular phones\",\n  \"259\": \"Movies\",\n  \"260\": \"Multiple closets\",\n  \"262\": \"Safe large enough to accommodate a laptop\",\n  \"265\": \"Bluray player\",\n  \"268\": \"Non-allergenic room\",\n  \"270\": \"Seating area with sofa/chair\",\n  \"271\": \"Separate toilet area\",\n  \"273\": \"Widescreen TV\",\n  \"276\": \"Separate tub or shower\",\n  \"249\": \"Double (Bed)\",\n  \"200\": \"Futon Mat\",\n  \"58\": \"Extra large Double\",\n  \"86\": \"Large Double\",\n  \"102\": \"Sofa Bed\",\n  \"113\": \"Twin (bed)\",\n  \"203\": \"Single (bed)\",\n  \"4001\": \"Bunk bed\",\n  \"5001\": \"Coffee/Tea maker\",\n  \"5002\": \"Internet facilities\",\n  \"5003\": \"Mini-bar\",\n  \"5004\": \"Shower\",\n  \"5005\": \"Bath\",\n  \"5006\": \"Safe Deposit Box\",\n  \"5007\": \"Pay-per-view Channels\",\n  \"5008\": \"TV\",\n  \"5009\": \"Telephone\",\n  \"5010\": \"Fax\",\n  \"5011\": \"Airconditioning\",\n  \"5012\": \"Hair Dryer\",\n  \"5013\": \"Wake Up Service/Alarm-clock\",\n  \"5014\": \"Hot Tub\",\n  \"5015\": \"Clothing Iron\",\n  \"5016\": \"Kitchenette\",\n  \"5017\": \"Balcony\",\n  \"5018\": \"Trouser Press\",\n  \"5019\": \"Bath-robe\",\n  \"5020\": \"Spa Bath\",\n  \"5021\": \"Radio\",\n  \"5022\": \"Refrigerator\",\n  \"5023\": \"Desk\",\n  \"5024\": \"Shared Bathroom\",\n  \"5025\": \"Ironing facilities\",\n  \"5026\": \"Seating area\",\n  \"5027\": \"Free Toiletries\",\n  \"5028\": \"DVD-Player\",\n  \"5029\": \"CD-Player\",\n  \"5030\": \"Fan\",\n  \"5031\": \"Toilet\",\n  \"5032\": \"Microwave\",\n  \"5033\": \"Dishwasher\",\n  \"5034\": \"Washing machine\",\n  \"5035\": \"Video\",\n  \"5036\": \"Video Games\",\n  \"5037\": \"Patio\",\n  \"5038\": \"Bathroom\",\n  \"5039\": \"Extra long beds (> 2 meter)\",\n  \"5040\": \"Heating\",\n  \"5041\": \"Dressing room\",\n  \"5042\": \"Guest toilet\",\n  \"5043\": \"Slippers\",\n  \"5044\": \"Satellite Channels\",\n  \"5045\": \"Kitchen\",\n  \"5046\": \"Wireless internet\",\n  \"5068\": \"Cable channels\",\n  \"5069\": \"Bath or Shower\",\n  \"5070\": \"Carpeted Floor\",\n  \"5071\": \"Fireplace\",\n  \"5072\": \"Additional Toilet\",\n  \"5073\": \"Interconnecting Room(s) available\",\n  \"5074\": \"Laptop Safe Box\",\n  \"5075\": \"Flat-screen TV\",\n  \"5076\": \"Private Entrance\",\n  \"5077\": \"Sofa\",\n  \"5079\": \"Soundproofing\",\n  \"5080\": \"Tiled / Marble floor\",\n  \"5081\": \"View\",\n  \"5082\": \"Wooden / Parquet floor\",\n  \"5083\": \"Wake Up Service\",\n  \"5084\": \"Alarm Clock\",\n  \"5085\": \"Dining Area\",\n  \"5086\": \"Electric Kettle\",\n  \"5087\": \"Executive Lounge Access\",\n  \"5088\": \"iPod Docking Station\",\n  \"5089\": \"Kitchenware\",\n  \"5090\": \"Mosquito Net\",\n  \"5091\": \"Towels/Linens at surcharge\",\n  \"5092\": \"Sauna\",\n  \"5093\": \"Private Pool\",\n  \"5094\": \"Tumble dryer (machine)\",\n  \"5095\": \"Wardrobe/Closet\",\n  \"5096\": \"Oven\",\n  \"5097\": \"Stove\",\n  \"5098\": \"Toaster\",\n  \"5099\": \"Barbecue\",\n  \"5100\": \"Bidet\",\n  \"5101\": \"Computer\",\n  \"5102\": \"iPad\",\n  \"5103\": \"Game Console\",\n  \"5104\": \"Game Console - Xbox 360\",\n  \"5105\": \"Game Console - PS2\",\n  \"5106\": \"Game Console - PS3\",\n  \"5107\": \"Game Console - Nintendo Wii\",\n  \"5108\": \"Sea View\",\n  \"5109\": \"Lake View\",\n  \"5110\": \"Garden View\",\n  \"5111\": \"Pool View\",\n  \"5112\": \"Mountain View\",\n  \"5113\": \"Landmark View\",\n  \"5114\": \"Laptop\",\n  \"5115\": \"Allergy-Free\",\n  \"5116\": \"Cleaning products\",\n  \"5117\": \"Electric blankets\",\n  \"5118\": \"Additional Bathroom\",\n  \"5119\": \"Blu-ray player\",\n  \"5120\": \"Coffee Machine\",\n  \"5121\": \"City View\",\n  \"5122\": \"River View\",\n  \"5123\": \"Terrace\",\n  \"5124\": \"Towels\",\n  \"5125\": \"Linen\",\n  \"5126\": \"Dining table\",\n  \"5127\": \"Children highchair\",\n  \"5129\": \"Outdoor furniture\",\n  \"5130\": \"Outdoor dining area\",\n  \"5131\": \"Entire property on ground floor\",\n  \"5132\": \"Upper floor reachable by lift\",\n  \"5133\": \"Upper floor reachable by stairs only\",\n  \"5134\": \"Entire unit wheelchair accessible\",\n  \"5135\": \"Detached\",\n  \"5136\": \"Semi-detached\",\n  \"5137\": \"Private flat in block of flats\",\n  \"5138\": \"Clothes Rack\",\n  \"5139\": \"Rollaway bed\",\n  \"5140\": \"Clothes drying rack\",\n  \"5141\": \"Toilet paper\",\n  \"5142\": \"Child safety socket covers\",\n  \"5143\": \"Board games/puzzles\",\n  \"5144\": \"Book/DVD/Music library for children\",\n  \"5145\": \"Baby safety gates\",\n  \"5146\": \"Sofa bed\",\n  \"5147\": \"toilet with grab rails\",\n  \"5148\": \"adapted bath\",\n  \"5149\": \"roll in shower\",\n  \"5150\": \"walk in shower\",\n  \"5151\": \"higher level toilet\",\n  \"5152\": \"low bathroom sink\",\n  \"5153\": \"bathroom emergency pull cord\",\n  \"5154\": \"shower chair\",\n  \"5157\": \"rooftop pool\",\n  \"5158\": \"infinity pool\",\n  \"5159\": \"pool with view\",\n  \"5160\": \"heated pool\",\n  \"5161\": \"salt-water pool\",\n  \"5162\": \"plunge pool\",\n  \"5163\": \"pool towels\",\n  \"5164\": \"shallow end\",\n  \"5165\": \"pool cover\",\n  \"5166\": \"wine/champagne\",\n  \"5167\": \"bottle of water\",\n  \"5168\": \"fruits\",\n  \"5169\": \"chocolate/cookies\",\n  \"5170\": \"Trash cans\",\n  \"5171\": \"Wine glasses\",\n  \"5172\": \"Game console - Xbox One\",\n  \"5173\": \"Game console - Wii U\",\n  \"5174\": \"Game console - PS4\",\n  \"5175\": \"Children crib/cots\",\n  \"5176\": \"toothbrush\",\n  \"5177\": \"shampoo\",\n  \"5178\": \"conditioner\",\n  \"5179\": \"body soap\",\n  \"5180\": \"shower cap\",\n  \"5181\": \"pajamas\",\n  \"5182\": \"yukata\",\n  \"5184\": \"socket near the bed\",\n  \"5185\": \"adapter\",\n  \"5186\": \"feather pillow\",\n  \"5187\": \"non-feather pillow\",\n  \"5188\": \"hypoallergenic pillow\",\n  \"5189\": \"Accessible by Lift\",\n  \"5190\": \"Inner courtyard view\",\n  \"5191\": \"Quiet street view\",\n  \"5196\": \"Portable Wifi\",\n  \"5198\": \"Smartphone\",\n  \"5199\": \"Streaming service (such as Netflix)\",\n  \"5200\": \"Lockers\",\n  \"5201\": \"Fire alarms or smoke detectors\",\n  \"5202\": \"Fire extinguishers\",\n  \"5203\": \"Metal keys access\",\n  \"5204\": \"Electronic key card access\",\n  \"5205\": \"Reading light\",\n  \"5206\": \"Earplugs\",\n  \"5207\": \"Private curtain\",\n  \"5211\": \"Carbon monoxide detector\",\n  \"5212\": \"Carbon monoxide source\"\n}\n\n```\n\n\n<!--\ntype: tab\ntitle: Property Amenities\n-->\nBelow you will find a list of all property amenities in JSON format.\n```JSON\n{\n  \"1\": \"24-hour front desk\",\n  \"5\": \"Air conditioning\",\n  \"7\": \"ATM on site\",\n  \"8\": \"Baby sitting\",\n  \"9\": \"BBQ/Picnic area\",\n  \"14\": \"Library\",\n  \"15\": \"Car rental\",\n  \"16\": \"Casino\",\n  \"22\": \"Concierge desk\",\n  \"26\": \"Currency exchange\",\n  \"33\": \"Elevators\",\n  \"35\": \"Fitness Center\",\n  \"36\": \"Express Check-in/Check-out\",\n  \"41\": \"Airport shuttle (free)\",\n  \"44\": \"Game room\",\n  \"45\": \"Souvenir/Gift Shop\",\n  \"49\": \"Heated pool\",\n  \"50\": \"Housekeeping - daily\",\n  \"53\": \"Indoor parking\",\n  \"54\": \"Indoor pool\",\n  \"55\": \"Jacuzzi (Hot Tub)\",\n  \"60\": \"Evening Entertainment\",\n  \"61\": \"Massage\",\n  \"62\": \"Nightclub/DJ\",\n  \"66\": \"Outdoor pool\",\n  \"76\": \"Restaurant\",\n  \"77\": \"Room service\",\n  \"78\": \"Safe\",\n  \"79\": \"Sauna\",\n  \"81\": \"Shoeshine\",\n  \"83\": \"Solarium\",\n  \"86\": \"Turkish/ Steam Bath\",\n  \"91\": \"Tour Desk\",\n  \"96\": \"Dry cleaning\",\n  \"97\": \"Valet parking\",\n  \"98\": \"Vending Machine(snacks)\",\n  \"116\": \"Accessible parking\",\n  \"122\": \"Shops (on site)\",\n  \"149\": \"Grocery shopping service available\",\n  \"165\": \"Bar\",\n  \"168\": \"Laundry\",\n  \"173\": \"Breakfast\",\n  \"186\": \"Street parking\",\n  \"193\": \"Playground\",\n  \"197\": \"Lockers\",\n  \"198\": \"Non-smoking rooms\",\n  \"202\": \"Bicycle rentals\",\n  \"228\": \"Business center\",\n  \"230\": \"Secured parking\",\n  \"233\": \"Tennis court\",\n  \"234\": \"Water Sport Facilities (on site)\",\n  \"236\": \"Golf Course (within 2 miles)\",\n  \"237\": \"Horseback riding\",\n  \"239\": \"Beachfront\",\n  \"242\": \"Heating\",\n  \"262\": \"Shared Kitchen\",\n  \"269\": \"Meeting/Banquet Facilities\",\n  \"272\": \"Skiing\",\n  \"282\": \"Airport shuttle service (surcharge)\",\n  \"283\": \"Baggage Storage\",\n  \"292\": \"Newspaper\",\n  \"310\": \"Hypoallergenic room available\",\n  \"312\": \"All Spaces Non-Smoking (public and private)\",\n  \"316\": \"Electric vehicle charging station\",\n  \"327\": \"Events ticket service\",\n  \"342\": \"Snack bar\",\n  \"5154\": \"Swimming pool\",\n  \"5044\": \"Spa and wellness centre\",\n  \"5041\": \"Family Rooms\",\n  \"5123\": \"Airport shuttle with surcharge\",\n  \"5086\": \"Fitness centre\",\n  \"5006\": \"Terrace\",\n  \"5005\": \"Garden\",\n  \"5056\": \"Water park\",\n  \"5054\": \"Kids' club\",\n  \"5000\": \"Breakfast in the room\",\n  \"5001\": \"Public transport tickets\",\n  \"5002\": \"Bikes available (free)\",\n  \"5003\": \"Outdoor furniture\",\n  \"5004\": \"Outdoor fireplace\",\n  \"5007\": \"Sun terrace\",\n  \"5008\": \"Chapel/shrine\",\n  \"5009\": \"Shared lounge/TV area\",\n  \"5010\": \"Ironing service\",\n  \"5011\": \"Trouser press\",\n  \"5012\": \"Designated smoking area\",\n  \"5013\": \"Pet basket\",\n  \"5014\": \"Pet bowls\",\n  \"5015\": \"Beach\",\n  \"5016\": \"Bowling\",\n  \"5017\": \"Darts\",\n  \"5018\": \"Fishing\",\n  \"5020\": \"Hiking\",\n  \"5021\": \"Minigolf\",\n  \"5022\": \"Snorkeling\",\n  \"5023\": \"Squash\",\n  \"5024\": \"Windsurfing\",\n  \"5025\": \"Billiard\",\n  \"5026\": \"Table tennis\",\n  \"5027\": \"Canoeing\",\n  \"5028\": \"Ski-to-door access\",\n  \"5029\": \"Diving\",\n  \"5030\": \"Tennis equipment\",\n  \"5031\": \"Badminton equipment\",\n  \"5032\": \"Cycling\",\n  \"5033\": \"Ski storage\",\n  \"5034\": \"Ski school\",\n  \"5035\": \"Ski equipment hire (on site)\",\n  \"5036\": \"Ski pass vendor\",\n  \"5037\": \"Private beach area\",\n  \"5039\": \"Rooms/Facilities for Disabled\",\n  \"5040\": \"Hair dresser-beautician\",\n  \"5042\": \"Viproom facilities\",\n  \"5043\": \"Bridal Suite\",\n  \"5045\": \"Karaoke\",\n  \"5046\": \"Soundproof-rooms\",\n  \"5047\": \"Packed Lunches\",\n  \"5048\": \"Ticket service\",\n  \"5049\": \"Entertainment Staff\",\n  \"5050\": \"Private Check-in/Check-out\",\n  \"5051\": \"Special Diet Menus (on request)\",\n  \"5052\": \"Vending Machine (drinks)\",\n  \"5053\": \"Hot Spring Bath\",\n  \"5055\": \"Minimarket on site\",\n  \"5057\": \"Adult only\",\n  \"5058\": \"Open-air bath\",\n  \"5059\": \"Public bath\",\n  \"5060\": \"Water slide\",\n  \"5061\": \"Board games/puzzles\",\n  \"5062\": \"Book/DVD/Music library for children\",\n  \"5063\": \"Indoor play area\",\n  \"5064\": \"Kids' outdoor play equipment\",\n  \"5065\": \"Baby safety gates\",\n  \"5066\": \"Children television networks\",\n  \"5067\": \"Kid meals\",\n  \"5068\": \"Kid-friendly buffet\",\n  \"5069\": \"Pool towels\",\n  \"5070\": \"Wine/Champagne\",\n  \"5071\": \"Bottle of water\",\n  \"5072\": \"Fruits\",\n  \"5073\": \"Chocolate/Cookies\",\n  \"5074\": \"Strollers\",\n  \"5075\": \"On-site coffee house\",\n  \"5076\": \"Sun loungers or beach chairs\",\n  \"5077\": \"Sun umbrellas\",\n  \"5078\": \"Picnic area\",\n  \"5079\": \"Beauty Services\",\n  \"5080\": \"Spa Facilities\",\n  \"5081\": \"Steam room\",\n  \"5082\": \"Spa lounge/relaxation area\",\n  \"5083\": \"Foot bath\",\n  \"5084\": \"Spa/wellness packages\",\n  \"5085\": \"Massage chair\",\n  \"5087\": \"Yoga classes\",\n  \"5088\": \"Fitness classes\",\n  \"5089\": \"Personal trainer\",\n  \"5090\": \"Fitness/spa locker rooms\",\n  \"5091\": \"Kids pool\",\n  \"5092\": \"Shuttle Service\",\n  \"5093\": \"Temporary art galleries\",\n  \"5094\": \"Pub crawls\",\n  \"5095\": \"Stand-up comedy\",\n  \"5096\": \"Movie nights\",\n  \"5097\": \"Walking tours\",\n  \"5098\": \"Bike tours\",\n  \"5099\": \"Themed dinner nights\",\n  \"5100\": \"Happy hour\",\n  \"5101\": \"Tour or class about local culture\",\n  \"5102\": \"Cooking class\",\n  \"5103\": \"Live music/performance\",\n  \"5104\": \"Live sports events (broadcast)\",\n  \"5105\": \"Archery\",\n  \"5106\": \"Aerobics\",\n  \"5107\": \"Bingo\",\n  \"5108\": \"Ski Shuttle\",\n  \"5109\": \"Outdoor Swimming Pool (all year)\",\n  \"5110\": \"Outdoor Swimming Pool (seasonal)\",\n  \"5111\": \"Indoor Swimming Pool (all year)\",\n  \"5112\": \"Indoor Swimming Pool (seasonal)\",\n  \"5113\": \"Swimming pool toys\",\n  \"5114\": \"Rooftop pool\",\n  \"5115\": \"Infinity pool\",\n  \"5116\": \"Pool with view\",\n  \"5117\": \"Salt-water pool\",\n  \"5118\": \"Plunge pool\",\n  \"5119\": \"Pool bar\",\n  \"5120\": \"Shallow end pool\",\n  \"5121\": \"Pool cover\",\n  \"5122\": \"Fence around pool\",\n  \"5124\": \"Property is wheel chair accessible\",\n  \"5125\": \"Toilet with grab rails\",\n  \"5126\": \"Higher level toilet\",\n  \"5127\": \"Low bathroom sink\",\n  \"5128\": \"Bathroom emergency pull cord\",\n  \"5129\": \"Visual aids: Braille\",\n  \"5130\": \"Visual aids: Tactile Signs\",\n  \"5131\": \"Auditory Guidance\",\n  \"5132\": \"Back massage\",\n  \"5133\": \"Neck massage\",\n  \"5134\": \"Foot massage\",\n  \"5135\": \"Couples massage\",\n  \"5136\": \"Head massage\",\n  \"5137\": \"Hand massage\",\n  \"5138\": \"Full body massage\",\n  \"5139\": \"Facial treatments\",\n  \"5140\": \"Waxing services\",\n  \"5141\": \"Make up services\",\n  \"5142\": \"Hair treatments\",\n  \"5143\": \"Manicure\",\n  \"5144\": \"Pedicure\",\n  \"5145\": \"Hair cut\",\n  \"5146\": \"Hair colouring\",\n  \"5147\": \"Hair styling\",\n  \"5148\": \"Body Treatments\",\n  \"5149\": \"Body scrub\",\n  \"5150\": \"Body wrap\",\n  \"5151\": \"Light therapy\",\n  \"5152\": \"Shuttle Service (free)\",\n  \"5153\": \"Shuttle Service (surcharge)\",\n  \"5156\": \"No Single-Use Toiletries\",\n  \"5157\": \"Towels Changed Upon Request\",\n  \"5158\": \"24-hour security\",\n  \"5159\": \"Security alarm\",\n  \"5160\": \"Smoke alarms\",\n  \"5161\": \"CCTV in common areas\",\n  \"5162\": \"CCTV outside property\",\n  \"5163\": \"Fire extinguishers\",\n  \"5164\": \"Key access\",\n  \"5165\": \"Key card access\",\n  \"5166\": \"Carbon monoxide detector\",\n  \"5167\": \"Carbon monoxide source\",\n  \"5168\": \"No plastic stirrers\",\n  \"5169\": \"No plastic straws\",\n  \"5170\": \"No plastic cups\",\n  \"5171\": \"No plastic bottles for water\",\n  \"5172\": \"No plastic bottles for non-water\",\n  \"5173\": \"No plastic cutlery\",\n  \"5174\": \"Keycard for room electricity\",\n  \"5175\": \"Opt-out from daily room cleaning\",\n  \"5176\": \"Refillable water stations\",\n  \"5177\": \"Bike rental\",\n  \"5178\": \"Bike parking\",\n  \"6000\": \"Lunch\",\n  \"6001\": \"Dinner\"\n}\n```\n\n<!-- type: tab-end -->"
+      properties:
+        code:
+          description: Unique identifier of this amenity according to the Open Travel Alliance HAC (Hotel Amenity Code) standard for hotels and RAC (Room Amenity Code) standard for rooms.
+          example: 1234
+          type: number
+        formatted:
+          description: A human-readable English description of the amenity.
+          example: WiFi
+          type: string
+      required:
+      - code
+      - formatted
+      title: Amenity
+      type: object
+      x-examples: {}
+      x-internal: false
+    externalUrl:
+      properties:
+        name:
+          description: Destination of the external url
+          enum:
+          - BOOKING.COM
+          - HOTELS.COM
+        url:
+          description: Value of the external url
+          type: string
+      type: object
+    timeRange:
+      description: A time range. Open-ended time ranges are indicated by omitting either `start` or `end` in the object.
+      example:
+        from: '12:00'
+        to: '21:00'
+      properties:
+        from:
+          description: Time in ISO 8601 time format.
+          example: '13:00'
+          type: string
+        to:
+          description: Time in ISO 8601 time format.
+          example: '21:00'
+          type: string
+      title: Time range
+      type: object
+    money:
+      description: An amount of money in the specified currency (used in the context of prices, fees, refunds etc.)
+      properties:
+        amount:
+          description: Amount in the smallest unit of the currency. E.g. 234.56 € is expressed as 23456 (in Euro cents to avoid rounding errors in calculations).
+          example: 9500
+          type: integer
+        currency:
+          description: Details of the currency.
+          properties:
+            code:
+              description: Three-character currency code in ISO 4217 notation.
+              example: EUR
+              type: string
+          required:
+          - code
+          title: CurrencyDetails
+          type: object
+      required:
+      - amount
+      - currency
+      title: Money
+      type: object
+      x-examples:
+        Double-decimal currency (EUR):
+          amount: 9500
+          currency:
+            code: EUR
+        Zero-decimal currency (JPY):
+          amount: 37747
+          currency:
+            code: JPY
   securitySchemes:
     API_Key_Authentication:
       in: header
