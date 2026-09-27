@@ -843,38 +843,96 @@ paths:
       - Bookings
 components:
   schemas:
-    cancellationFee:
-      description: Describes the costs associated with a cancellation and how it is calculated.
+    validationResult:
+      description: Describes the validation that failed.
       properties:
-        count:
-          description: The value that is used in calculation of the cost. This could be 50 in case of a 50% fee being charged for a type "PERCENTAGE" or 2 in case of the initial two nights of the stay being charged in full as a fee if the type is "NIGHTS".
-          example: 100
-          type: number
-        price:
-          $ref: '#/components/schemas/money'
-        type:
-          description: The way in which the cancellation fee is calculated. This can be "NONE" in case a full refund is paid out, "NON_REFUNDABLE" if no refund is paid out and the full amount is due, "PERCENTAGE" if a percentage of the total price for the stay is charged as cancellation fee, "NIGHTS" if a defined number of initial nights of the stay are charged in full as cancellation fee or "FLAT" in case a flat cancellation fee is charged.
-          enum:
-          - NON_REFUNDABLE
-          - PERCENTAGE
-          - NONE
-          - NIGHTS
-          - FLAT
-          example: PERCENTAGE
+        code:
+          description: Error code intended for logging and debugging.
+          example: ANY_REQUIRED
+          type: string
+        field:
+          description: Name of the field that has failed to validate. Intended to aid developers in finding and fixing implementation mistakes.
+          example: start
+          type: string
+        message:
+          description: Error message in English intended to aid developers in finding and solving implementation mistakes. Do not display to your guests as it **might contain sensitive implementation information**.
+          example: '"start" is required'
           type: string
       required:
-      - type
-      - price
-      title: Cancellation fee
+      - message
+      - code
+      title: Validation result
+      type: object
+      x-examples: {}
+    personInfo:
+      description: Information on a person and their contact details.
+      properties:
+        email:
+          description: Email address.
+          example: jocelin.carreon.crespo@example.com
+          type: string
+        firstName:
+          description: First name.
+          example: Jocelín
+          type: string
+        lastName:
+          description: Family name or surname.
+          example: Carreón Sample
+          type: string
+      required:
+      - firstName
+      - lastName
+      - email
+      title: Person
+      type: object
+    timeRange:
+      description: A time range. Open-ended time ranges are indicated by omitting either `start` or `end` in the object.
+      example:
+        from: '12:00'
+        to: '21:00'
+      properties:
+        from:
+          description: Time in ISO 8601 time format.
+          example: '13:00'
+          type: string
+        to:
+          description: Time in ISO 8601 time format.
+          example: '21:00'
+          type: string
+      title: Time range
+      type: object
+    money:
+      description: An amount of money in the specified currency (used in the context of prices, fees, refunds etc.)
+      properties:
+        amount:
+          description: Amount in the smallest unit of the currency. E.g. 234.56 € is expressed as 23456 (in Euro cents to avoid rounding errors in calculations).
+          example: 9500
+          type: integer
+        currency:
+          description: Details of the currency.
+          properties:
+            code:
+              description: Three-character currency code in ISO 4217 notation.
+              example: EUR
+              type: string
+          required:
+          - code
+          title: CurrencyDetails
+          type: object
+      required:
+      - amount
+      - currency
+      title: Money
       type: object
       x-examples:
-        example-1:
-          count: 100
-          price:
-            amount: 9500
-            currency:
-              code: EUR
-          type: PERCENTAGE
+        Double-decimal currency (EUR):
+          amount: 9500
+          currency:
+            code: EUR
+        Zero-decimal currency (JPY):
+          amount: 37747
+          currency:
+            code: JPY
     bookedRoom:
       description: ''
       properties:
@@ -911,6 +969,112 @@ components:
       - notes
       title: Booked room
       type: object
+      x-examples: {}
+    cancellationFee:
+      description: Describes the costs associated with a cancellation and how it is calculated.
+      properties:
+        count:
+          description: The value that is used in calculation of the cost. This could be 50 in case of a 50% fee being charged for a type "PERCENTAGE" or 2 in case of the initial two nights of the stay being charged in full as a fee if the type is "NIGHTS".
+          example: 100
+          type: number
+        price:
+          $ref: '#/components/schemas/money'
+        type:
+          description: The way in which the cancellation fee is calculated. This can be "NONE" in case a full refund is paid out, "NON_REFUNDABLE" if no refund is paid out and the full amount is due, "PERCENTAGE" if a percentage of the total price for the stay is charged as cancellation fee, "NIGHTS" if a defined number of initial nights of the stay are charged in full as cancellation fee or "FLAT" in case a flat cancellation fee is charged.
+          enum:
+          - NON_REFUNDABLE
+          - PERCENTAGE
+          - NONE
+          - NIGHTS
+          - FLAT
+          example: PERCENTAGE
+          type: string
+      required:
+      - type
+      - price
+      title: Cancellation fee
+      type: object
+      x-examples:
+        example-1:
+          count: 100
+          price:
+            amount: 9500
+            currency:
+              code: EUR
+          type: PERCENTAGE
+    updateBookingRequest:
+      allOf:
+      - $ref: '#/components/schemas/bookingRequest'
+      - properties:
+          updateBookingVersionAtTimestamp:
+            $ref: '#/components/schemas/updateBookingVersionAtTimestamp'
+        required:
+        - updateBookingVersionAtTimestamp
+        title: updateBookingRequest
+        type: object
+      description: ''
+      title: Booking request (used for updating a booking)
+      x-examples:
+        Example:
+          value:
+            bookingContact:
+              email: jocelin.carreon.crespo@example.com
+              firstName: Jocelín
+              lastName: Carreón Sample
+            end: '2019-08-24'
+            rooms:
+            - adults: 2
+              rateId: i8fIZ277SPDq4UohuxAft5Sr29UhMvyc0VypRxLiRFLoTk0XHmEbgSQ
+            start: '2019-08-24'
+            updateBookingVersionAtTimestamp: '2020-12-20T11:01:30.745Z'
+    notesBooking:
+      description: Notes allow sellers to their guests to communicate relevant information to the hotel.
+      properties:
+        fromGuest:
+          description: Notes a guest has entered as they made the book can be added here. This allows you to display a free text field to your guests where they can enter any information they want to communicate to the hotel (e.g. that their booking is for a special occassion or that they have a particular room preference).
+          type: string
+        fromSeller:
+          description: Notes you as a seller want to communicate to the hotel. You might use this field to communicate operational processes to watch out for (e.g. providing the hotel with context around where the booking was made or what to watch out for) or information about the guest.
+          type: string
+      type: object
+    image:
+      properties:
+        altText:
+          description: Alternative text for the image (to be used e.g. to cater to screenreaders).
+          example: A photo of an object
+          type:
+          - string
+          - 'null'
+        height:
+          description: Height in pixels.
+          example: 4000
+          type: number
+        url:
+          description: The url of this image. The url of an image might change over time, and we therefore advise not to store or cache image URLs within your app beyond a few minutes.
+          example: https://cdn.impala.travel/ckhlsuxbb000b3b666rr9ussq.jpg
+          format: uri
+          type: string
+        width:
+          description: Width in pixels.
+          example: 4000
+          type: number
+      required:
+      - height
+      - width
+      - url
+      title: Image
+      type: object
+      x-examples: {}
+    validationError:
+      allOf:
+      - $ref: '#/components/schemas/genericError'
+      - properties:
+          validations:
+            items:
+              $ref: '#/components/schemas/validationResult'
+            type: array
+        type: object
+      title: Validation error response
       x-examples: {}
     bookingRequest:
       properties:
@@ -970,65 +1134,117 @@ components:
           - adults: 2
             rateId: 3rX3IaqkpJaPlttxoFoM3uDcHJEZCAuByqfBSLUPMvkBGyu7IAlhbxl3rZ7cVmVj6TbXL4EfiHlTA
           start: '2019-08-24'
-    hotelStub:
-      description: Essential information on a hotel returned as part of other resources, linking to the full resource within its `href` field.
+    pagination:
+      description: Information that helps paginate through lists of resources.
       properties:
-        address:
-          $ref: '#/components/schemas/address'
-        checkIn:
-          $ref: '#/components/schemas/timeRange'
-        checkOut:
-          $ref: '#/components/schemas/timeRange'
-        emails:
-          items:
-            type: string
-          type: array
-        hotelId:
-          description: Unique identifier for this hotel within the Impala platform.
-          example: 60a06628-2c71-44bf-9685-efbd2df4179e
-          format: uuid
-          type: string
-        href:
-          description: URI that allows access to the full hotel information.
-          example: /v1/hotels/60a06628-2c71-44bf-9685-efbd2df4179e
-          type: string
-        images:
-          description: Photos of the hotel, sorted in the recommended display order (e.g. for photo galleries) starting with the recommended hero image.
-          items:
-            $ref: '#/components/schemas/image'
-          type: array
-        location:
-          $ref: '#/components/schemas/location'
-        name:
-          description: Name of the hotel.
-          example: Impala Minimalist Palace
-          type: string
-        phoneNumbers:
-          description: The hotel's phone number(s)
-          items:
-            type: string
-          type: array
-        starRating:
-          description: The star rating (or star-equivalent rating)
-          example: 2.5
-          format: double
+        count:
+          description: The number of items returned on this page.
+          example: 10
+          format: int32
+          type: number
+        next:
+          description: The absolute URL pointing to the next page. Will be null if there are no next pages.
+          example: /v1/sample?size=20&offset=120
           type:
-          - number
+          - string
           - 'null'
-        timezone:
-          description: The timezone the hotel is in - e.g AST
-          example: AST
+        prev:
+          description: The absolute URL pointing to the previous page. Will be null if there are no previous pages.
+          example: /v1/sample?size=20&offset=80
+          type:
+          - string
+          - 'null'
+        total:
+          description: The total number of items that exist for your query across all pages.
+          example: 1500
+          format: int32
+          type: number
+      required:
+      - count
+      - total
+      - next
+      - prev
+      title: Pagination information
+      type: object
+    updateBookingContactRequest:
+      description: Request body for update contact booking
+      properties:
+        bookingContact:
+          $ref: '#/components/schemas/personInfo'
+        updateBookingVersionAtTimestamp:
+          $ref: '#/components/schemas/updateBookingVersionAtTimestamp'
+      required:
+      - bookingContact
+      - updateBookingVersionAtTimestamp
+      title: UpdateBookingContactRequest
+      type: object
+      x-examples:
+        Example:
+          value:
+            bookingContact:
+              email: jocelin.carreon.sample@example.com
+              firstName: Jocelín
+              lastName: Carreón Sample
+            updateBookingVersionAtTimestamp: '2021-06-20T11:01:30.745Z'
+    updateBookingVersionAtTimestamp:
+      description: The timestamp of when the booking was last updated
+      example: '2020-12-20T11:01:30.745Z'
+      format: date-time
+      type: string
+      writeOnly: true
+    taxOrFee:
+      description: Details of a tax or fee (included or excluded in a rate).
+      properties:
+        category:
+          description: Structured information on what type the type of tax or fee.
+          enum:
+          - VAT
+          - CITY_TAX
+          - OTHER
+          minLength: 1
+          type: string
+        charges:
+          $ref: '#/components/schemas/money'
+        formatted:
+          description: Formatted English description of this tax or fee, ready to be shown to your guests.
+          example: 10% VAT
+          minLength: 1
+          type: string
+      title: Tax / fee
+      type: object
+    genericError:
+      properties:
+        code:
+          description: Error code for you to use programatically, for error logging and debugging.
+          example: ERROR_CODE
+          type: string
+        message:
+          description: Error message intended to aid developers in debugging issues. We strongly advise against displaying this information publicly to your guests as it **might contain sensitive implementation details**.
+          example: Resource not found
           type: string
       required:
-      - hotelId
-      - name
-      - starRating
-      - images
-      - address
-      - location
-      title: Hotel information (stub)
+      - message
+      title: Error response
       type: object
-      x-examples: {}
+    notesBookedRoom:
+      description: 'Notes about this booked room. These might be requests for room setup (e.g. extra beds or requests to remove alcoholic beverages from the minibar) or other requests related to this particular booked room.
+
+        These fields allow for **Markdown formatting** that''s displayed to hotels in its rendered format in most circumstances but might fall back to text-only in scenarios where that''s not possible.'
+      properties:
+        fromGuest:
+          description: Notes your guest has entered as part of the booking for this booked room. These allow them to communicate anything noteworthy about this booked room to the hotel, e.g. special instructions around room setup, that the minibar should not contain any alcoholic beverages or a wheelchair-accessible room is required.
+          type:
+          - string
+          - 'null'
+        fromSeller:
+          description: Notes from you as a seller allow you to communicate any instructions for this booked room. These are communicated to the hotel as coming from you. You can use this field to provide the hotel with pointers about e.g. room setup, connecting doors that need to be opened, extrabeds to be placed in the rooms or any other instructions.
+          type:
+          - string
+          - 'null'
+      required:
+      - fromGuest
+      - fromSeller
+      type: object
     rateComponent:
       description: Product or service offered as part of a rate in addition to accommodation in the room.
       properties:
@@ -1054,173 +1270,6 @@ components:
       title: Rate component
       type: object
       x-examples: {}
-    personInfo:
-      description: Information on a person and their contact details.
-      properties:
-        email:
-          description: Email address.
-          example: jocelin.carreon.crespo@example.com
-          type: string
-        firstName:
-          description: First name.
-          example: Jocelín
-          type: string
-        lastName:
-          description: Family name or surname.
-          example: Carreón Sample
-          type: string
-      required:
-      - firstName
-      - lastName
-      - email
-      title: Person
-      type: object
-    location:
-      description: Precise location on a map (using WGS 84 longitude and latitude notation)
-      properties:
-        latitude:
-          description: WGS 84 latitude.
-          example: 58.386186
-          type: number
-        longitude:
-          description: WGS 84 longitude.
-          example: -9.952549
-          type: number
-      required:
-      - latitude
-      - longitude
-      title: Location
-      type: object
-    updateBookingRequest:
-      allOf:
-      - $ref: '#/components/schemas/bookingRequest'
-      - properties:
-          updateBookingVersionAtTimestamp:
-            $ref: '#/components/schemas/updateBookingVersionAtTimestamp'
-        required:
-        - updateBookingVersionAtTimestamp
-        title: updateBookingRequest
-        type: object
-      description: ''
-      title: Booking request (used for updating a booking)
-      x-examples:
-        Example:
-          value:
-            bookingContact:
-              email: jocelin.carreon.crespo@example.com
-              firstName: Jocelín
-              lastName: Carreón Sample
-            end: '2019-08-24'
-            rooms:
-            - adults: 2
-              rateId: i8fIZ277SPDq4UohuxAft5Sr29UhMvyc0VypRxLiRFLoTk0XHmEbgSQ
-            start: '2019-08-24'
-            updateBookingVersionAtTimestamp: '2020-12-20T11:01:30.745Z'
-    genericError:
-      properties:
-        code:
-          description: Error code for you to use programatically, for error logging and debugging.
-          example: ERROR_CODE
-          type: string
-        message:
-          description: Error message intended to aid developers in debugging issues. We strongly advise against displaying this information publicly to your guests as it **might contain sensitive implementation details**.
-          example: Resource not found
-          type: string
-      required:
-      - message
-      title: Error response
-      type: object
-    cancellationPolicy:
-      description: A rule that applies if the booking is cancelled.
-      properties:
-        end:
-          description: The time (in the hotel's local timezone) at which the policy takes effect, in ISO 8601 format. If omitted, the policy applies open-ended until the guests' stay.
-          example: '2020-12-17 23:59:59.999'
-          type: string
-        fee:
-          $ref: '#/components/schemas/cancellationFee'
-        formatted:
-          description: Human-readable plain English cancellation policy information, ready to be shown to your guests.
-          example: Non-refundable after October 19, 2021 00:00
-          type: string
-        start:
-          description: The time (in the hotel's local timezone) at which the policy takes effect, in ISO 8601 format. If omitted, the policy is already in effect.
-          example: '2020-12-15 23:59:59.999'
-          type: string
-      required:
-      - start
-      - formatted
-      - fee
-      title: Cancellation policy
-      type: object
-    notesBooking:
-      description: Notes allow sellers to their guests to communicate relevant information to the hotel.
-      properties:
-        fromGuest:
-          description: Notes a guest has entered as they made the book can be added here. This allows you to display a free text field to your guests where they can enter any information they want to communicate to the hotel (e.g. that their booking is for a special occassion or that they have a particular room preference).
-          type: string
-        fromSeller:
-          description: Notes you as a seller want to communicate to the hotel. You might use this field to communicate operational processes to watch out for (e.g. providing the hotel with context around where the booking was made or what to watch out for) or information about the guest.
-          type: string
-      type: object
-    address:
-      description: Physical address
-      properties:
-        city:
-          example: Impalaland
-          type: string
-        country:
-          description: Three-character country code in ISO alpha-3 format.
-          example: GBR
-          type: string
-        countryName:
-          description: English name of the country.
-          example: United Kingdom
-          type: string
-        line1:
-          description: First line of the address.
-          example: 12 Sample Avenue
-          type: string
-        line2:
-          description: Second line of the address.
-          type:
-          - string
-          - 'null'
-        postalCode:
-          example: '12345'
-          type: string
-        region:
-          type:
-          - string
-          - 'null'
-      required:
-      - line1
-      - city
-      - country
-      - countryName
-      - postalCode
-      title: Address
-      type: object
-    taxOrFee:
-      description: Details of a tax or fee (included or excluded in a rate).
-      properties:
-        category:
-          description: Structured information on what type the type of tax or fee.
-          enum:
-          - VAT
-          - CITY_TAX
-          - OTHER
-          minLength: 1
-          type: string
-        charges:
-          $ref: '#/components/schemas/money'
-        formatted:
-          description: Formatted English description of this tax or fee, ready to be shown to your guests.
-          example: 10% VAT
-          minLength: 1
-          type: string
-      title: Tax / fee
-      type: object
     booking:
       description: Details of an existing booking.
       properties:
@@ -1411,70 +1460,6 @@ components:
             start: '2020-10-21'
             status: ACCEPTED
             updatedAt: '2020-10-22T20:12:33Z'
-    validationError:
-      allOf:
-      - $ref: '#/components/schemas/genericError'
-      - properties:
-          validations:
-            items:
-              $ref: '#/components/schemas/validationResult'
-            type: array
-        type: object
-      title: Validation error response
-      x-examples: {}
-    pagination:
-      description: Information that helps paginate through lists of resources.
-      properties:
-        count:
-          description: The number of items returned on this page.
-          example: 10
-          format: int32
-          type: number
-        next:
-          description: The absolute URL pointing to the next page. Will be null if there are no next pages.
-          example: /v1/sample?size=20&offset=120
-          type:
-          - string
-          - 'null'
-        prev:
-          description: The absolute URL pointing to the previous page. Will be null if there are no previous pages.
-          example: /v1/sample?size=20&offset=80
-          type:
-          - string
-          - 'null'
-        total:
-          description: The total number of items that exist for your query across all pages.
-          example: 1500
-          format: int32
-          type: number
-      required:
-      - count
-      - total
-      - next
-      - prev
-      title: Pagination information
-      type: object
-    validationResult:
-      description: Describes the validation that failed.
-      properties:
-        code:
-          description: Error code intended for logging and debugging.
-          example: ANY_REQUIRED
-          type: string
-        field:
-          description: Name of the field that has failed to validate. Intended to aid developers in finding and fixing implementation mistakes.
-          example: start
-          type: string
-        message:
-          description: Error message in English intended to aid developers in finding and solving implementation mistakes. Do not display to your guests as it **might contain sensitive implementation information**.
-          example: '"start" is required'
-          type: string
-      required:
-      - message
-      - code
-      title: Validation result
-      type: object
-      x-examples: {}
     hotelAgreementStub:
       description: Essential information on an agreement with a hotel.
       properties:
@@ -1534,32 +1519,86 @@ components:
       - object
       - 'null'
       x-examples: {}
-    image:
+    cancellationPolicy:
+      description: A rule that applies if the booking is cancelled.
       properties:
-        altText:
-          description: Alternative text for the image (to be used e.g. to cater to screenreaders).
-          example: A photo of an object
-          type:
-          - string
-          - 'null'
-        height:
-          description: Height in pixels.
-          example: 4000
-          type: number
-        url:
-          description: The url of this image. The url of an image might change over time, and we therefore advise not to store or cache image URLs within your app beyond a few minutes.
-          example: https://cdn.impala.travel/ckhlsuxbb000b3b666rr9ussq.jpg
-          format: uri
+        end:
+          description: The time (in the hotel's local timezone) at which the policy takes effect, in ISO 8601 format. If omitted, the policy applies open-ended until the guests' stay.
+          example: '2020-12-17 23:59:59.999'
           type: string
-        width:
-          description: Width in pixels.
-          example: 4000
-          type: number
+        fee:
+          $ref: '#/components/schemas/cancellationFee'
+        formatted:
+          description: Human-readable plain English cancellation policy information, ready to be shown to your guests.
+          example: Non-refundable after October 19, 2021 00:00
+          type: string
+        start:
+          description: The time (in the hotel's local timezone) at which the policy takes effect, in ISO 8601 format. If omitted, the policy is already in effect.
+          example: '2020-12-15 23:59:59.999'
+          type: string
       required:
-      - height
-      - width
-      - url
-      title: Image
+      - start
+      - formatted
+      - fee
+      title: Cancellation policy
+      type: object
+    hotelStub:
+      description: Essential information on a hotel returned as part of other resources, linking to the full resource within its `href` field.
+      properties:
+        address:
+          $ref: '#/components/schemas/address'
+        checkIn:
+          $ref: '#/components/schemas/timeRange'
+        checkOut:
+          $ref: '#/components/schemas/timeRange'
+        emails:
+          items:
+            type: string
+          type: array
+        hotelId:
+          description: Unique identifier for this hotel within the Impala platform.
+          example: 60a06628-2c71-44bf-9685-efbd2df4179e
+          format: uuid
+          type: string
+        href:
+          description: URI that allows access to the full hotel information.
+          example: /v1/hotels/60a06628-2c71-44bf-9685-efbd2df4179e
+          type: string
+        images:
+          description: Photos of the hotel, sorted in the recommended display order (e.g. for photo galleries) starting with the recommended hero image.
+          items:
+            $ref: '#/components/schemas/image'
+          type: array
+        location:
+          $ref: '#/components/schemas/location'
+        name:
+          description: Name of the hotel.
+          example: Impala Minimalist Palace
+          type: string
+        phoneNumbers:
+          description: The hotel's phone number(s)
+          items:
+            type: string
+          type: array
+        starRating:
+          description: The star rating (or star-equivalent rating)
+          example: 2.5
+          format: double
+          type:
+          - number
+          - 'null'
+        timezone:
+          description: The timezone the hotel is in - e.g AST
+          example: AST
+          type: string
+      required:
+      - hotelId
+      - name
+      - starRating
+      - images
+      - address
+      - location
+      title: Hotel information (stub)
       type: object
       x-examples: {}
     bookedRate:
@@ -1657,99 +1696,60 @@ components:
                 code: EUR
           sellerCommissionPercentage: 9.5
           start: '2021-11-20'
-    notesBookedRoom:
-      description: 'Notes about this booked room. These might be requests for room setup (e.g. extra beds or requests to remove alcoholic beverages from the minibar) or other requests related to this particular booked room.
-
-        These fields allow for **Markdown formatting** that''s displayed to hotels in its rendered format in most circumstances but might fall back to text-only in scenarios where that''s not possible.'
+    address:
+      description: Physical address
       properties:
-        fromGuest:
-          description: Notes your guest has entered as part of the booking for this booked room. These allow them to communicate anything noteworthy about this booked room to the hotel, e.g. special instructions around room setup, that the minibar should not contain any alcoholic beverages or a wheelchair-accessible room is required.
+        city:
+          example: Impalaland
+          type: string
+        country:
+          description: Three-character country code in ISO alpha-3 format.
+          example: GBR
+          type: string
+        countryName:
+          description: English name of the country.
+          example: United Kingdom
+          type: string
+        line1:
+          description: First line of the address.
+          example: 12 Sample Avenue
+          type: string
+        line2:
+          description: Second line of the address.
           type:
           - string
           - 'null'
-        fromSeller:
-          description: Notes from you as a seller allow you to communicate any instructions for this booked room. These are communicated to the hotel as coming from you. You can use this field to provide the hotel with pointers about e.g. room setup, connecting doors that need to be opened, extrabeds to be placed in the rooms or any other instructions.
+        postalCode:
+          example: '12345'
+          type: string
+        region:
           type:
           - string
           - 'null'
       required:
-      - fromGuest
-      - fromSeller
+      - line1
+      - city
+      - country
+      - countryName
+      - postalCode
+      title: Address
       type: object
-    timeRange:
-      description: A time range. Open-ended time ranges are indicated by omitting either `start` or `end` in the object.
-      example:
-        from: '12:00'
-        to: '21:00'
+    location:
+      description: Precise location on a map (using WGS 84 longitude and latitude notation)
       properties:
-        from:
-          description: Time in ISO 8601 time format.
-          example: '13:00'
-          type: string
-        to:
-          description: Time in ISO 8601 time format.
-          example: '21:00'
-          type: string
-      title: Time range
-      type: object
-    updateBookingVersionAtTimestamp:
-      description: The timestamp of when the booking was last updated
-      example: '2020-12-20T11:01:30.745Z'
-      format: date-time
-      type: string
-      writeOnly: true
-    updateBookingContactRequest:
-      description: Request body for update contact booking
-      properties:
-        bookingContact:
-          $ref: '#/components/schemas/personInfo'
-        updateBookingVersionAtTimestamp:
-          $ref: '#/components/schemas/updateBookingVersionAtTimestamp'
+        latitude:
+          description: WGS 84 latitude.
+          example: 58.386186
+          type: number
+        longitude:
+          description: WGS 84 longitude.
+          example: -9.952549
+          type: number
       required:
-      - bookingContact
-      - updateBookingVersionAtTimestamp
-      title: UpdateBookingContactRequest
+      - latitude
+      - longitude
+      title: Location
       type: object
-      x-examples:
-        Example:
-          value:
-            bookingContact:
-              email: jocelin.carreon.sample@example.com
-              firstName: Jocelín
-              lastName: Carreón Sample
-            updateBookingVersionAtTimestamp: '2021-06-20T11:01:30.745Z'
-    money:
-      description: An amount of money in the specified currency (used in the context of prices, fees, refunds etc.)
-      properties:
-        amount:
-          description: Amount in the smallest unit of the currency. E.g. 234.56 € is expressed as 23456 (in Euro cents to avoid rounding errors in calculations).
-          example: 9500
-          type: integer
-        currency:
-          description: Details of the currency.
-          properties:
-            code:
-              description: Three-character currency code in ISO 4217 notation.
-              example: EUR
-              type: string
-          required:
-          - code
-          title: CurrencyDetails
-          type: object
-      required:
-      - amount
-      - currency
-      title: Money
-      type: object
-      x-examples:
-        Double-decimal currency (EUR):
-          amount: 9500
-          currency:
-            code: EUR
-        Zero-decimal currency (JPY):
-          amount: 37747
-          currency:
-            code: JPY
   examples:
     CancelledBooking:
       value:
