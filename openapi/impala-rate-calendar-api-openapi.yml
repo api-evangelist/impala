@@ -222,6 +222,168 @@ paths:
       x-internal: false
 components:
   schemas:
+    money:
+      description: An amount of money in the specified currency (used in the context of prices, fees, refunds etc.)
+      properties:
+        amount:
+          description: Amount in the smallest unit of the currency. E.g. 234.56 € is expressed as 23456 (in Euro cents to avoid rounding errors in calculations).
+          example: 9500
+          type: integer
+        currency:
+          description: Details of the currency.
+          properties:
+            code:
+              description: Three-character currency code in ISO 4217 notation.
+              example: EUR
+              type: string
+          required:
+          - code
+          title: CurrencyDetails
+          type: object
+      required:
+      - amount
+      - currency
+      title: Money
+      type: object
+      x-examples:
+        Double-decimal currency (EUR):
+          amount: 9500
+          currency:
+            code: EUR
+        Zero-decimal currency (JPY):
+          amount: 37747
+          currency:
+            code: JPY
+    ratePlanRestrictions:
+      description: Restrictions that apply to this rate plan.
+      properties:
+        lengthOfStay:
+          description: Determines the length of stay in nights for which this rate plan can be booked.
+          properties:
+            max:
+              description: The maximum number of nights (inclusive) a guest can stay to be eligible for this rate plan.
+              type: number
+            min:
+              description: The minimum number of nights (inclusive) a guest has to stay to be eligible for this rate plan.
+              type: number
+          required:
+          - min
+          type: object
+      required:
+      - lengthOfStay
+      title: Rate plan restrictions
+      type: object
+      x-examples: {}
+    ratePlanRate:
+      properties:
+        adults:
+          description: The number of adults in the room for which this price applies.
+          minimum: 1
+          type: number
+        retailRate:
+          $ref: '#/components/schemas/money'
+        roomsSellable:
+          description: Amount of room which can be sold for this occupancy level and room type at this rate price.
+          type: number
+      required:
+      - adults
+      - roomsSellable
+      - retailRate
+      title: 'Rate plans: rate price for date'
+      type: object
+    rateAdjustment:
+      properties:
+        adjustmentId:
+          description: Unique identifier of this rate adjustment.
+          format: uuid
+          type: string
+        amount:
+          description: The percentage discount between 0 and 100.
+          example: 5
+          maximum: 100
+          minimum: 0
+          type: number
+        conditions:
+          description: A list of conditions for the adjustment to apply.
+          items:
+            $ref: '#/components/schemas/adjustmentConditions'
+          minItems: 1
+          type: array
+          uniqueItems: true
+        type:
+          description: The adjustment type.
+          enum:
+          - PERCENTAGE
+          type: string
+      required:
+      - amount
+      - type
+      - conditions
+      title: Adjustment
+      type: object
+    rateComponent:
+      description: Product or service offered as part of a rate in addition to accommodation in the room.
+      properties:
+        formatted:
+          description: Human-readable plain English version of the component included in the rate, ready to be shown to your guests.
+          example: breakfast
+          type: string
+        includedInRate:
+          type: boolean
+        type:
+          description: The type of product or service included in the price. We currently support rates including "BREAKFAST", "LUNCH", "DINNER" and "ALL_INCLUSIVE".
+          enum:
+          - BREAKFAST
+          - LUNCH
+          - DINNER
+          - WELCOME_BEVERAGE
+          - ALL_INCLUSIVE
+          example: BREAKFAST
+          type: string
+      required:
+      - formatted
+      - type
+      title: Rate component
+      type: object
+      x-examples: {}
+    validationError:
+      allOf:
+      - $ref: '#/components/schemas/genericError'
+      - properties:
+          validations:
+            items:
+              $ref: '#/components/schemas/validationResult'
+            type: array
+        type: object
+      title: Validation error response
+      x-examples: {}
+    adjustmentConditions:
+      $ref: '#/components/schemas/adjustmentConditionLengthOfStayRule'
+    conditions:
+      description: Conditions described by the rate plan.
+      properties:
+        cancellationDeadline:
+          format: days
+          type:
+          - number
+          - 'null'
+        cancellationPolicy:
+          description: Type of cancellation policy applicable to the rate
+          enum:
+          - FREE_CANCELLATION
+          - FREE_CANCELLATION_24
+          - FREE_CANCELLATION_48
+          - FREE_CANCELLATION_WEEK
+          - NON_REFUNDABLE
+          - null
+          type:
+          - string
+          - 'null'
+      required:
+      - cancellationPolicy
+      - cancellationDeadline
+      title: Conditions
+      type: object
     validationResult:
       description: Describes the validation that failed.
       properties:
@@ -288,268 +450,6 @@ components:
       - rules
       title: 'Adjustment: Conditions'
       type: object
-    adjustmentConditions:
-      $ref: '#/components/schemas/adjustmentConditionLengthOfStayRule'
-    ratePlanRestrictions:
-      description: Restrictions that apply to this rate plan.
-      properties:
-        lengthOfStay:
-          description: Determines the length of stay in nights for which this rate plan can be booked.
-          properties:
-            max:
-              description: The maximum number of nights (inclusive) a guest can stay to be eligible for this rate plan.
-              type: number
-            min:
-              description: The minimum number of nights (inclusive) a guest has to stay to be eligible for this rate plan.
-              type: number
-          required:
-          - min
-          type: object
-      required:
-      - lengthOfStay
-      title: Rate plan restrictions
-      type: object
-      x-examples: {}
-    validationError:
-      allOf:
-      - $ref: '#/components/schemas/genericError'
-      - properties:
-          validations:
-            items:
-              $ref: '#/components/schemas/validationResult'
-            type: array
-        type: object
-      title: Validation error response
-      x-examples: {}
-    ratePlanRate:
-      properties:
-        adults:
-          description: The number of adults in the room for which this price applies.
-          minimum: 1
-          type: number
-        retailRate:
-          $ref: '#/components/schemas/money'
-        roomsSellable:
-          description: Amount of room which can be sold for this occupancy level and room type at this rate price.
-          type: number
-      required:
-      - adults
-      - roomsSellable
-      - retailRate
-      title: 'Rate plans: rate price for date'
-      type: object
-    rateComponent:
-      description: Product or service offered as part of a rate in addition to accommodation in the room.
-      properties:
-        formatted:
-          description: Human-readable plain English version of the component included in the rate, ready to be shown to your guests.
-          example: breakfast
-          type: string
-        includedInRate:
-          type: boolean
-        type:
-          description: The type of product or service included in the price. We currently support rates including "BREAKFAST", "LUNCH", "DINNER" and "ALL_INCLUSIVE".
-          enum:
-          - BREAKFAST
-          - LUNCH
-          - DINNER
-          - WELCOME_BEVERAGE
-          - ALL_INCLUSIVE
-          example: BREAKFAST
-          type: string
-      required:
-      - formatted
-      - type
-      title: Rate component
-      type: object
-      x-examples: {}
-    ratesPerDate:
-      properties:
-        closed:
-          description: Determines whether the rate is available for a stay including this date.
-          type: boolean
-        closedToArrival:
-          description: Determines whether the rate is available if the arrival falls on this date.
-          type: boolean
-        closedToDeparture:
-          description: Determines whether the rate is available if the departure falls on this date.
-          type: boolean
-        date:
-          description: ''
-          format: YYYY-MM-DD
-          minLength: 1
-          type: string
-        rates:
-          description: Rate prices for each occupancy the room can accommodate.
-          items:
-            $ref: '#/components/schemas/ratePlanRate'
-          type: array
-          uniqueItems: true
-        staythrough:
-          description: The minimum number of nights (inclusive) that the guest has to book which include the date to be eligible for this rate.
-          properties:
-            min:
-              description: Expressed in minimum value.
-              type: number
-          required:
-          - min
-          type: object
-      required:
-      - date
-      - rates
-      - closed
-      title: 'Rate plans: Rates available for a date'
-      type: object
-      x-examples: {}
-    ratePlanRoomType:
-      properties:
-        dates:
-          description: A list of future dates and their rate prices for this rate plan and room type.
-          items:
-            $ref: '#/components/schemas/ratesPerDate'
-          minItems: 1
-          type: array
-          uniqueItems: true
-        maxOccupancy:
-          description: Number of adults that the room can accommodate.
-          minimum: 1
-          type: number
-        name:
-          description: Formatted room type name.
-          example: Junior Suite
-          minLength: 1
-          type: string
-        roomTypeId:
-          description: Unique identifier of this room type.
-          format: uuid
-          minLength: 1
-          type: string
-      required:
-      - roomTypeId
-      - name
-      - maxOccupancy
-      - dates
-      title: RoomType
-      type: object
-    conditions:
-      description: Conditions described by the rate plan.
-      properties:
-        cancellationDeadline:
-          format: days
-          type:
-          - number
-          - 'null'
-        cancellationPolicy:
-          description: Type of cancellation policy applicable to the rate
-          enum:
-          - FREE_CANCELLATION
-          - FREE_CANCELLATION_24
-          - FREE_CANCELLATION_48
-          - FREE_CANCELLATION_WEEK
-          - NON_REFUNDABLE
-          - null
-          type:
-          - string
-          - 'null'
-      required:
-      - cancellationPolicy
-      - cancellationDeadline
-      title: Conditions
-      type: object
-    money:
-      description: An amount of money in the specified currency (used in the context of prices, fees, refunds etc.)
-      properties:
-        amount:
-          description: Amount in the smallest unit of the currency. E.g. 234.56 € is expressed as 23456 (in Euro cents to avoid rounding errors in calculations).
-          example: 9500
-          type: integer
-        currency:
-          description: Details of the currency.
-          properties:
-            code:
-              description: Three-character currency code in ISO 4217 notation.
-              example: EUR
-              type: string
-          required:
-          - code
-          title: CurrencyDetails
-          type: object
-      required:
-      - amount
-      - currency
-      title: Money
-      type: object
-      x-examples:
-        Double-decimal currency (EUR):
-          amount: 9500
-          currency:
-            code: EUR
-        Zero-decimal currency (JPY):
-          amount: 37747
-          currency:
-            code: JPY
-    rateAdjustment:
-      properties:
-        adjustmentId:
-          description: Unique identifier of this rate adjustment.
-          format: uuid
-          type: string
-        amount:
-          description: The percentage discount between 0 and 100.
-          example: 5
-          maximum: 100
-          minimum: 0
-          type: number
-        conditions:
-          description: A list of conditions for the adjustment to apply.
-          items:
-            $ref: '#/components/schemas/adjustmentConditions'
-          minItems: 1
-          type: array
-          uniqueItems: true
-        type:
-          description: The adjustment type.
-          enum:
-          - PERCENTAGE
-          type: string
-      required:
-      - amount
-      - type
-      - conditions
-      title: Adjustment
-      type: object
-    pagination:
-      description: Information that helps paginate through lists of resources.
-      properties:
-        count:
-          description: The number of items returned on this page.
-          example: 10
-          format: int32
-          type: number
-        next:
-          description: The absolute URL pointing to the next page. Will be null if there are no next pages.
-          example: /v1/sample?size=20&offset=120
-          type:
-          - string
-          - 'null'
-        prev:
-          description: The absolute URL pointing to the previous page. Will be null if there are no previous pages.
-          example: /v1/sample?size=20&offset=80
-          type:
-          - string
-          - 'null'
-        total:
-          description: The total number of items that exist for your query across all pages.
-          example: 1500
-          format: int32
-          type: number
-      required:
-      - count
-      - total
-      - next
-      - prev
-      title: Pagination information
-      type: object
     ratePlan:
       description: Rate plan encapsulates rates given a set of internal conditions like cancellation policy or meal plan.
       properties:
@@ -598,6 +498,38 @@ components:
       title: Rate plan info
       type: object
       x-examples: {}
+    pagination:
+      description: Information that helps paginate through lists of resources.
+      properties:
+        count:
+          description: The number of items returned on this page.
+          example: 10
+          format: int32
+          type: number
+        next:
+          description: The absolute URL pointing to the next page. Will be null if there are no next pages.
+          example: /v1/sample?size=20&offset=120
+          type:
+          - string
+          - 'null'
+        prev:
+          description: The absolute URL pointing to the previous page. Will be null if there are no previous pages.
+          example: /v1/sample?size=20&offset=80
+          type:
+          - string
+          - 'null'
+        total:
+          description: The total number of items that exist for your query across all pages.
+          example: 1500
+          format: int32
+          type: number
+      required:
+      - count
+      - total
+      - next
+      - prev
+      title: Pagination information
+      type: object
     genericError:
       properties:
         code:
@@ -612,26 +544,75 @@ components:
       - message
       title: Error response
       type: object
+    ratePlanRoomType:
+      properties:
+        dates:
+          description: A list of future dates and their rate prices for this rate plan and room type.
+          items:
+            $ref: '#/components/schemas/ratesPerDate'
+          minItems: 1
+          type: array
+          uniqueItems: true
+        maxOccupancy:
+          description: Number of adults that the room can accommodate.
+          minimum: 1
+          type: number
+        name:
+          description: Formatted room type name.
+          example: Junior Suite
+          minLength: 1
+          type: string
+        roomTypeId:
+          description: Unique identifier of this room type.
+          format: uuid
+          minLength: 1
+          type: string
+      required:
+      - roomTypeId
+      - name
+      - maxOccupancy
+      - dates
+      title: RoomType
+      type: object
+    ratesPerDate:
+      properties:
+        closed:
+          description: Determines whether the rate is available for a stay including this date.
+          type: boolean
+        closedToArrival:
+          description: Determines whether the rate is available if the arrival falls on this date.
+          type: boolean
+        closedToDeparture:
+          description: Determines whether the rate is available if the departure falls on this date.
+          type: boolean
+        date:
+          description: ''
+          format: YYYY-MM-DD
+          minLength: 1
+          type: string
+        rates:
+          description: Rate prices for each occupancy the room can accommodate.
+          items:
+            $ref: '#/components/schemas/ratePlanRate'
+          type: array
+          uniqueItems: true
+        staythrough:
+          description: The minimum number of nights (inclusive) that the guest has to book which include the date to be eligible for this rate.
+          properties:
+            min:
+              description: Expressed in minimum value.
+              type: number
+          required:
+          - min
+          type: object
+      required:
+      - date
+      - rates
+      - closed
+      title: 'Rate plans: Rates available for a date'
+      type: object
+      x-examples: {}
   responses:
-    ratePlansBadRequestResponse:
-      content:
-        application/json:
-          examples:
-            Validation error:
-              summary: Bad request
-              value:
-                code: VALIDATION_ERROR
-                message: '"start" must be in YYYY-MM-DD format. "foo" is not allowed. "lorem" missing required peer "ipsum"'
-                validations:
-                - code: DATE_FORMAT
-                  message: '"start" must be in YYYY-MM-DD format'
-                  property: start
-                - code: OBJECT_WITH
-                  message: '"lorem" missing required peer "ipsum"'
-                  property: lorem
-          schema:
-            $ref: '#/components/schemas/validationError'
-      description: Your request wasn't formatted correctly and therefore couldn't be processed. This most frequently happens when query parameters or request body values are missing, incorrectly formatted or added where they don't exist (e.g. due to typos). We're including a list of `validations` to point out where things are going wrong and should be fixed.
     ratePlansOKResponse:
       content:
         application/json:
@@ -653,6 +634,31 @@ components:
             - pagination
             type: object
       description: ''
+    ratePlansBadRequestResponse:
+      content:
+        application/json:
+          examples:
+            Validation error:
+              summary: Bad request
+              value:
+                code: VALIDATION_ERROR
+                message: '"start" must be in YYYY-MM-DD format. "foo" is not allowed. "lorem" missing required peer "ipsum"'
+                validations:
+                - code: DATE_FORMAT
+                  message: '"start" must be in YYYY-MM-DD format'
+                  property: start
+                - code: OBJECT_WITH
+                  message: '"lorem" missing required peer "ipsum"'
+                  property: lorem
+          schema:
+            $ref: '#/components/schemas/validationError'
+      description: Your request wasn't formatted correctly and therefore couldn't be processed. This most frequently happens when query parameters or request body values are missing, incorrectly formatted or added where they don't exist (e.g. due to typos). We're including a list of `validations` to point out where things are going wrong and should be fixed.
+    ratePlanOKResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ratePlan'
+      description: ''
     notFoundResponse:
       content:
         application/json:
@@ -662,18 +668,7 @@ components:
           schema:
             $ref: '#/components/schemas/genericError'
       description: Not Found
-    ratePlanOKResponse:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ratePlan'
-      description: ''
   examples:
-    hotelNotFoundResponseExample:
-      summary: Not found
-      value:
-        code: NOT_FOUND
-        message: Cannot find property with id 6f86fd08-5378-4ac4-a6e0-ae099d5ce512
     RatePlansResponseExample:
       value:
         data:
@@ -2509,6 +2504,11 @@ components:
           next: https://api.impala.travel/v1/085c034a-955c-42b7-81a9-a5ec445b18c6/rate-plans?size=1&offset=1
           prev: null
           total: 2
+    hotelNotFoundResponseExample:
+      summary: Not found
+      value:
+        code: NOT_FOUND
+        message: Cannot find property with id 6f86fd08-5378-4ac4-a6e0-ae099d5ce512
   securitySchemes:
     API_Key_Authentication:
       in: header
