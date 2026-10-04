@@ -1,29 +1,27 @@
-# Kin Score artifact — impala — 2026-08-26T215308
+# Kin Score artifact — impala — 2026-09-25T210408
 # The API Evangelist rating (https://github.com/api-evangelist/kin-score). Generated; do not edit.
 ---
 kin_score:
   slug: impala
-  schema_version: 0.15.0
-  scored_at: '2026-08-26'
-  run_ts: 2026-08-26T215308
-  composite: 29.5
-  band: thin
+  schema_version: 0.23.0
+  scored_at: '2026-09-25'
+  run_ts: 2026-09-25T210408
+  composite: 0.0
+  band: minimal
   facets:
-    discoverability: 81.5
-    contract_quality: 63.0
-    governance: 16.7
-    operational_transparency: 2.6
-    developer_ergonomics: 28.0
-    commercial_clarity: 0.0
-    contract_governance: 16.7
+    discoverability: 0.0
+    contract_quality: 0.0
+    contract_governance: 0.0
+    operational_transparency: 0.0
+    developer_ergonomics: 0.0
     access_clarity: 0.0
   agent_readiness:
-    score: 27.2
-    band: agent-aware
+    score: 0.0
+    band: human-only
     dimensions:
       spec_presence: true
       agentic_access: false
-      reversibility_documented: false
+      reversibility_documented: documented
       mcp_server: false
       auth_clarity: bearer
       idempotency: false
@@ -44,16 +42,8 @@ kin_score:
     applies: true
     regime: Payments
     regime_id: payments
-    score: 17.2
+    score: 9.8
     matched_via: tags
-  needs_work:
-    owner: catalog
-    reasons:
-    - owner: catalog
-      reason: no_resolvable_host
-    detected: '2026-08-18'
-    note: Recorded so this provider's gaps can be attributed. Does not affect the
-      composite.
   provenance:
     mcp: derived
     skills: derived
@@ -62,4 +52,4 @@ kin_score:
       total: 3
       derived: 0
       coverage: 0.0
-      callable: 100.0
+      callable: 0.0
