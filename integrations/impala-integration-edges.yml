@@ -40,6 +40,37 @@ edges:
     detected: '2026-10-22'
   detected_by: sweep-openapi-directory-apis-guru.py
   first_seen: '2026-10-22'
+- partner_name: Packagist
+  partner: packagist
+  partner_match: register
+  type: register
+  direction: provider-built
+  category: official SDK (PHP)
+  evidence: https://packagist.org/packages/get-impala/impala-php
+  channel: package-registry
+  relationship: distribution-channel
+  contract_reference:
+    register: Packagist (public registry JSON)
+    spec_file: null
+    language: PHP
+    packages:
+    - name: get-impala/impala-php
+      version: 2.0.2
+      released: '2018-08-01'
+      released_field: time
+      lapsed: true
+      page: https://packagist.org/packages/get-impala/impala-php
+      repo_leg: github-org:getimpala
+      publisher_leg: org:get-impala
+      matched_by: github-org
+      abandoned: true
+    current: false
+    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
+      24 months'
+    detected_by: sweep-php-dart-elixir-package-registries.py
+    detected: '2026-10-22'
+  detected_by: sweep-php-dart-elixir-package-registries.py
+  first_seen: '2026-10-22'
 generated: '2026-10-22'
 method: searched
 source:
@@ -48,3 +79,6 @@ source:
 checked:
 - https://api.apis.guru/v2/list.json
 - https://api.apis.guru/v2/providers.json
+- https://hex.pm/api
+- https://packagist.org/packages
+- https://pub.dev/api
